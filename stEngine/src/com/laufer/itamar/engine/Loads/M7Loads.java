@@ -5,8 +5,8 @@ import com.laufer.itamar.engine.Pieces.*;
 public class M7Loads extends Loads {
     @Override
     public Boolean canLoad(LifeShip lifeShip) {
-        return bombs.isEmpty();
-    } //todo fix
+        return false;
+    }
     @Override
     public Boolean canLoad(Bomb bomb) {
         return bombs.isEmpty(); //can only load one bomb

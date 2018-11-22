@@ -6,11 +6,11 @@ import com.laufer.itamar.communication.server.GameServer;
 public class Main {
 
     public static void main(String[] args){
-	// write your code here
         //Todo do some tests here
         //Todo handle die of loader with safe boat
         GameServer server = new GameServer();
         server.runServer();
+        Thread t;
     }
     public static void printBoard(SuperTacticoGame game){
         for(int i=0;i<20;i++){

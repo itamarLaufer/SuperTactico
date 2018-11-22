@@ -84,7 +84,7 @@ public abstract class Piece
     public boolean basicCanMove(Location dest){
         if(location.equals(dest)) //it cannot move to it's current place
             return false;
-        if(dest.notInBoard())
+        if(dest.notInBoard(game.getBoardSize()))
             return false;
         if(game.getPieceFromBoard(dest) != null) //square is taken
             return false;
@@ -143,7 +143,7 @@ public abstract class Piece
             game.getDiedWithLifeShip().add(this);
     }
     public boolean unload(Piece piece, Location location){
-        if(location.notInBoard() || !this.location.touches(location) || !loads.getAllLoads().contains(piece))
+        if(location.notInBoard(game.getBoardSize()) || !this.location.touches(location) || !loads.getAllLoads().contains(piece))
             return false;
         loads.getAllLoads().remove(piece);
         return true;

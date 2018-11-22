@@ -23,7 +23,7 @@ class TestBasicMove {
     public void testCannotMoveOutOfBoard(){
         Piece mover = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(0, 0), 0);
         assertFalse(mover.canMove(new Location(-1, 0)));
-        assertFalse(mover.canMove(new Location(Location.BOARD_SIZE, Location.BOARD_SIZE)));
+        assertFalse(mover.canMove(new Location(game.getBoardSize(), game.getBoardSize())));
     }
     @Test
     public void testCannotMoveToTakenSquare(){

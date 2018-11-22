@@ -66,5 +66,5 @@ public abstract class Loads
         }
         return counter;
     }
-    //Todo consider this do not forget to learn some gemara sir
+    //Todo consider this
 }

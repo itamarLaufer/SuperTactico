@@ -14,7 +14,6 @@ public class GuiPiece {
     private String name;
     private Location location;
     private List<GuiPiece>loadingPieces;
-    private static List<Order>EMPTY = new ArrayList<>(0);
 
     public GuiPiece(Piece piece, boolean visible) {
         id = piece.getId();

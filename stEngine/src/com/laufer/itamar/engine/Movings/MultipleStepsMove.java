@@ -11,7 +11,7 @@ public class MultipleStepsMove implements MoveType {
 
     @Override
     public List<Location> getPossibleMoveLocations(Piece piece) {
-        List<Location>res = new ArrayList<>(Location.BOARD_SIZE * 2);
+        List<Location>res = new ArrayList<>(piece.getGame().getBoardSize() * 2);
         int[]rowsA = {1, -1, 0, 0};
         int[]colsA = {0, 0, 1, -1};
         for(int i = 0; i < rowsA.length; i++) {
@@ -21,7 +21,7 @@ public class MultipleStepsMove implements MoveType {
                     res.add(loc);
                 loc = loc.add(rowsA[i], colsA[i]);
             }
-            while (!loc.notInBoard() && (piece.getGame().getPieceFromBoard(loc) == null));
+            while (!loc.notInBoard(piece.getGame().getBoardSize()) && (piece.getGame().getPieceFromBoard(loc) == null));
         }
         return res;
     }

@@ -46,7 +46,7 @@ public class GameServer {
 
     synchronized void joinAGame(PlayerClient client) {
         if (waiting != null) {
-            GameClient game = new GameClient(new SuperTacticoGame(20, waiting.getName(), client.getName()), waiting, client);
+            GameClient game = new GameClient(new SuperTacticoGame(waiting.getName(), client.getName()), waiting, client);
             games.add(game);
             ServerUtils.send(waiting.getSocket(), "game found!");
             ServerUtils.send(client.getSocket(), "game found!");

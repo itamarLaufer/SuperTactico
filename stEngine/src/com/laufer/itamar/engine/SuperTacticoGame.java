@@ -11,29 +11,19 @@ public class SuperTacticoGame {
     private Square[][]board;
     private int turns;
     private List<Piece>diedWithLifeShip; //to show dialog to select which pieces to save and kill the rest
-
-    public SuperTacticoGame(int boardSize, String p1name, String p2name) {
-        turns = 0;
-        board = new Square[boardSize][boardSize];
-        Location.BOARD_SIZE = boardSize;
-        createBoard();
-        players = new Player[2];
-        players[0] = new Player(p1name, 0);
-        players[1] = new Player(p2name, 1);
-        diedWithLifeShip = new ArrayList<>(2);
-    }
+    private int boardSize;
     public SuperTacticoGame(Square[][]board){
         turns = 0;
-        Location.BOARD_SIZE = board.length;
+        this.boardSize = boardSize;
         this.board = board;
         players = new Player[2];
         players[0] = new Player("player1", 0);
         players[1] = new Player("player2", 1);
     }
     public SuperTacticoGame(String p1name, String p2name) {
+        boardSize = 20; //Todo constant
         turns = 0;
-        board = new Square[20][20]; //Todo constant
-        Location.BOARD_SIZE = 20;
+        board = new Square[boardSize][boardSize];
         createBoard();
         players = new Player[2];
         players[0] = new Player(p1name, 0);
@@ -169,30 +159,15 @@ public class SuperTacticoGame {
         return players[turns%players.length];
     }
 
-    /**
-     * Handles the battle according to the result
-     * @param attacker the attacking piece
-     * @param target the attacked piece
-     * @param result the result of the battle
-     */
-    public void basicBattleHandle(Piece attacker, Piece target, AttackResult result){
-        switch (result){
-            case TIE:
-                attacker.die();
-                target.die();
-                break;
-            case VICTORY:
-                target.die();
-                attacker.move(target.getLocation());
-            case DEFEAT:
-                attacker.die();
-        }
-    }
     public void removePiece(Location location){
         board[location.getRow()][location.getCol()] = null;
     }
 
     public List<Piece> getDiedWithLifeShip() {
         return diedWithLifeShip;
+    }
+
+    public int getBoardSize() {
+        return boardSize;
     }
 }

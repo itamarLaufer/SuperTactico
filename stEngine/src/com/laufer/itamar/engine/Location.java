@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Location
 {
-    public static int BOARD_SIZE;
     private int row;
     private int col;
 
@@ -55,8 +54,8 @@ public class Location
                 ", col=" + col +
                 '}';
     }
-    public boolean notInBoard(){
-        return row < 0 || col < 0 || row >= BOARD_SIZE || col >= BOARD_SIZE;
+    public boolean notInBoard(int boardSize){
+        return row < 0 || col < 0 || row >= boardSize || col >= boardSize;
     }
 
     /**
