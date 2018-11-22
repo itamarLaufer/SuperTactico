@@ -65,7 +65,7 @@ public abstract class Piece
             return false;
         if(getOwnerWhoCanLoad() != owner)
             return false;
-        if(!other.getAllLoads().isEmpty() && !(other.getAllLoads().get(0) instanceof Flag))
+        if(!other.getAllLoads().isEmpty() && !(other.getAllLoads().get(0) instanceof Flag)) //Todo find another way that is not instanceof
             return false;
         return loads.canLoad(other);
     }
@@ -129,7 +129,7 @@ public abstract class Piece
     public void die() {
         boolean hasLifeSHip = false;
         for (Piece piece : getPieceAndItsLoads()) {
-            if (piece instanceof LifeShip) {
+            if (piece instanceof LifeShip) { //Todo find another way with no instanceof
                 hasLifeSHip = true;
                 break;
             }
@@ -141,6 +141,13 @@ public abstract class Piece
             }
         } else
             game.getDiedWithLifeShip().add(this);
+    }
+    public boolean unload(Piece piece){
+        if(loads.getAllLoads().contains(piece)){
+            loads.getAllLoads().remove(piece);
+            return true;
+        }
+        return false;
     }
 
     public AttackResult attack(Bomb bomb){
