@@ -14,7 +14,7 @@ public class SuperTacticoGame {
     private int boardSize;
     public SuperTacticoGame(Square[][]board){
         turns = 0;
-        this.boardSize = boardSize;
+        this.boardSize = board.length;
         this.board = board;
         players = new Player[2];
         players[0] = new Player("player1", 0);
