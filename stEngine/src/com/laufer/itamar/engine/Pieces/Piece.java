@@ -96,7 +96,7 @@ public abstract class Piece
     public List<Order>getPossibleOrders(){
         List<Order>orders = new LinkedList<>();
         orders.addAll(getPossibleMoveOrders());
-        //Todo add attack orders and load orders
+        //Todo add attack load and unload orders
 
         return orders;
     }
@@ -142,12 +142,11 @@ public abstract class Piece
         } else
             game.getDiedWithLifeShip().add(this);
     }
-    public boolean unload(Piece piece){
-        if(loads.getAllLoads().contains(piece)){
-            loads.getAllLoads().remove(piece);
-            return true;
-        }
-        return false;
+    public boolean unload(Piece piece, Location location){
+        if(location.notInBoard() || !this.location.touches(location) || !loads.getAllLoads().contains(piece))
+            return false;
+        loads.getAllLoads().remove(piece);
+        return true;
     }
 
     public AttackResult attack(Bomb bomb){
