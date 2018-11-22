@@ -9,8 +9,7 @@ import com.laufer.itamar.engine.SuperTacticoGame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TestMultipleStepMove {
     private SuperTacticoGame game;
@@ -31,7 +30,7 @@ class TestMultipleStepMove {
     }
     @Test
     public void testCannotMoveAbovePieces(){
-        assertFalse(true); //todo implement
+        fail("needs to be implemented"); //todo implement
     }
     @BeforeEach
     public void init(){
