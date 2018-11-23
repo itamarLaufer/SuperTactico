@@ -53,17 +53,19 @@ public class GameServer {
             waiting.setGame(game);
             client.setGame(game);
             waiting = null;
-        } else {
+        }
+        else {
             waiting = client;
-            executor.execute(() -> {
-                try {
-                    Thread.sleep(20000);
-                    if (waiting != null) { //Todo may create concurrency bugs
-                       ServerUtils.send(waiting.getSocket(), "couldn't find :(");
-                        waiting = null;
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            executor.execute(new TaskForTime(20000) {
+                @Override
+                public boolean isDone() {
+                    return waiting == null;
+                }
+
+                @Override
+                public void handleNotDone() {
+                    ServerUtils.send(waiting.getSocket(), "couldn't find :(");
+                    waiting = null;
                 }
             });
         }

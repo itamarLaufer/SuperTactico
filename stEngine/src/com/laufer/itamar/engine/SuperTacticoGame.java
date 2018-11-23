@@ -22,7 +22,7 @@ public class SuperTacticoGame {
     }
     public SuperTacticoGame(String p1name, String p2name) {
         boardSize = 20; //Todo constant
-        turns = 0;
+        turns = -1; //game didn't start yet, both players need to organize their pieces
         board = new Square[boardSize][boardSize];
         createBoard();
         players = new Player[2];
