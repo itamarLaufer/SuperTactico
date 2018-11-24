@@ -136,6 +136,7 @@ public abstract class Piece
         }
         if (!hasLifeSHip) {
             game.removePiece(location);
+            owner.removePiece(this);
             for (Piece piece : getPieceAndItsLoads()) {
                 piece.die();
             }
@@ -164,5 +165,9 @@ public abstract class Piece
 
     public int getId() {
         return id;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 }
