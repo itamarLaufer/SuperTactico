@@ -1,6 +1,8 @@
 package com.laufer.itamar.communication.server;
 
 
+import com.laufer.itamar.engine.SuperTacticoGame;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -16,13 +18,14 @@ public class GameClientThread implements Runnable {
 
     public void run() {
         System.out.println("new client has connected " + client.getSocket());
+        client.setGame(new GameClient(new SuperTacticoGame(), null, null));
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getSocket().getInputStream()));
             String inputLine;
             String name;
             while ((inputLine = in.readLine()) != null) {
                 if(inputLine.contains("join")){
-                    if(client.getGame() == null) {
+                    if(client.getGame().getGame().isFake()) {
                         name = inputLine.replace("join ", "");
                         client.setName(name);
                         server.joinAGame(client);
@@ -31,7 +34,7 @@ public class GameClientThread implements Runnable {
                         ServerUtils.send(client.getSocket(), "You are already in a game");
                 }
                 else {
-                    if (client.getGame() == null)
+                    if (client.getGame().getGame().isFake())
                         ServerUtils.send(client.getSocket(), "You didn't join a game yet");
                     else
                         ServerUtils.send(client.getSocket(), "Opponent is " + client.getGame().getOtherPlayer(client).getName());
