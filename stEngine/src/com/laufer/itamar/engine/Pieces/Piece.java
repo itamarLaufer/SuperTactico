@@ -25,6 +25,7 @@ public abstract class Piece
     protected LocType locType;
     protected Loads loads;
     protected AttackVisitor attackVisitor;
+    protected Piece loader;
 
 
     public Piece(SuperTacticoGame game, Location location, LocType locType, MoveType moveType, Loads loads, Player owner, int id){
@@ -71,6 +72,7 @@ public abstract class Piece
     }
     public void load(Piece toLoad){
         loads.load(toLoad);
+        toLoad.loader = this;
     }
 
     public Player getOwnerWhoCanLoad() {
@@ -169,5 +171,9 @@ public abstract class Piece
 
     public void setOwner(Player owner) {
         this.owner = owner;
+    }
+
+    public Piece getLoader() {
+        return loader;
     }
 }
