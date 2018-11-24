@@ -3,7 +3,6 @@ package com.laufer.itamar.engine;
 import com.laufer.itamar.engine.Pieces.Piece;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SuperTacticoGame {
@@ -12,6 +11,11 @@ public class SuperTacticoGame {
     private int turns;
     private List<Piece>diedWithLifeShip; //to show dialog to select which pieces to save and kill the rest
     private int boardSize;
+
+    /**
+     * Initializes a game for testing reasons, with no pieces
+     * @param board the board of the game
+     */
     public SuperTacticoGame(Square[][]board){
         turns = 0;
         this.boardSize = board.length;
@@ -20,9 +24,15 @@ public class SuperTacticoGame {
         players[0] = new Player("player1", 0);
         players[1] = new Player("player2", 1);
     }
+
+    /**
+     * Creates a game with the default map
+     * @param p1name the name of the 1st player
+     * @param p2name the name of the 2nd player
+     */
     public SuperTacticoGame(String p1name, String p2name) {
         boardSize = 20; //Todo constant
-        turns = -1; //game didn't start yet, both players need to organize their pieces
+        turns = 0;
         board = new Square[boardSize][boardSize];
         createBoard();
         players = new Player[2];
@@ -31,6 +41,20 @@ public class SuperTacticoGame {
         diedWithLifeShip = new ArrayList<>(2); //Todo if I will go in it than it should be initialized every turn or something
     }
 
+    /**
+     * Creates fake game only for pieces organizing
+     */
+    public SuperTacticoGame(){
+        players = new Player[]{new Player("demo", 0)};
+        boardSize = 20; //Todo constant
+        turns = 0;
+        board = new Square[boardSize][boardSize];
+        createBoard();
+    }
+
+    /**
+     * Creates the default map
+     */
     private void createBoard() {
         boardSize = 20; //Todo constant
         board = new Square[boardSize][boardSize];
@@ -161,5 +185,8 @@ public class SuperTacticoGame {
 
     public int getBoardSize() {
         return boardSize;
+    }
+    public boolean isFake(){
+        return players.length == 0;
     }
 }
