@@ -28,11 +28,12 @@ public class SuperTacticoGame {
         players = new Player[2];
         players[0] = new Player(p1name, 0);
         players[1] = new Player(p2name, 1);
-        diedWithLifeShip = new ArrayList<>(2);
+        diedWithLifeShip = new ArrayList<>(2); //Todo if I will go in it than it should be initialized every turn or something
     }
 
     private void createBoard() {
-        //Todo change for real map
+        boardSize = 20; //Todo constant
+        board = new Square[boardSize][boardSize];
         board[1][4] = new Square(LocType.LAND);
         board[1][7] = new Square(LocType.LAND);
         board[1][10] = new Square(LocType.LAND);
@@ -124,15 +125,6 @@ public class SuperTacticoGame {
                     board[board.length - i - 1][j] = new Square(board[i][j].getLocType());
             }
         }
-    }
-
-    /**
-     * insert to the game the given players including their pieces with the chosen location and update the board according to that
-     * @param players the players that participate in the game (supposes it include exactly 2 players)
-     */
-    public void insertPlayers(Player[]players){
-        this.players = players;
-        Arrays.stream(this.players).forEach(player-> Arrays.stream(player.getPieces()).forEach(this::insertPiece));
     }
 
     public Player[] getPlayers() {
