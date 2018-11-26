@@ -177,9 +177,15 @@ public class SuperTacticoGame {
     public Piece getPieceFromBoard(Location location) {
         return board[location.getRow()][location.getCol()].getPiece();
     }
+    public Piece getPieceFromBoard(int row, int col) {
+        return board[row][col].getPiece();
+    }
 
     public LocType getLocTypeInLocation(Location location) {
         return board[location.getRow()][location.getCol()].getLocType();
+    }
+    public LocType getLocTypeInLocation(int row, int col) {
+        return board[row][col].getLocType();
     }
 
     public void movePiece(Piece piece, Location location) {

@@ -176,4 +176,14 @@ public abstract class Piece
     public Piece getLoader() {
         return loader;
     }
+    public List<MoveOrder>getLocateOrders(){
+        List<MoveOrder>res = new ArrayList<>(game.getBoardSize() * game.getBoardSize() / 2);
+        for(int i=game.getBoardSize() - 1; i > 0.5 * game.getBoardSize(); i--){
+            for(int j=0;j<game.getBoardSize();j++){
+                if(locType.canStandHere(game.getLocTypeInLocation(i, j)) && game.getPieceFromBoard(i, j) == null)
+                    res.add(new MoveOrder(this, new Location(i, j)));
+            }
+        }
+        return res;
+    }
 }

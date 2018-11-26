@@ -9,7 +9,7 @@ import com.laufer.itamar.engine.Visitors.VoidVisitor;
 public class SeaBomb extends Bomb {
 
     public SeaBomb(SuperTacticoGame game, Player owner, Location location, int id) {
-        super(game, owner, location, LocType.SEA, id);
+        super(game, owner, location, LocType.ALL, id);
     }
 
     @Override
