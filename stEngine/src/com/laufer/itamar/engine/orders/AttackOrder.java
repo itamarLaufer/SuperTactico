@@ -4,9 +4,9 @@ import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Pieces.Piece;
 
 public class AttackOrder extends Order{
-    private static String ORDER_NAME = "attack";
+    private static int ORDER_ID = 1;
     public AttackOrder(Piece actor, Location location) {
-        super(actor, location, ORDER_NAME);
+        super(actor, location, ORDER_ID);
     }
 
     @Override

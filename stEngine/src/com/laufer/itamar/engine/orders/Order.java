@@ -9,13 +9,13 @@ public abstract class Order {
     protected SuperTacticoGame game;
     protected Piece actor;
     protected Location location;
-    protected String type;
+    protected int id;
 
-    public Order(Piece actor, Location location, String type) {
+    public Order(Piece actor, Location location, int id) {
         this.game = actor.getGame();
         this.actor = actor;
         this.location = location;
-        this.type = type;
+        this.id = id;
     }
     public abstract void execute();
 }
