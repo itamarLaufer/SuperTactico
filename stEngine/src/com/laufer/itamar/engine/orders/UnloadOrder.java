@@ -13,6 +13,6 @@ public class UnloadOrder extends Order {
 
     @Override
     public void execute() {
-        actor.getLoader().unload(actor, location);
+        actor.unload(location);
     }
 }

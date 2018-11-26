@@ -6,9 +6,7 @@ import com.laufer.itamar.engine.Movings.MoveType;
 import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
-import com.laufer.itamar.engine.orders.AttackOrder;
-import com.laufer.itamar.engine.orders.MoveOrder;
-import com.laufer.itamar.engine.orders.Order;
+import com.laufer.itamar.engine.orders.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -47,6 +45,9 @@ public abstract class Piece
             return false;
         return true;
     }
+    public boolean canUnload(Location dest){
+        return !dest.notInBoard(game.getBoardSize()) && this.location.touches(dest) && loader != null && locType.canStandHere(game.getLocTypeInLocation(dest));
+    }
     public AttackResult attack(Piece other){
         return other.accept(attackVisitor);
     }
@@ -63,6 +64,8 @@ public abstract class Piece
         return Location.onSameCol(location,other.location);
     }
     public boolean canLoad(Piece other){
+        if(other == null)
+            return false;
         if(!touches(other))
             return false;
         if(getOwnerWhoCanLoad() != owner)
@@ -99,8 +102,9 @@ public abstract class Piece
     public List<Order>getPossibleOrders(){
         List<Order>orders = new LinkedList<>();
         orders.addAll(getPossibleMoveOrders());
-        //Todo add attack load and unload orders
-
+        orders.addAll(getPossibleAttackOrders());
+        orders.addAll(getPossibleLoadOrders());
+        orders.addAll(getPossibleUnloadOrders());
         return orders;
     }
     private List<MoveOrder> getPossibleMoveOrders(){
@@ -108,6 +112,14 @@ public abstract class Piece
     }
     private List<AttackOrder> getPossibleAttackOrders(){
         return location.touchingLocations().stream().filter(it -> canAttack(game.getPieceFromBoard(it))).map(it -> new AttackOrder(this, it)).collect(Collectors.toList());
+    }
+
+    private List<LoadOrder> getPossibleLoadOrders(){
+        return location.touchingLocations().stream().filter(it -> canLoad(game.getPieceFromBoard(it))).map(it -> new LoadOrder(this, it)).collect(Collectors.toList());
+    }
+
+    private List<UnloadOrder> getPossibleUnloadOrders(){
+        return location.touchingLocations().stream().filter(this::canUnload).map(it -> new UnloadOrder(this, it)).collect(Collectors.toList());
     }
 
     public Location getLocation() {
@@ -149,11 +161,10 @@ public abstract class Piece
         } else
             game.getDiedWithLifeShip().add(this);
     }
-    public boolean unload(Piece piece, Location location){
-        if(location.notInBoard(game.getBoardSize()) || !this.location.touches(location) || !loads.getAllLoads().contains(piece))
-            return false;
-        loads.getAllLoads().remove(piece);
-        return true;
+    public void unload(Location dest){
+        move(dest);
+        loader.loads.getAllLoads().remove(this);
+        loader = null;
     }
 
     public AttackResult attack(Bomb bomb){
