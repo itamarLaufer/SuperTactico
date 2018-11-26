@@ -5,6 +5,7 @@ import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.orders.Order;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ public class GuiPiece {
     private String name;
     private Location location;
     private List<GuiPiece>loadingPieces;
+    private List<Order>orders;
 
     public GuiPiece(Piece piece, boolean visible) {
         id = piece.getId();
@@ -21,6 +23,7 @@ public class GuiPiece {
         name = visible ? piece.getType() : "unknown";
         location = piece.getLocation();
         loadingPieces = piece.getAllLoads().stream().map(it->new GuiPiece(it, visible)).collect(Collectors.toList());
+        orders = visible ? piece.getPossibleOrders() : new LinkedList<>();
     }
     public GuiPiece(Piece piece) {
         this(piece, true);
