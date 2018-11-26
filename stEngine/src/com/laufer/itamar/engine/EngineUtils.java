@@ -9,13 +9,11 @@ public class EngineUtils {
      * @param arr the array to flip
      */
     public static <T> void flipY(T[][]arr){
-        for(int i=0;i<arr.length;i++){
+        for(int i=0;i<arr.length / 2;i++){
             for(int j=0;j<arr[i].length;j++){
-                if(i < arr.length / 2){
-                    T tmp = arr[i][j];
-                    arr[i][j] = arr[arr.length - i - 1][j];
-                    arr[arr.length - i - 1][j] = tmp;
-                }
+                T tmp = arr[i][j];
+                arr[i][j] = arr[arr.length - i - 1][j];
+                arr[arr.length - i - 1][j] = tmp;
             }
         }
     }
