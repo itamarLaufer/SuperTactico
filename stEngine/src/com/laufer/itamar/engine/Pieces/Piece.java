@@ -1,5 +1,6 @@
 package com.laufer.itamar.engine.Pieces;
 
+import com.laufer.itamar.JsonParsable;
 import com.laufer.itamar.engine.*;
 import com.laufer.itamar.engine.Loads.Loads;
 import com.laufer.itamar.engine.Movings.MoveType;
@@ -7,13 +8,15 @@ import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
 import com.laufer.itamar.engine.orders.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Piece
+public abstract class Piece implements JsonParsable
 {
 
     protected int id;
@@ -142,7 +145,7 @@ public abstract class Piece
     public List<Piece>getAllLoads(){
         return new ArrayList<>(loads.getAllLoads());
     }
-    public abstract String getType();
+    public abstract int getType();
 
     public void die() {
         boolean hasLifeSHip = false;
@@ -199,6 +202,19 @@ public abstract class Piece
                     res.add(new MoveOrder(this, new Location(i, j)));
             }
         }
+        return res;
+    }
+
+    public JSONObject parseJson() {
+        JSONObject res = new JSONObject();
+        res.put("id", id);
+        res.put("typeId", getType());
+        JSONArray arr = new JSONArray();
+        for(Piece piece: getAllLoads()){
+            arr.add(piece.parseJson());
+        }
+        res.put("loads", arr);
+
         return res;
     }
 }

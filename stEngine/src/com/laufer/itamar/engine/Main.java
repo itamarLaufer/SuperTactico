@@ -10,7 +10,6 @@ public class Main {
         //Todo handle die of loader with safe boat
         GameServer server = new GameServer();
         server.runServer();
-        Thread t;
     }
     public static void printBoard(SuperTacticoGame game){
         for(int i=0;i<20;i++){

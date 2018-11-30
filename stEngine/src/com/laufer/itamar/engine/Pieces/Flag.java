@@ -43,8 +43,8 @@ public class Flag extends Soldier {
     }
 
     @Override
-    public String getType() {
-        return "Flag";
+    public int getType() {
+        return 19;
     }
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {

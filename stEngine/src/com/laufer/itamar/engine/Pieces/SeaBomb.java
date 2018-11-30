@@ -23,8 +23,8 @@ public class SeaBomb extends Bomb {
     }
 
     @Override
-    public String getType() {
-        return "Sea Bomb";
+    public int getType() {
+        return 12;
     }
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {

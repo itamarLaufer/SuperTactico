@@ -1,8 +1,10 @@
 package com.laufer.itamar.engine;
 
+import com.laufer.itamar.JsonParsable;
 import com.laufer.itamar.engine.Pieces.Piece;
+import org.json.simple.JSONObject;
 
-public class Square {
+public class Square implements JsonParsable {
     private LocType locType;
     private Piece piece;
 
@@ -26,5 +28,13 @@ public class Square {
 
     public LocType getLocType() {
         return locType;
+    }
+
+    @Override
+    public JSONObject parseJson() {
+        JSONObject res = new JSONObject();
+        res.put("locType", locType.toString());
+        res.put("piece", piece.parseJson());
+        return res;
     }
 }

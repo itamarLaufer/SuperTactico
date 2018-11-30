@@ -26,8 +26,8 @@ public class LandSapper extends Soldier {
     }
 
     @Override
-    public String getType() {
-        return null;
+    public int getType() {
+        return 9;
     }
 
     public boolean attack(GeneralSoldier generalSoldier){

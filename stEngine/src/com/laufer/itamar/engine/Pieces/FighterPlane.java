@@ -30,8 +30,8 @@ public class FighterPlane extends Plane {
 
 
     @Override
-    public String getType() {
-        return "Fighter Plane";
+    public int getType() {
+        return 18;
     }
 
     public boolean attack(TourPlane tourPlane){

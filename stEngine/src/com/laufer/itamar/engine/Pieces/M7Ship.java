@@ -26,8 +26,8 @@ public class M7Ship extends Ship {
     }
 
     @Override
-    public String getType() {
-        return "M7 Ship";
+    public int getType() {
+        return 16;
     }
     public boolean attack(SeaSapper seaSapper){
         //first to attack wins

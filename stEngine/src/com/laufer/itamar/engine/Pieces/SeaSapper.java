@@ -28,8 +28,8 @@ public class SeaSapper extends Soldier {
     }
 
     @Override
-    public String getType() {
-        return "Sea Sapper";
+    public int getType() {
+        return 10;
     }
     public boolean attack(LandSapper landSapper){
         die();

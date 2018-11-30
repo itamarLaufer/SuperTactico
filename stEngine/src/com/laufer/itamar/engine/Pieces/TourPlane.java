@@ -25,8 +25,8 @@ public class TourPlane extends Plane {
     }
 
     @Override
-    public String getType() {
-        return "Tour Plane";
+    public int getType() {
+        return 17;
     }
 
     public boolean attack(TourPlane tourPlane){

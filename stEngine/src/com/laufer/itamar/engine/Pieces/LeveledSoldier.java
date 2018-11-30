@@ -34,8 +34,8 @@ public class LeveledSoldier extends Soldier {
     }
 
     @Override
-    public String getType() {
-        return "soldier soldierLevel " + soldierLevel;
+    public int getType() {
+        return soldierLevel.getLevel();
     }
 
     public boolean attack(LeveledSoldier leveledSoldier) {

@@ -24,8 +24,8 @@ public class LandBomb extends Bomb {
     }
 
     @Override
-    public String getType() {
-        return "Land Bomb";
+    public int getType() {
+        return 11;
     }
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {

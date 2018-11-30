@@ -26,8 +26,8 @@ public class LifeShip extends Ship {
     }
 
     @Override
-    public String getType() {
-        return "Life Ship";
+    public int getType() {
+        return 13;
     }
     public boolean attack(M7Ship m7Ship){
         die();

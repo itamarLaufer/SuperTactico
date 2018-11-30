@@ -26,8 +26,8 @@ public class SpyShip extends Ship {
     }
 
     @Override
-    public String getType() {
-        return "Spy Ship";
+    public int getType() {
+        return 14;
     }
 
     public boolean attack(M7Ship m7Ship){

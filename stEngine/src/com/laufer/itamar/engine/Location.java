@@ -2,10 +2,13 @@ package com.laufer.itamar.engine;
 
 
 
+import com.laufer.itamar.JsonParsable;
+import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Location
+public class Location implements JsonParsable
 {
     private int row;
     private int col;
@@ -83,5 +86,13 @@ public class Location
     }
     public Location add(int rowAdd, int colAdd){
         return new Location(row + rowAdd, col + colAdd);
+    }
+
+    @Override
+    public JSONObject parseJson() {
+        JSONObject res = new JSONObject();
+        res.put("row", row);
+        res.put("col", col);
+        return res;
     }
 }
