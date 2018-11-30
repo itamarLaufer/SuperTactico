@@ -56,8 +56,8 @@ public class CanLoadVisitor<Boolean> implements ReturningVisitor {
     }
 
     @Override
-    public java.lang.Boolean visit(GeneralSoldier generalSoldier) {
-        return loads.canLoad(generalSoldier);
+    public java.lang.Boolean visit(LieutenantGeneral lieutenantGeneral) {
+        return loads.canLoad(lieutenantGeneral);
     }
 
     @Override

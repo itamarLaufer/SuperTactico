@@ -13,7 +13,7 @@ public interface VoidVisitor {
     void visit(LandSapper landSapper);
     void visit(SeaBomb seaBomb);
     void visit(LeveledSoldier leveledSoldier);
-    void visit(GeneralSoldier generalSoldier);
+    void visit(LieutenantGeneral lieutenantGeneral);
     void visit(LandBomb landBomb);
     void visit(M7Ship m7Ship);
 

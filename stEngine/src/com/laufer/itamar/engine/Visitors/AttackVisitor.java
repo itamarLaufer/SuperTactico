@@ -54,8 +54,8 @@ public class AttackVisitor implements ReturningVisitor<AttackResult> {
     }
 
     @Override
-    public AttackResult visit(GeneralSoldier generalSoldier) {
-        return attacker.attack(generalSoldier);
+    public AttackResult visit(LieutenantGeneral lieutenantGeneral) {
+        return attacker.attack(lieutenantGeneral);
     }
 
     @Override

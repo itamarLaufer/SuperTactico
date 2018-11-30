@@ -56,8 +56,8 @@ public class LoadVoidVisitor implements VoidVisitor {
     }
 
     @Override
-    public void visit(GeneralSoldier generalSoldier) {
-        loads.load(generalSoldier);
+    public void visit(LieutenantGeneral lieutenantGeneral) {
+        loads.load(lieutenantGeneral);
     }
 
     @Override

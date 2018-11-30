@@ -13,7 +13,7 @@ public interface ReturningVisitor<T> {
     T visit(LandSapper landSapper);
     T visit(SeaBomb seaBomb);
     T visit(LeveledSoldier leveledSoldier);
-    T visit(GeneralSoldier generalSoldier);
+    T visit(LieutenantGeneral lieutenantGeneral);
     T visit(LandBomb landBomb);
     T visit(M7Ship m7Ship);
     T visit(M4Ship m4Ship);
