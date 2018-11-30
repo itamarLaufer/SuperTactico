@@ -13,7 +13,7 @@ public class PieceFactory {
         this.player = player;
         counter = -1;
     }
-    public Piece createPiece(int type, Player player, Location location){
+    public Piece createPiece(int type, Location location){
         counter++;
         if(type < 8)
             return new LeveledSoldier(game, player, location, SoldierLevel.getLeveledSoldierFromLevel(type), counter);
