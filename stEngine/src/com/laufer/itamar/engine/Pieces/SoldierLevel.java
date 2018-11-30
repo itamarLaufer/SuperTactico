@@ -20,4 +20,11 @@ public enum SoldierLevel {
     public int getLevel() {
         return level;
     }
+    public static SoldierLevel getLeveledSoldierFromLevel(int level){
+        for(SoldierLevel soldierLevel: SoldierLevel.class.getEnumConstants()){
+            if(level == soldierLevel.level)
+                return soldierLevel;
+        }
+        return null;
+    }
 }

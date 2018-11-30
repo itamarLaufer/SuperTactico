@@ -44,12 +44,15 @@ public class SuperTacticoGame {
         players[1] = new Player(p2name, 1);
         diedWithLifeShip = new ArrayList<>(2); //Todo if I will go in it than it should be initialized every turn or something
         for(Piece piece: p1FakeGame.getPlayers()[0].getLivingPieces()) {
+            players[0].addPiece(piece);
             piece.setOwner(players[0]);
             insertPiece(piece);
         }
         for(Piece piece: p2FakeGame.getPlayers()[0].getLivingPieces()) {
             piece.setLocation(new Location(boardSize - piece.getLocation().getRow() - 1, piece.getLocation().getCol()));
+            players[1].addPiece(piece);
             piece.setOwner(players[1]);
+            piece.setId(piece.getId() + players[0].getLivingPieces().size());
             insertPiece(piece);
         }
     }
@@ -63,8 +66,11 @@ public class SuperTacticoGame {
         turns = 0;
         board = new Square[boardSize][boardSize];
         createBoard();
-        for(Piece piece : players[0].getLivingPieces())
-            insertPiece(piece);
+        insertPieces();
+    }
+
+    private void insertPieces() {
+        //Todo implement using the factory
     }
 
     /**

@@ -30,6 +30,10 @@ public abstract class Piece implements JsonParsable
     protected Piece loader;
 
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Piece(SuperTacticoGame game, Location location, LocType locType, MoveType moveType, Loads loads, Player owner, int id){
         this.id = id;
         this.owner = owner;

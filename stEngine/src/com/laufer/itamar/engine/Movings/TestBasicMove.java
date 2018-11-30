@@ -2,7 +2,7 @@ package com.laufer.itamar.engine.Movings;
 
 import com.laufer.itamar.engine.LocType;
 import com.laufer.itamar.engine.Location;
-import com.laufer.itamar.engine.Pieces.GeneralSoldier;
+import com.laufer.itamar.engine.Pieces.LieutenantGeneral;
 import com.laufer.itamar.engine.Pieces.M4Ship;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.Square;
@@ -16,19 +16,19 @@ class TestBasicMove {
 
     @Test
     public void testCannotMoveToItsCurPlace(){
-        Piece mover = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(0, 0), 0);
+        Piece mover = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(0, 0), 0);
         assertFalse(mover.canMove(new Location(0, 0)));
     }
     @Test
     public void testCannotMoveOutOfBoard(){
-        Piece mover = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(0, 0), 0);
+        Piece mover = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(0, 0), 0);
         assertFalse(mover.canMove(new Location(-1, 0)));
         assertFalse(mover.canMove(new Location(game.getBoardSize(), game.getBoardSize())));
     }
     @Test
     public void testCannotMoveToTakenSquare(){
-        Piece mover = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(0, 0), 0);
-        Piece blocking = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(1, 0), 1);
+        Piece mover = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(0, 0), 0);
+        Piece blocking = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(1, 0), 1);
         assertFalse(mover.canMove(new Location(1, 0)));
     }
     @Test

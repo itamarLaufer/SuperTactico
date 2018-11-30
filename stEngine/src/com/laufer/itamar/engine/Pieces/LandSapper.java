@@ -7,7 +7,6 @@ import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
-import com.laufer.itamar.engine.Visitors.ReturningVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
 
 public class LandSapper extends Soldier {
@@ -30,8 +29,8 @@ public class LandSapper extends Soldier {
         return 9;
     }
 
-    public boolean attack(GeneralSoldier generalSoldier){
-        generalSoldier.die();
+    public boolean attack(LieutenantGeneral lieutenantGeneral){
+        lieutenantGeneral.die();
         return true;
     }
     public boolean attack(LandBomb landBomb){

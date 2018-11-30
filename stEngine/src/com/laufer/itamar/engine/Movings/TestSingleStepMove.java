@@ -2,7 +2,7 @@ package com.laufer.itamar.engine.Movings;
 
 import com.laufer.itamar.engine.LocType;
 import com.laufer.itamar.engine.Location;
-import com.laufer.itamar.engine.Pieces.GeneralSoldier;
+import com.laufer.itamar.engine.Pieces.LieutenantGeneral;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.Square;
 import com.laufer.itamar.engine.SuperTacticoGame;
@@ -17,7 +17,7 @@ class TestSingleStepMove {
     }
     @Test
     public void testCanMoveSingleStep(){
-        Piece singleStepper = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(1, 1), 0);
+        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(1, 1), 0);
         assertTrue(singleStepper.canMove(new Location(1, 0)));
         assertTrue(singleStepper.canMove(new Location(1, 2)));
         assertTrue(singleStepper.canMove(new Location(0, 1)));
@@ -25,12 +25,12 @@ class TestSingleStepMove {
     }
     @Test
     public void testCannotMoveDiagonally(){
-        Piece singleStepper = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(0, 0), 0);
+        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(0, 0), 0);
         assertFalse(singleStepper.canMove(new Location(1, 1)));
     }
     @Test
     public void testCannotMoveMoreThanSingleStep(){
-        Piece singleStepper = new GeneralSoldier(game, game.getCurrentPlayer(), new Location(0, 0), 0);
+        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(0, 0), 0);
         assertFalse(singleStepper.canMove(new Location(8, 0)));
     }
     @BeforeEach

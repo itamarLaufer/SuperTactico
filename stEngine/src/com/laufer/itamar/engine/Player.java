@@ -19,15 +19,6 @@ public class Player {
     public Player(String name, int id){
         this.name = name;
         this.id = id;
-        createPieces();
-    }
-
-    /**
-     * Creates the livingPieces list of the player with all the default livingPieces on the default locations
-     */
-    private void createPieces() {
-        livingPieces = new ArrayList<>(60);
-        //Todo init livingPieces on default locs(lower side of map), id should be calculated in this formula piece.id = (player.id + 1)*counter
     }
 
     public List<Piece> getLivingPieces() {
@@ -49,4 +40,9 @@ public class Player {
     public void removePiece(Piece piece) {
         livingPieces.remove(piece);
     }
+    /**
+     * Adds the given piece to the player livingPieces list
+     * @param piece to add
+     */
+    public void addPiece(Piece piece){livingPieces.add(piece);}
 }
