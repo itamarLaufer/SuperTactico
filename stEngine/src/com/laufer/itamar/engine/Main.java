@@ -1,7 +1,6 @@
 package com.laufer.itamar.engine;
 
 import com.laufer.itamar.communication.server.GameServer;
-import com.laufer.itamar.engine.Pieces.SoldierLevel;
 
 
 public class Main {
@@ -9,7 +8,6 @@ public class Main {
     public static void main(String[] args){
         //Todo do some tests here
         //Todo handle die of loader with safe boat
-        System.out.println(SoldierLevel.getLeveledSoldierFromLevel(1));
         GameServer server = new GameServer();
         server.runServer();
     }

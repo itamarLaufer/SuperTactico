@@ -43,7 +43,6 @@ public abstract class Piece implements JsonParsable
         this.loads = loads;
         this.game = game;
         this.attackVisitor = new AttackVisitor(this);
-        game.insertPiece(this);
     }
     public boolean canAttack(Piece other){
         if(other == null || !(location.touches(other.location)&&locType.canStandHere(other.locType))) //is not close enough or is on unreachable location?
@@ -211,8 +210,10 @@ public abstract class Piece implements JsonParsable
 
     public JSONObject parseJson() {
         JSONObject res = new JSONObject();
-        res.put("id", id);
-        res.put("typeId", getType());
+        if(game.getCurrentPlayer() == owner) {
+            res.put("id", id);
+            res.put("typeId", getType());
+        }
         JSONArray arr = new JSONArray();
         for(Piece piece: getAllLoads()){
             arr.add(piece.parseJson());

@@ -37,4 +37,13 @@ public class Square implements JsonParsable {
         res.put("piece", piece.parseJson());
         return res;
     }
+
+    @Override
+    public String toString() {
+        String p = piece == null?"N":"" + piece.getType();
+        return "{" +
+                "" + locType +
+                "," + p +
+                '}';
+    }
 }

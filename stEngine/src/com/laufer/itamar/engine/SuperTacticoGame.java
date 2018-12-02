@@ -1,6 +1,9 @@
 package com.laufer.itamar.engine;
 
 import com.laufer.itamar.engine.Pieces.Piece;
+import com.laufer.itamar.engine.Pieces.PieceFactory;
+import com.laufer.itamar.engine.orders.MoveOrder;
+import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,7 @@ public class SuperTacticoGame {
     private int turns;
     private List<Piece> diedWithLifeShip; //to show dialog to select which pieces to save and kill the rest
     private int boardSize;
+    private final int[] pieces_amounts = {5, 5, 4, 4, 3, 3, 2, 1, 1, 1, 1, 3, 3, 3, 4, 2, 2, 2, 2, 1};
 
     /**
      * Initializes a game for testing reasons, *with no pieces*
@@ -70,7 +74,17 @@ public class SuperTacticoGame {
     }
 
     private void insertPieces() {
-        //Todo implement using the factory
+        Piece piece;
+        PieceFactory factory = new PieceFactory(this, players[0]);
+        for(int i=0; i<pieces_amounts.length; i++){
+            for(int j=0; j<pieces_amounts[i]; j++){
+                piece = factory.createPiece(i, null);
+                players[0].addPiece(piece);
+                List<MoveOrder>orders = piece.getLocateOrders();
+                if(!orders.isEmpty())
+                    piece.getLocateOrders().get(0).execute();
+            }
+        }
     }
 
     /**
@@ -195,7 +209,8 @@ public class SuperTacticoGame {
     }
 
     public void movePiece(Piece piece, Location location) {
-        board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(null);
+        if(piece.getLocation() != null)
+            board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(null);
         piece.setLocation(location);
         insertPiece(piece);
     }
@@ -227,6 +242,27 @@ public class SuperTacticoGame {
         List<Piece> res = new ArrayList<>(players[0].getLivingPieces());
         if(!isFake())
             res.addAll(players[1].getLivingPieces());
+        return res;
+    }
+    //method mor debug purposes only
+    public void printBoard(){
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[i].length;j++){
+                System.out.print(board[i][j]);
+            }
+            System.out.println();
+        }
+    }
+    public JSONArray getBoardAsJson(){
+        JSONArray res = new JSONArray();
+        JSONArray line;
+        for(int i=0;i<board.length;i++){
+            line = new JSONArray();
+            for(int j=0;j<board[i].length;j++){
+                line.add(board[i][j].getLocType().toString());
+            }
+            res.add(line);
+        }
         return res;
     }
 }

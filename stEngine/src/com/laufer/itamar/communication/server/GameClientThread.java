@@ -2,6 +2,7 @@ package com.laufer.itamar.communication.server;
 
 
 import com.laufer.itamar.engine.SuperTacticoGame;
+import org.json.simple.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,6 +20,9 @@ public class GameClientThread implements Runnable {
     public void run() {
         System.out.println("new client has connected " + client.getSocket());
         client.setGame(new GameClient(new SuperTacticoGame(), null, null));
+        JSONObject update = new JSONObject();
+        update.put("board", client.getGame().getGame().getBoardAsJson());
+        ServerUtils.send(client.getSocket(), 4 + "_" + update.toJSONString());
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getSocket().getInputStream()));
             String inputLine;
