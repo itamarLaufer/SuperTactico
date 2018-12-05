@@ -9,6 +9,7 @@ import com.laufer.itamar.engine.SuperTacticoGame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.laufer.itamar.engine.Location.generateLocation;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestNotMove {
@@ -16,8 +17,8 @@ class TestNotMove {
 
     @Test
     public void testCannotMove(){
-        Piece unmovable = new Flag(game, game.getCurrentPlayer(),new Location(0, 0), 0);
-        assertFalse(unmovable.canMove(new Location(0, 1)));
+        Piece unmovable = new Flag(game, game.getCurrentPlayer(),generateLocation(0, 0), 0);
+        assertFalse(unmovable.canMove(generateLocation(0, 1)));
     }
 
     @BeforeEach

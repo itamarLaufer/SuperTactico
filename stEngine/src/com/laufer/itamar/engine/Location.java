@@ -76,10 +76,10 @@ public class Location implements JsonParsable
      */
     public List<Location>touchingLocations(){
         List<Location>res = new ArrayList<>(4);
-        res.add(new Location(row + 1, col));
-        res.add(new Location(row - 1, col));
-        res.add(new Location(row, col + 1));
-        res.add(new Location(row, col +-1));
+        res.add(generateLocation(row + 1, col));
+        res.add(generateLocation(row - 1, col));
+        res.add(generateLocation(row, col + 1));
+        res.add(generateLocation(row, col +-1));
         return res;
     }
 
@@ -94,7 +94,7 @@ public class Location implements JsonParsable
         return ((Location) obj).col == col && ((Location) obj).row == row;
     }
     public Location add(int rowAdd, int colAdd){
-        return new Location(row + rowAdd, col + colAdd);
+        return generateLocation(row + rowAdd, col + colAdd);
     }
 
     @Override

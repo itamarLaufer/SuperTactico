@@ -8,6 +8,8 @@ import org.json.simple.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.laufer.itamar.engine.Location.generateLocation;
+
 public class SuperTacticoGame {
     private Player[] players;
     private Square[][] board;
@@ -53,7 +55,7 @@ public class SuperTacticoGame {
             insertPiece(piece);
         }
         for(Piece piece: p2FakeGame.getPlayers()[0].getLivingPieces()) {
-            piece.setLocation(new Location(boardSize - piece.getLocation().getRow() - 1, boardSize - piece.getLocation().getCol() - 1));
+            piece.setLocation(generateLocation(boardSize - piece.getLocation().getRow() - 1, boardSize - piece.getLocation().getCol() - 1));
             players[1].addPiece(piece);
             piece.setOwner(players[1]);
             piece.setId(piece.getId() + players[0].getLivingPieces().size());
@@ -219,6 +221,10 @@ public class SuperTacticoGame {
         return players[turns % players.length];
     }
 
+    public Player getOtherPlayer() {
+        return players[(turns + 1) % players.length];
+    }
+
     public void removePiece(Location location) {
         board[location.getRow()][location.getCol()] = null;
     }
@@ -281,7 +287,8 @@ public class SuperTacticoGame {
         for(int i=0;i<board.length;i++){
             for(int j=0; j<board.length; j++){
                 board[i][j] = help[i][j];
-                board[i][j].getPiece().setLocation(new Location(i, j));
+                if(board[i][j].getPiece() != null)
+                    board[i][j].getPiece().setLocation(generateLocation(i, j));
             }
         }
     }

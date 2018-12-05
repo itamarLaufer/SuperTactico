@@ -9,6 +9,7 @@ import com.laufer.itamar.engine.SuperTacticoGame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.laufer.itamar.engine.Location.generateLocation;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestSingleStepMove {
@@ -17,21 +18,21 @@ class TestSingleStepMove {
     }
     @Test
     public void testCanMoveSingleStep(){
-        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(1, 1), 0);
-        assertTrue(singleStepper.canMove(new Location(1, 0)));
-        assertTrue(singleStepper.canMove(new Location(1, 2)));
-        assertTrue(singleStepper.canMove(new Location(0, 1)));
-        assertTrue(singleStepper.canMove(new Location(2, 1)));
+        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), generateLocation(1, 1), 0);
+        assertTrue(singleStepper.canMove(generateLocation(1, 0)));
+        assertTrue(singleStepper.canMove(generateLocation(1, 2)));
+        assertTrue(singleStepper.canMove(generateLocation(0, 1)));
+        assertTrue(singleStepper.canMove(generateLocation(2, 1)));
     }
     @Test
     public void testCannotMoveDiagonally(){
-        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(0, 0), 0);
-        assertFalse(singleStepper.canMove(new Location(1, 1)));
+        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), generateLocation(0, 0), 0);
+        assertFalse(singleStepper.canMove(generateLocation(1, 1)));
     }
     @Test
     public void testCannotMoveMoreThanSingleStep(){
-        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), new Location(0, 0), 0);
-        assertFalse(singleStepper.canMove(new Location(8, 0)));
+        Piece singleStepper = new LieutenantGeneral(game, game.getCurrentPlayer(), generateLocation(0, 0), 0);
+        assertFalse(singleStepper.canMove(generateLocation(8, 0)));
     }
     @BeforeEach
     public void init(){

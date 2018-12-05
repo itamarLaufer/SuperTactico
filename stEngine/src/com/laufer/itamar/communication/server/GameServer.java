@@ -53,16 +53,18 @@ public class GameServer {
             waiting.setGame(gameClient);
             client.setGame(gameClient);
             JSONObject update = new JSONObject();
-            update.put("pieces", JsonUtils.listToJsonArray(game.getCurrentPlayer().getLivingPieces()));
+            update.put("pieces", JsonUtils.listToJsonArray(game.getOtherPlayer().getLivingPieces()));
             update.put("starts", 1);
             update.put("opponent", client.getName());
             ServerUtils.send(waiting.getSocket(), update.toJSONString());
             game.nextTurn();
-            update.put("pieces", JsonUtils.listToJsonArray(game.getCurrentPlayer().getLivingPieces()));
+            game.turnBoard();
+            update.put("pieces", JsonUtils.listToJsonArray(game.getOtherPlayer().getLivingPieces()));
             update.put("starts", 0);
             update.put("opponent", waiting.getName());
             ServerUtils.send(client.getSocket(), update.toJSONString());
             game.previousTurn();
+            game.turnBoard();
             waiting = null;
         }
         else {
