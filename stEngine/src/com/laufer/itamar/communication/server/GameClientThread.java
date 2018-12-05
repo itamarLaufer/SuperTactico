@@ -18,10 +18,12 @@ public class GameClientThread implements Runnable {
     }
 
     public void run() {
+        SuperTacticoGame game = new SuperTacticoGame();
         System.out.println("new client has connected " + client.getSocket());
-        client.setGame(new GameClient(new SuperTacticoGame(), null, null));
+        client.setGame(new GameClient(game, null, null));
         JSONObject update = new JSONObject();
-        update.put("board", client.getGame().getGame().getBoardAsJson());
+        update.put("board", game.getBoardAsJson());
+        update.put("pieces", JsonUtils.listToJsonArray(game.getAllLivingPieces()));
         ServerUtils.send(client.getSocket(), 4 + "_" + update.toJSONString());
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getSocket().getInputStream()));

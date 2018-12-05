@@ -2,6 +2,7 @@ package com.laufer.itamar.communication.server;
 
 import com.laufer.itamar.engine.SuperTacticoGame;
 import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -46,12 +47,22 @@ public class GameServer {
 
     synchronized void joinAGame(PlayerClient client) {
         if (waiting != null) {
-            GameClient game = new GameClient(new SuperTacticoGame(waiting.getName(), client.getName(), waiting.getGame().getGame(), client.getGame().getGame()), waiting, client);
-            games.add(game);
-            ServerUtils.send(waiting.getSocket(), "game found!");
-            ServerUtils.send(client.getSocket(), "game found!");
-            waiting.setGame(game);
-            client.setGame(game);
+            SuperTacticoGame game = new SuperTacticoGame(waiting.getName(), client.getName(), waiting.getGame().getGame(), client.getGame().getGame());
+            GameClient gameClient = new GameClient(game, waiting, client);
+            games.add(gameClient);
+            waiting.setGame(gameClient);
+            client.setGame(gameClient);
+            JSONObject update = new JSONObject();
+            update.put("pieces", JsonUtils.listToJsonArray(game.getCurrentPlayer().getLivingPieces()));
+            update.put("starts", 1);
+            update.put("opponent", client.getName());
+            ServerUtils.send(waiting.getSocket(), update.toJSONString());
+            game.nextTurn();
+            update.put("pieces", JsonUtils.listToJsonArray(game.getCurrentPlayer().getLivingPieces()));
+            update.put("starts", 0);
+            update.put("opponent", waiting.getName());
+            ServerUtils.send(client.getSocket(), update.toJSONString());
+            game.previousTurn();
             waiting = null;
         }
         else {

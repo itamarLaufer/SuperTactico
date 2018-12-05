@@ -219,6 +219,7 @@ public abstract class Piece implements JsonParsable
             arr.add(piece.parseJson());
         }
         res.put("loads", arr);
+        res.put("location", location.parseJson());
 
         return res;
     }

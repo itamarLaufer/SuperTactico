@@ -12,8 +12,17 @@ public class Location implements JsonParsable
 {
     private int row;
     private int col;
+    private static final Location[][] LOCATIONS = new Location[20][20]; //Todo use constant
+    static {
+        for(int i=0; i < LOCATIONS.length; i++){
+            for(int j=0; j < LOCATIONS.length; j++){
+                LOCATIONS[i][j] = new Location(i, j);
+            }
+        }
+    }
 
-    public Location(int row, int col) {
+
+    private Location(int row, int col) {
         this.row = row;
         this.col = col;
     }
@@ -94,5 +103,8 @@ public class Location implements JsonParsable
         res.put("row", row);
         res.put("col", col);
         return res;
+    }
+    public static Location generateLocation(int row, int col){
+        return LOCATIONS[row][col];
     }
 }

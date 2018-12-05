@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) {
         //Todo do some tests here
         //Todo handle die of loader with safe boat
-        new SuperTacticoGame().printBoard();
         GameServer server = new GameServer();
         server.runServer();
     }
