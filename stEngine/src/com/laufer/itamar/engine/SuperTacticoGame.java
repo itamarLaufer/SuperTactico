@@ -53,7 +53,7 @@ public class SuperTacticoGame {
             insertPiece(piece);
         }
         for(Piece piece: p2FakeGame.getPlayers()[0].getLivingPieces()) {
-            piece.setLocation(new Location(boardSize - piece.getLocation().getRow() - 1, piece.getLocation().getCol()));
+            piece.setLocation(new Location(boardSize - piece.getLocation().getRow() - 1, boardSize - piece.getLocation().getCol() - 1));
             players[1].addPiece(piece);
             piece.setOwner(players[1]);
             piece.setId(piece.getId() + players[0].getLivingPieces().size());
