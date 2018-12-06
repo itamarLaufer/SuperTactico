@@ -31,36 +31,46 @@ public class GameClientThread implements Runnable {
             String inputLine;
             String name;
             while ((inputLine = in.readLine()) != null) {
-                if(inputLine.startsWith("1_")){
+                String[]args = inputLine.split("_");
+                if(args[0].equals("1")){
                     if(game.isFake()) {
-                        name = inputLine.replace("1_", "");
-                        client.setName(name);
-                        server.joinAGame(client);
+                        if(args.length == 2){
+                            name = args[1];
+                            client.setName(name);
+                            server.joinAGame(client);
+                        }
+                        else
+                            ServerUtils.send(client.getSocket(), "0_" + "invalid request");
                     }
                     else
                         ServerUtils.send(client.getSocket(), "You are already in a game");
                 }
-                else if(inputLine.startsWith("3_")){
-                    Piece actor = game.getPieceById(Integer.parseInt(inputLine.replace("3_", "")));
-                    if(actor == null){
-                        ServerUtils.send(client.getSocket(), "0_" + "invalid id");
-                        continue;
+                else if(args[0].equals("3")){
+                    if(args.length == 2){
+                        int actorId;
+                        try{
+                        actorId = Integer.parseInt(args[1]);}
+                        catch (NumberFormatException e){
+                            ServerUtils.send(client.getSocket(), "0_" + "invalid request");
+                            continue;
+                        }
+                        Piece actor = game.getPieceById(actorId);
+                        if(actor != null){
+                            if(!game.isFake()){
+                                ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getPossibleOrders()));
+                            }
+                            else{
+                                ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getLocateOrders()));
+                            }
+                        }
+                        else
+                            ServerUtils.send(client.getSocket(), "0_" + "invalid id");
                     }
-                    if(!game.isFake()){
-                        ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getPossibleOrders()));
-                    }
-                    else{
-                        ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getLocateOrders()));
-                    }
-
-
-                }
-                else {
-                    if (client.getGame().getGame().isFake())
-                        ServerUtils.send(client.getSocket(), "You didn't join a game yet");
                     else
-                        ServerUtils.send(client.getSocket(), "Opponent is " + client.getGame().getOtherPlayer(client).getName());
-                    }
+                        ServerUtils.send(client.getSocket(), "0_" + "invalid request");
+                }
+                else
+                    ServerUtils.send(client.getSocket(), "0_" + "wrong request");
                 }
         } catch (SocketException e) { //client has disconnected
             System.out.println("client has disconnected " + client.getSocket());
