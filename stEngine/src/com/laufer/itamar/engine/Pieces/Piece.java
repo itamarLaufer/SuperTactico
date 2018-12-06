@@ -163,6 +163,7 @@ public abstract class Piece implements JsonParsable
         if (!hasLifeSHip) {
             game.removePiece(location);
             owner.removePiece(this);
+            location = generateLocation(-1, -1);
             for (Piece piece : getPieceAndItsLoads()) {
                 piece.die();
             }
@@ -211,18 +212,24 @@ public abstract class Piece implements JsonParsable
     }
 
     public JSONObject parseJson() {
-        JSONObject res = new JSONObject();
-        if(game.getCurrentPlayer() == owner) {
-            res.put("id", id);
-            res.put("typeId", getType());
+        if(game.getCurrentPlayer() == owner)
+            return visibleParseJson();
+        return invisibleParseJson();
         }
+    public JSONObject invisibleParseJson() {
+        JSONObject res = new JSONObject();
         JSONArray arr = new JSONArray();
         for(Piece piece: getAllLoads()){
             arr.add(piece.parseJson());
         }
         res.put("loads", arr);
         res.put("location", location.parseJson());
-
+        return res;
+    }
+    public JSONObject visibleParseJson() {
+        JSONObject res = invisibleParseJson();
+        res.put("id", id);
+        res.put("typeId", getType());
         return res;
     }
 }

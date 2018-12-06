@@ -10,8 +10,10 @@ public class LoadOrder extends Order {
     }
 
     @Override
-    public void execute() {
-        actor.load(game.getPieceFromBoard(location));
+    public Piece[] execute() {
+        Piece loaded = game.getPieceFromBoard(location);
+        actor.load(loaded);
+        return new Piece[]{actor, loaded};
     }
 
 }

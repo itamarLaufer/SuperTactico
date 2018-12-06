@@ -6,6 +6,8 @@ import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import org.json.simple.JSONObject;
 
+import java.util.List;
+
 public abstract class Order implements JsonParsable {
 
     protected SuperTacticoGame game;
@@ -19,7 +21,12 @@ public abstract class Order implements JsonParsable {
         this.location = location;
         this.id = id;
     }
-    public abstract void execute();
+
+    /**
+     * Executes this order
+     * @return the pieces that this order changed something regarding to them
+     */
+    public abstract Piece[] execute();
 
     @Override
     public JSONObject parseJson() {

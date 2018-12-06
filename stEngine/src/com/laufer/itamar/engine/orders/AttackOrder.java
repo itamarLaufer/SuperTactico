@@ -10,8 +10,10 @@ public class AttackOrder extends Order{
     }
 
     @Override
-    public void execute() {
-        actor.attack(game.getPieceFromBoard(location));
+    public Piece[] execute() {
+        Piece target = game.getPieceFromBoard(location);
+        actor.attack(target);
+        return new Piece[]{actor, target};
         //Todo needs to send back to gui to show in nice interface the participants in the attack and the results
     }
 }

@@ -12,7 +12,9 @@ public class UnloadOrder extends Order {
     }
 
     @Override
-    public void execute() {
+    public Piece[] execute() {
+        Piece loader = actor.getLoader();
         actor.unload(location);
+        return new Piece[]{actor, loader};
     }
 }

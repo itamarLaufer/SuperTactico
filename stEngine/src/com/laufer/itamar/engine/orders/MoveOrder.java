@@ -10,7 +10,8 @@ public class MoveOrder extends Order {
     }
 
     @Override
-    public void execute() {
+    public Piece[] execute() {
         actor.move(location);
+        return new Piece[]{actor};
     }
 }
