@@ -24,8 +24,9 @@ public abstract class Order implements JsonParsable {
     @Override
     public JSONObject parseJson() {
         JSONObject res = new JSONObject();
-        res.put("id", actor.getId());
+        res.put("actorId", actor.getId());
         res.put("location", location.parseJson());
+        res.put("typeId", id);
         return res;
     }
 }
