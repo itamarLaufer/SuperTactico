@@ -1,6 +1,7 @@
 package com.laufer.itamar.communication.server;
 
 
+import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import org.json.simple.JSONObject;
 
@@ -30,14 +31,29 @@ public class GameClientThread implements Runnable {
             String inputLine;
             String name;
             while ((inputLine = in.readLine()) != null) {
-                if(inputLine.contains("join")){
-                    if(client.getGame().getGame().isFake()) {
-                        name = inputLine.replace("join ", "");
+                if(inputLine.startsWith("1_")){
+                    if(game.isFake()) {
+                        name = inputLine.replace("1_", "");
                         client.setName(name);
                         server.joinAGame(client);
                     }
                     else
                         ServerUtils.send(client.getSocket(), "You are already in a game");
+                }
+                else if(inputLine.startsWith("3_")){
+                    Piece actor = game.getPieceById(Integer.parseInt(inputLine.replace("3_", "")));
+                    if(actor == null){
+                        ServerUtils.send(client.getSocket(), "0_" + "invalid id");
+                        continue;
+                    }
+                    if(!game.isFake()){
+                        ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getPossibleOrders()));
+                    }
+                    else{
+                        ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getLocateOrders()));
+                    }
+
+
                 }
                 else {
                     if (client.getGame().getGame().isFake())

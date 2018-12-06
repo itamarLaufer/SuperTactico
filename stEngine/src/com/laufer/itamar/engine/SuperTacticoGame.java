@@ -292,5 +292,12 @@ public class SuperTacticoGame {
             }
         }
     }
+    public Piece getPieceById(int id){
+        for(Piece piece: getAllLivingPieces()){
+            if(piece.getId() == id)
+                return piece;
+        }
+        return null;
+    }
 }
 
