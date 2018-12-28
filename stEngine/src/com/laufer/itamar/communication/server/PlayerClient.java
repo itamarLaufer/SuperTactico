@@ -1,8 +1,11 @@
 package com.laufer.itamar.communication.server;
 
+import com.laufer.itamar.engine.Player;
+
 import java.net.Socket;
 
 public class PlayerClient {
+    private Player player;
     private Socket socket;
     private String name;
     private GameClient game;
@@ -34,5 +37,13 @@ public class PlayerClient {
 
     public void setGame(GameClient game) {
         this.game = game;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

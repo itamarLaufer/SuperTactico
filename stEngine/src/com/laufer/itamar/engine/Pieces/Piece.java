@@ -139,7 +139,7 @@ public abstract class Piece implements JsonParsable
     }
     public void move(Location dest){
         for(Piece piece:getPieceAndItsLoads()){
-            game.movePiece(piece,dest);
+            game.movePiece(piece, dest);
         }
     }
     public List<Piece>getPieceAndItsLoads(){
@@ -211,23 +211,25 @@ public abstract class Piece implements JsonParsable
         return res;
     }
 
-    public JSONObject parseJson() {
-        if(game.getCurrentPlayer() == owner)
-            return visibleParseJson();
-        return invisibleParseJson();
-        }
-    public JSONObject invisibleParseJson() {
+    public JSONObject parseJson(String[]args) {
+        if(args == null || args.length < 1)
+            throw new IllegalArgumentException("Must receive argument for whether this piece should be represented as visible or invisible!");
+        if(Integer.parseInt(args[0]) == owner.getId())
+            return visibleParseJson(args);
+        return invisibleParseJson(args);
+    }
+    public JSONObject invisibleParseJson(String[]args) {
         JSONObject res = new JSONObject();
         JSONArray arr = new JSONArray();
         for(Piece piece: getAllLoads()){
-            arr.add(piece.parseJson());
+            arr.add(piece.parseJson(args));
         }
         res.put("loads", arr);
-        res.put("location", location.parseJson());
+        res.put("location", location.parseJson(null));
         return res;
     }
-    public JSONObject visibleParseJson() {
-        JSONObject res = invisibleParseJson();
+    public JSONObject visibleParseJson(String[]args) {
+        JSONObject res = invisibleParseJson(args);
         res.put("id", id);
         res.put("typeId", getType());
         return res;

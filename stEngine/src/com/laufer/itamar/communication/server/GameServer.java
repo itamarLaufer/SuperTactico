@@ -51,19 +51,21 @@ public class GameServer {
             GameClient gameClient = new GameClient(game, waiting, client);
             games.add(gameClient);
             waiting.setGame(gameClient);
+            waiting.setPlayer(game.getPlayers()[0]);
             client.setGame(gameClient);
+            client.setPlayer(game.getPlayers()[1]);
             JSONObject update = new JSONObject();
-            update.put("pieces", JsonUtils.listToJsonArray(game.getOtherPlayer().getLivingPieces()));
-            update.put("starts", 1);
+            update.put("pieces", JsonUtils.listToJsonArray(game.getOtherPlayer().getLivingPieces(), new String[]{"0"}));
+            update.put("turn", 1);
             update.put("opponent", client.getName());
+            update.put("id", 0);
             ServerUtils.send(waiting.getSocket(), update.toJSONString());
-            game.nextTurn();
             game.turnBoard();
-            update.put("pieces", JsonUtils.listToJsonArray(game.getOtherPlayer().getLivingPieces()));
-            update.put("starts", 0);
+            update.put("pieces", JsonUtils.listToJsonArray(game.getCurrentPlayer().getLivingPieces(), new String[]{"1"}));
+            update.put("turn", 0);
+            update.put("id", 1);
             update.put("opponent", waiting.getName());
             ServerUtils.send(client.getSocket(), update.toJSONString());
-            game.previousTurn();
             game.turnBoard();
             waiting = null;
         }
@@ -88,7 +90,7 @@ public class GameServer {
         if(!disconnecting.getGame().getGame().isFake()) { //in a middle of a game -> needs to update opponent
             ServerUtils.send(disconnecting.getGame().getOtherPlayer(disconnecting).getSocket(), "Your opponent has disconnected");
             disconnecting.getGame().getOtherPlayer(disconnecting).setGame(null);
-            games.remove(disconnecting.getGame());
+            removeGame(disconnecting.getGame());
         }
         else{ // not in a middle of a game, but maybe while waiting for an opponent
             synchronized (this) {
@@ -101,5 +103,12 @@ public class GameServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+    public void removeGame(GameClient gameClient){
+        games.remove(gameClient);
     }
 }

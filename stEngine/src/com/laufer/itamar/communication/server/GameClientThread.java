@@ -4,7 +4,6 @@ package com.laufer.itamar.communication.server;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import com.laufer.itamar.engine.orders.MoveOrder;
-import com.laufer.itamar.engine.orders.Order;
 import org.json.simple.JSONObject;
 
 import java.io.*;
@@ -27,7 +26,7 @@ public class GameClientThread implements Runnable {
         client.setGame(new GameClient(game, null, null));
         JSONObject update = new JSONObject();
         update.put("board", game.getBoardAsJson());
-        update.put("pieces", JsonUtils.listToJsonArray(game.getAllLivingPieces()));
+        update.put("pieces", JsonUtils.listToJsonArray(game.getAllLivingPieces(), new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
         ServerUtils.send(client.getSocket(), "4_" + update.toJSONString());
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getSocket().getInputStream()));
@@ -63,9 +62,9 @@ public class GameClientThread implements Runnable {
                             Piece actor = game.getPieceById(actorId);
                             if (actor != null) {
                                 if (!game.isFake()) {
-                                    ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getPossibleOrders()));
+                                    ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getPossibleOrders(), null));
                                 } else {
-                                    ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getLocateOrders()));
+                                    ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getLocateOrders(), null));
                                 }
                             } else
                                 ServerUtils.send(client.getSocket(), "0_" + "invalid id");
@@ -87,14 +86,54 @@ public class GameClientThread implements Runnable {
                             if (actor != null) {
                                 if (!game.isFake()) {
                                     //Todo validate, Execute the order, update all players, move turn to the next player
-                                } else {
+                                    if(client.getPlayer() != game.getCurrentPlayer()){
+                                        ServerUtils.send(client.getSocket(), "0_" + "not your turn");
+                                        continue;
+                                    }
                                     List<MoveOrder> orders = actor.getLocateOrders();
                                     if (orderId < orders.size() && orderId >= 0) {
-                                        System.out.println("banana");
-                                        Piece[] change = orders.get(actorId).execute();
+                                        Piece[] change = orders.get(orderId).execute();
                                         update = new JSONObject();
-                                        update.put("pieces", JsonUtils.arrayToJsonArray(change));
+                                        update.put("pieces", JsonUtils.arrayToJsonArray(change, new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
+                                        update.put("turn", game.getCurrentPlayer().getId() ^ 1);
                                         //Todo maybe another data should be added like battle results, safe boat etc.
+                                        ServerUtils.send(client.getSocket(), "5_" + update.toJSONString());
+                                        game.turnBoard();
+
+                                        update.put("pieces", JsonUtils.arrayToJsonArray(change, new String[]{String.valueOf(game.getCurrentPlayer().getId() ^ 1)}));
+                                        //Todo maybe another data should be added like battle results, safe boat etc.
+                                        ServerUtils.send(client.getGame().getOtherPlayer(client).getSocket(), "5_" + update.toJSONString());
+
+                                        game.nextTurn();
+                                        SuperTacticoGame finalgame = game;
+                                        this.server.getExecutor().execute(new TurnTaskForTime(5000, finalgame.getTurns()) {
+                                            @Override
+                                            public boolean isDone() {
+                                                System.out.println("isDone");
+                                                return getTurn() < finalgame.getTurns();
+                                            }
+
+                                            @Override
+                                            public void handleNotDone() {
+                                                try {
+                                                    client.getGame().getOtherPlayer(client).getSocket().close();
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                ServerUtils.send(client.getSocket(), "0_opponent has disconnected");
+                                                client.setGame(new GameClient(new SuperTacticoGame(), null, null));
+                                                server.removeGame(client.getGame());
+                                            }
+                                        });
+                                    } else
+                                        ServerUtils.send(client.getSocket(), "0_" + "invalid request");
+                                } else {
+                                    System.out.println("banana");
+                                    List<MoveOrder> orders = actor.getLocateOrders();
+                                    if (orderId < orders.size() && orderId >= 0) {
+                                        Piece[] change = orders.get(orderId).execute();
+                                        update = new JSONObject();
+                                        update.put("pieces", JsonUtils.arrayToJsonArray(change, new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
                                         ServerUtils.send(client.getSocket(), "5_" + update.toJSONString());
                                     } else
                                         ServerUtils.send(client.getSocket(), "0_" + "invalid request");

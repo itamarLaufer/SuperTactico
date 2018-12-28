@@ -98,7 +98,7 @@ public class Location implements JsonParsable
     }
 
     @Override
-    public JSONObject parseJson() {
+    public JSONObject parseJson(String[]args) {
         JSONObject res = new JSONObject();
         res.put("row", row);
         res.put("col", col);

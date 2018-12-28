@@ -274,9 +274,6 @@ public class SuperTacticoGame {
     public void nextTurn(){
         turns++;
     }
-    public void previousTurn(){
-        turns--;
-    }
     public void turnBoard(){
         Square[][] help = new Square[board.length][board.length];
         for(int i=0;i<board.length;i++){
@@ -298,6 +295,10 @@ public class SuperTacticoGame {
                 return piece;
         }
         return null;
+    }
+
+    public int getTurns() {
+        return turns;
     }
 }
 

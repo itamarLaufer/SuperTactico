@@ -31,10 +31,10 @@ public class Square implements JsonParsable {
     }
 
     @Override
-    public JSONObject parseJson() {
+    public JSONObject parseJson(String[]args) {
         JSONObject res = new JSONObject();
         res.put("locType", locType.toString());
-        res.put("piece", piece.parseJson());
+        res.put("piece", piece.parseJson(args));
         return res;
     }
 

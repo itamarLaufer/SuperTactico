@@ -29,11 +29,20 @@ public abstract class Order implements JsonParsable {
     public abstract Piece[] execute();
 
     @Override
-    public JSONObject parseJson() {
+    public JSONObject parseJson(String[]args) {
         JSONObject res = new JSONObject();
         res.put("actorId", actor.getId());
-        res.put("location", location.parseJson());
+        res.put("location", location.parseJson(null));
         res.put("typeId", id);
         return res;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "actor=" + actor.getId() +
+                ", location=" + location +
+                ", id=" + id +
+                '}';
     }
 }
