@@ -1,11 +1,8 @@
 package com.laufer.itamar.communication.server;
 
 import com.laufer.itamar.engine.SuperTacticoGame;
-import org.jetbrains.annotations.Nullable;
 import org.json.simple.JSONObject;
-
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;

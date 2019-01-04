@@ -1,5 +1,6 @@
 package com.laufer.itamar.engine;
 
+import com.laufer.itamar.RandomGenerator;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.Pieces.PieceFactory;
 import com.laufer.itamar.engine.orders.MoveOrder;
@@ -48,17 +49,19 @@ public class SuperTacticoGame {
         players = new Player[2];
         players[0] = new Player(p1name, 0);
         players[1] = new Player(p2name, 1);
+        RandomGenerator randomGenerator = new RandomGenerator(200);
         diedWithLifeShip = new ArrayList<>(2); //Todo if I will go in it than it should be initialized every turn or something
         for(Piece piece: p1FakeGame.getPlayers()[0].getLivingPieces()) {
             players[0].addPiece(piece);
             piece.setOwner(players[0]);
+            piece.setId(randomGenerator.getRandom());
             insertPiece(piece);
         }
         for(Piece piece: p2FakeGame.getPlayers()[0].getLivingPieces()) {
             piece.setLocation(generateLocation(boardSize - piece.getLocation().getRow() - 1, boardSize - piece.getLocation().getCol() - 1));
             players[1].addPiece(piece);
             piece.setOwner(players[1]);
-            piece.setId(piece.getId() + players[0].getLivingPieces().size());
+            piece.setId(randomGenerator.getRandom());
             insertPiece(piece);
         }
     }
@@ -299,6 +302,9 @@ public class SuperTacticoGame {
 
     public int getTurns() {
         return turns;
+    }
+    public Square[][]getBoard(){
+        return board;
     }
 }
 

@@ -96,7 +96,7 @@ public abstract class Piece implements JsonParsable
     }
 
     public boolean basicCanMove(Location dest){
-        if(location.equals(dest)) //it cannot move to it's current place
+        if(dest == null || location.equals(dest)) //it cannot move to it's current place
             return false;
         if(dest.notInBoard(game.getBoardSize()))
             return false;
@@ -163,7 +163,7 @@ public abstract class Piece implements JsonParsable
         if (!hasLifeSHip) {
             game.removePiece(location);
             owner.removePiece(this);
-            location = generateLocation(-1, -1);
+            location = Location.OUT_LOCATION;
             for (Piece piece : getPieceAndItsLoads()) {
                 piece.die();
             }
@@ -224,13 +224,13 @@ public abstract class Piece implements JsonParsable
         for(Piece piece: getAllLoads()){
             arr.add(piece.parseJson(args));
         }
+        res.put("id", id);
         res.put("loads", arr);
         res.put("location", location.parseJson(null));
         return res;
     }
     public JSONObject visibleParseJson(String[]args) {
         JSONObject res = invisibleParseJson(args);
-        res.put("id", id);
         res.put("typeId", getType());
         return res;
     }
