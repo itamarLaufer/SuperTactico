@@ -1,14 +1,17 @@
 package com.laufer.itamar.communication.server;
 
+import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class GameServer {
     private final int PORT = 1978;
@@ -52,19 +55,25 @@ public class GameServer {
             client.setGame(gameClient);
             client.setPlayer(game.getPlayers()[1]);
             JSONObject update = new JSONObject();
-            update.put("pieces", JsonUtils.listToJsonArray(game.getOtherPlayer().getLivingPieces(), new String[]{"0"}));
+            List<Piece>pieces = new LinkedList<>(game.getOtherPlayer().getLivingPieces());
+            Collections.shuffle(pieces);
+            update.put("pieces", JsonUtils.listToJsonArray(pieces, new String[]{"0"}));
+            update.put("newIds", game.getCurrentPlayer().getLivingPieces().stream().map(Piece::getId).collect(Collectors.toList()));
             update.put("turn", 1);
             update.put("opponent", client.getName());
             update.put("id", 0);
             ServerUtils.send(waiting.getSocket(), update.toJSONString());
             game.turnBoard();
-            update.put("pieces", JsonUtils.listToJsonArray(game.getCurrentPlayer().getLivingPieces(), new String[]{"1"}));
+            pieces = new LinkedList<>(game.getOtherPlayer().getLivingPieces());
+            Collections.shuffle(pieces);
+            update.put("pieces", JsonUtils.listToJsonArray(pieces, new String[]{"1"}));
+            update.put("newIds", game.getOtherPlayer().getLivingPieces().stream().map(Piece::getId).collect(Collectors.toList()));
             update.put("turn", 0);
             update.put("id", 1);
             update.put("opponent", waiting.getName());
             ServerUtils.send(client.getSocket(), update.toJSONString());
-            game.turnBoard();
             waiting = null;
+            game.printBoard();
         }
         else {
             waiting = client;

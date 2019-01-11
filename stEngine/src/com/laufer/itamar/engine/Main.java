@@ -3,6 +3,7 @@ package com.laufer.itamar.engine;
 import com.laufer.itamar.communication.server.GameServer;
 
 
+
 public class Main {
 
     public static void main(String[] args) {
