@@ -11,6 +11,6 @@ public class SingleStepMove implements MoveType {
 
     @Override
     public List<Location> getPossibleMoveLocations(Piece piece) {
-        return piece.getLocation().touchingLocations().stream().filter(piece::basicCanMove).collect(Collectors.toList());
+        return piece.getLocation().touchingLocations(piece.getGame().getBoardSize()).stream().filter(piece::basicCanMove).collect(Collectors.toList());
     }
 }

@@ -6,6 +6,7 @@ import com.laufer.itamar.JsonParsable;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Location implements JsonParsable
@@ -75,12 +76,13 @@ public class Location implements JsonParsable
      * Calculates the locations that touches the square
      * @return list of the locations that touches the square
      */
-    public List<Location>touchingLocations(){
+    public List<Location>touchingLocations(int boardSize){
         List<Location>res = new ArrayList<>(4);
         res.add(generateLocation(row + 1, col));
         res.add(generateLocation(row - 1, col));
         res.add(generateLocation(row, col + 1));
         res.add(generateLocation(row, col +-1));
+        res.removeIf(location -> location.notInBoard(boardSize));
         return res;
     }
 
@@ -108,6 +110,6 @@ public class Location implements JsonParsable
     public static Location generateLocation(int row, int col){
         if(row >=0 && row < LOCATIONS.length && col >=0 && col < LOCATIONS.length)
             return LOCATIONS[row][col];
-        return null;
+        return OUT_LOCATION;
     }
 }

@@ -119,15 +119,15 @@ public abstract class Piece implements JsonParsable
         return moveType.getPossibleMoveLocations(this).stream().map(it-> new MoveOrder(this, it)).collect(Collectors.toList());
     }
     private List<AttackOrder> getPossibleAttackOrders(){
-        return location.touchingLocations().stream().filter(it -> canAttack(game.getPieceFromBoard(it))).map(it -> new AttackOrder(this, it)).collect(Collectors.toList());
+        return location.touchingLocations(game.getBoardSize()).stream().filter(it -> canAttack(game.getPieceFromBoard(it))).map(it -> new AttackOrder(this, it)).collect(Collectors.toList());
     }
 
     private List<LoadOrder> getPossibleLoadOrders(){
-        return location.touchingLocations().stream().filter(it -> canLoad(game.getPieceFromBoard(it))).map(it -> new LoadOrder(this, it)).collect(Collectors.toList());
+        return location.touchingLocations(game.getBoardSize()).stream().filter(it -> canLoad(game.getPieceFromBoard(it))).map(it -> new LoadOrder(this, it)).collect(Collectors.toList());
     }
 
     private List<UnloadOrder> getPossibleUnloadOrders(){
-        return location.touchingLocations().stream().filter(this::canUnload).map(it -> new UnloadOrder(this, it)).collect(Collectors.toList());
+        return location.touchingLocations(game.getBoardSize()).stream().filter(this::canUnload).map(it -> new UnloadOrder(this, it)).collect(Collectors.toList());
     }
 
     public Location getLocation() {
