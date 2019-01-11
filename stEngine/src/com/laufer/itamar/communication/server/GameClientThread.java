@@ -63,11 +63,14 @@ public class GameClientThread implements Runnable {
                             }
                             Piece actor = client.getGame().getGame().getPieceById(actorId);
                             if (actor != null) {
+                                update = new JSONObject();
+                                update.put("actorId", actor.getId());
                                 if (!client.getGame().getGame().isFake()) {
-                                    ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getPossibleOrders(), null));
+                                    update.put("orders", JsonUtils.listToJsonArray(actor.getPossibleOrders(), null));
                                 } else {
-                                    ServerUtils.send(client.getSocket(), "5_" + JsonUtils.listToJsonArray(actor.getLocateOrders(), null));
+                                    update.put("orders", JsonUtils.listToJsonArray(actor.getLocateOrders(), null));
                                 }
+                                ServerUtils.send(client.getSocket(), "5_" + update.toJSONString());
                             } else
                                 ServerUtils.send(client.getSocket(), "0_" + "invalid id");
                         } else
