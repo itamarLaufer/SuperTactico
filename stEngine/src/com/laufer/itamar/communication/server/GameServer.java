@@ -62,16 +62,16 @@ public class GameServer {
             update.put("turn", 1);
             update.put("opponent", client.getName());
             update.put("id", 0);
-            ServerUtils.send(waiting.getSocket(), update.toJSONString());
+            ServerUtils.send(waiting.getSocket(), "4_" + update.toJSONString());
             game.turnBoard();
-            pieces = new LinkedList<>(game.getOtherPlayer().getLivingPieces());
+            pieces = new LinkedList<>(game.getCurrentPlayer().getLivingPieces());
             Collections.shuffle(pieces);
             update.put("pieces", JsonUtils.listToJsonArray(pieces, new String[]{"1"}));
             update.put("newIds", game.getOtherPlayer().getLivingPieces().stream().map(Piece::getId).collect(Collectors.toList()));
             update.put("turn", 0);
             update.put("id", 1);
             update.put("opponent", waiting.getName());
-            ServerUtils.send(client.getSocket(), update.toJSONString());
+            ServerUtils.send(client.getSocket(), "4_" + update.toJSONString());
             waiting = null;
             game.printBoard();
         }
