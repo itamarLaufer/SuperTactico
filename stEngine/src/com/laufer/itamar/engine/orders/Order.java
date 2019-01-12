@@ -3,6 +3,7 @@ package com.laufer.itamar.engine.orders;
 import com.laufer.itamar.JsonParsable;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Pieces.Piece;
+import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import org.json.simple.JSONObject;
 
@@ -26,7 +27,8 @@ public abstract class Order implements JsonParsable {
      * Executes this order
      * @return the pieces that this order changed something regarding to them
      */
-    public abstract Piece[] execute();
+    public abstract void execute();
+    public abstract JSONObject orderDelta(Player player);
 
     @Override
     public JSONObject parseJson(String[]args) {
