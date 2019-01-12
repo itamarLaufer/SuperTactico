@@ -278,18 +278,9 @@ public class SuperTacticoGame {
         turns++;
     }
     public void turnBoard(){
-        Square[][] help = new Square[board.length][board.length];
-        for(int i=0;i<board.length;i++){
-            for(int j=0; j<board.length; j++){
-                help[board.length - i - 1][board.length - j - 1] = board[i][j];
-            }
-        }
-        for(int i=0;i<board.length;i++){
-            for(int j=0; j<board.length; j++){
-                board[i][j] = help[i][j];
-                if(board[i][j].getPiece() != null)
-                    board[i][j].getPiece().setLocation(generateLocation(i, j));
-            }
+        for(Piece piece: getAllLivingPieces()){
+            piece.setLocation(piece.getLocation().turned(boardSize));
+            board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
         }
     }
     public Piece getPieceById(int id){

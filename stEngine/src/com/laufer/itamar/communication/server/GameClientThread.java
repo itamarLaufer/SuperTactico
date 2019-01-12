@@ -92,7 +92,6 @@ public class GameClientThread implements Runnable {
                         //Todo maybe another data should be added like battle results, safe boat etc.
                         ServerUtils.send(client.getSocket(), "5_" + update.toJSONString());
                         client.getGame().getGame().turnBoard();
-
                         update.put("pieces", JsonUtils.arrayToJsonArray(change, new String[]{String.valueOf(client.getGame().getGame().getCurrentPlayer().getId() ^ 1)}));
                         //Todo maybe another data should be added like battle results, safe boat etc.
                         ServerUtils.send(client.getGame().getOtherPlayer(client).getSocket(), "4_" + update.toJSONString());
@@ -108,6 +107,7 @@ public class GameClientThread implements Runnable {
 
                             @Override
                             public void handleNotDone() {
+                                System.out.println("handleNotDone");
                                 try {
                                     client.getGame().getOtherPlayer(client).getSocket().close();
                                 } catch (IOException e) {
