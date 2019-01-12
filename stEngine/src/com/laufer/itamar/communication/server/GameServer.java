@@ -72,8 +72,9 @@ public class GameServer {
             update.put("id", 1);
             update.put("opponent", waiting.getName());
             ServerUtils.send(client.getSocket(), "4_" + update.toJSONString());
+            GameClientThread.timeTheTurn(client, this);
+
             waiting = null;
-            game.printBoard();
         }
         else {
             waiting = client;
@@ -94,7 +95,7 @@ public class GameServer {
 
     public void disconnect(PlayerClient disconnecting){
         if(!disconnecting.getGame().getGame().isFake()) { //in a middle of a game -> needs to update opponent
-            ServerUtils.send(disconnecting.getGame().getOtherPlayer(disconnecting).getSocket(), "Your opponent has disconnected");
+            ServerUtils.send(disconnecting.getGame().getOtherPlayer(disconnecting).getSocket(), "0_Opponent has disconnected");
             disconnecting.getGame().getOtherPlayer(disconnecting).setGame(null);
             removeGame(disconnecting.getGame());
         }

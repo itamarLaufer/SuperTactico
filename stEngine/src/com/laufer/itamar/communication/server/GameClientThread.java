@@ -97,27 +97,7 @@ public class GameClientThread implements Runnable {
                         ServerUtils.send(client.getGame().getOtherPlayer(client).getSocket(), "4_" + update.toJSONString());
 
                         client.getGame().getGame().nextTurn();
-                        SuperTacticoGame finalgame = client.getGame().getGame();
-                        this.server.getExecutor().execute(new TurnTaskForTime(5000, finalgame.getTurns()) {
-                            @Override
-                            public boolean isDone() {
-                                System.out.println("isDone");
-                                return getTurn() < finalgame.getTurns();
-                            }
-
-                            @Override
-                            public void handleNotDone() {
-                                System.out.println("handleNotDone");
-                                try {
-                                    client.getGame().getOtherPlayer(client).getSocket().close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                ServerUtils.send(client.getSocket(), "0_opponent has disconnected");
-                                client.setGame(new GameClient(new SuperTacticoGame(), null, null));
-                                server.removeGame(client.getGame());
-                            }
-                        });
+                        timeTheTurn(client, server);
                     } else
                         ServerUtils.send(client.getSocket(), "0_" + "invalid request");
                 } else {
@@ -135,6 +115,27 @@ public class GameClientThread implements Runnable {
                 ServerUtils.send(client.getSocket(), "0_" + "invalid id");
         } else
             ServerUtils.send(client.getSocket(), "0_" + "invalid request");
+    }
+
+    public static void timeTheTurn(PlayerClient client, GameServer server) {
+        SuperTacticoGame finalGame = client.getGame().getGame();
+        server.getExecutor().execute(new TurnTaskForTime(30000, finalGame.getTurns()) { //Todo constant
+            @Override
+            public boolean isDone() {
+                return getTurn() < finalGame.getTurns();
+            }
+
+            @Override
+            public void handleNotDone() {
+                try {
+                    client.getGame().getOtherPlayer(client).getSocket().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                client.setGame(new GameClient(new SuperTacticoGame(), null, null));
+                server.removeGame(client.getGame());
+            }
+        });
     }
 
     private void handlePossibleOrdersRequest(String[] args) {
