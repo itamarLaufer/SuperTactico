@@ -85,14 +85,15 @@ public class GameClientThread implements Runnable {
                     }
                     List<Order> orders = actor.getPossibleOrders();
                     if (orderId < orders.size() && orderId >= 0) {
-                        Piece[] change = orders.get(orderId).execute();
-                        update = new JSONObject();
-                        update.put("pieces", JsonUtils.arrayToJsonArray(change, new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
+                        Order order = orders.get(orderId);
+                        order.execute();
+                        update = order.orderDelta(client.getGame().getGame().getCurrentPlayer());
                         update.put("turn", client.getGame().getGame().getCurrentPlayer().getId() ^ 1);
                         //Todo maybe another data should be added like battle results, safe boat etc.
                         ServerUtils.send(client.getSocket(), "5_" + update.toJSONString());
                         client.getGame().getGame().turnBoard();
-                        update.put("pieces", JsonUtils.arrayToJsonArray(change, new String[]{String.valueOf(client.getGame().getGame().getCurrentPlayer().getId() ^ 1)}));
+                        update = order.orderDelta(client.getGame().getGame().getOtherPlayer());
+                        update.put("turn", client.getGame().getGame().getCurrentPlayer().getId() ^ 1);
                         //Todo maybe another data should be added like battle results, safe boat etc.
                         ServerUtils.send(client.getGame().getOtherPlayer(client).getSocket(), "4_" + update.toJSONString());
 
@@ -103,9 +104,9 @@ public class GameClientThread implements Runnable {
                 } else {
                     List<MoveOrder> orders = actor.getLocateOrders();
                     if (orderId < orders.size() && orderId >= 0) {
-                        Piece[] change = orders.get(orderId).execute();
-                        update = new JSONObject();
-                        update.put("pieces", JsonUtils.arrayToJsonArray(change, new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
+                        Order order = orders.get(orderId);
+                        order.execute();
+                        update = order.orderDelta(client.getGame().getGame().getCurrentPlayer());
                         ServerUtils.send(client.getSocket(), "4_" + update.toJSONString());
                     } else
                         ServerUtils.send(client.getSocket(), "0_" + "invalid request");
@@ -119,7 +120,7 @@ public class GameClientThread implements Runnable {
 
     public static void timeTheTurn(PlayerClient client, GameServer server) {
         SuperTacticoGame finalGame = client.getGame().getGame();
-        server.getExecutor().execute(new TurnTaskForTime(30000, finalGame.getTurns()) { //Todo constant
+        server.getExecutor().execute(new TurnTaskForTime(1200000, finalGame.getTurns()) { //Todo constant
             @Override
             public boolean isDone() {
                 return getTurn() < finalGame.getTurns();
