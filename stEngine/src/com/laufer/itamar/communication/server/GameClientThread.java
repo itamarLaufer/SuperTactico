@@ -149,6 +149,10 @@ public class GameClientThread implements Runnable {
                 ServerUtils.send(client.getSocket(), "0_" + "invalid request");
                 return;
             }
+            if(client.getPlayer() != client.getGame().getGame().getCurrentPlayer()){
+                ServerUtils.send(client.getSocket(), "0_" + "not your turn"); //Todo support possible orders request not at your turn
+                return;
+            }
             Piece actor = client.getGame().getGame().getPieceById(actorId);
             if (actor != null) {
                 update = new JSONObject();
