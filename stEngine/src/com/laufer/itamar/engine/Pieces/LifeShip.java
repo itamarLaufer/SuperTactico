@@ -1,13 +1,11 @@
 package com.laufer.itamar.engine.Pieces;
 
-import com.laufer.itamar.engine.AttackResult;
 import com.laufer.itamar.engine.Loads.LifeShipLoads;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
-import com.laufer.itamar.engine.Visitors.ReturningVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
 
 public class LifeShip extends Ship {
@@ -21,7 +19,7 @@ public class LifeShip extends Ship {
     }
 
     @Override
-    public AttackResult accept(AttackVisitor attackVisitor) {
+    public Boolean accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 

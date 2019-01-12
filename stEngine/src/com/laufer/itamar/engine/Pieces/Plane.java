@@ -16,8 +16,8 @@ public abstract class Plane extends Piece {
         die();
         return false;
     }
-    public AttackResult attack(Bomb bomb){
+    public Boolean attack(Bomb bomb){
         die();
-        return AttackResult.DEFEAT;
+        return false;
     }
 }

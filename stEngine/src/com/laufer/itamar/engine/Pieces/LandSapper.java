@@ -1,7 +1,6 @@
 package com.laufer.itamar.engine.Pieces;
 
 
-import com.laufer.itamar.engine.AttackResult;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
@@ -20,7 +19,7 @@ public class LandSapper extends Soldier {
     }
 
     @Override
-    public AttackResult accept(AttackVisitor attackVisitor) {
+    public Boolean accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 

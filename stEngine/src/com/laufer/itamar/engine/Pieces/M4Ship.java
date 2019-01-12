@@ -1,7 +1,6 @@
 package com.laufer.itamar.engine.Pieces;
 
 
-import com.laufer.itamar.engine.AttackResult;
 import com.laufer.itamar.engine.Loads.M4Loads;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
@@ -21,7 +20,7 @@ public class M4Ship extends Ship {
     }
 
     @Override
-    public AttackResult accept(AttackVisitor attackVisitor) {
+    public Boolean accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 

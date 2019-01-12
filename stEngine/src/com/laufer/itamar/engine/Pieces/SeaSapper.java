@@ -18,7 +18,7 @@ public class SeaSapper extends Soldier {
     }
 
     @Override
-    public AttackResult accept(AttackVisitor attackVisitor) {
+    public Boolean accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 

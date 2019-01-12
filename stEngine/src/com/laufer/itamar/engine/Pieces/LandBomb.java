@@ -19,7 +19,7 @@ public class LandBomb extends Bomb {
     }
 
     @Override
-    public AttackResult accept(AttackVisitor attackVisitor) {
+    public Boolean accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 

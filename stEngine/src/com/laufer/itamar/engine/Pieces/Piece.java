@@ -56,11 +56,11 @@ public abstract class Piece implements JsonParsable
     public boolean canUnload(Location dest){
         return !dest.notInBoard(game.getBoardSize()) && this.location.touches(dest) && loader != null && locType.canStandHere(game.getLocTypeInLocation(dest));
     }
-    public AttackResult attack(Piece other){
+    public Boolean attack(Piece other){
         return other.accept(attackVisitor);
     }
     public abstract void accept(VoidVisitor voidVisitor);
-    public abstract AttackResult accept(AttackVisitor attackVisitor);
+    public abstract Boolean accept(AttackVisitor attackVisitor);
     public abstract boolean accept(CanLoadVisitor canLoadVisitor);
     public boolean touches(Piece other){
         return Location.touches(location,other.location);
@@ -176,9 +176,9 @@ public abstract class Piece implements JsonParsable
         loader = null;
     }
 
-    public AttackResult attack(Bomb bomb){
+    public Boolean attack(Bomb bomb){
         die();
-        return AttackResult.DEFEAT;
+        return false;
     }
 
     public Player getOwner() {

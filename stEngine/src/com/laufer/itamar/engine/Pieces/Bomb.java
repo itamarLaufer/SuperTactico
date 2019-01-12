@@ -10,7 +10,7 @@ public abstract class Bomb extends Piece {
     }
 
     @Override
-    public AttackResult attack(Piece other) {
+    public Boolean attack(Piece other) {
         return null;
     } //cannot attack
 

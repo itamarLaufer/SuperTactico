@@ -1,7 +1,6 @@
 package com.laufer.itamar.engine.Pieces;
 
 
-import com.laufer.itamar.engine.AttackResult;
 import com.laufer.itamar.engine.Loads.CannotLoadLoads;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Movings.NotMove;
@@ -9,7 +8,6 @@ import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
-import com.laufer.itamar.engine.Visitors.ReturningVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
 
 public class Flag extends Soldier {
@@ -21,7 +19,7 @@ public class Flag extends Soldier {
     }
 
     @Override
-    public AttackResult accept(AttackVisitor attackVisitor) {
+    public Boolean accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
