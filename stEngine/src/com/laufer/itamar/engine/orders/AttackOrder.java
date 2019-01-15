@@ -30,7 +30,10 @@ public class AttackOrder extends Order{
         res.put("pieces", pieces);
         if(result == null)
             throw new IllegalArgumentException("Must execute the order before retrieving delta!");
-        res.put("battleResult", result);
+        if(actor.getOwner() == player)
+            res.put("battleResult", result);
+        else
+            res.put("battleResult", !result);
         return res;
     }
 }

@@ -7,7 +7,6 @@ import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import org.json.simple.JSONObject;
 
-import java.util.List;
 
 public abstract class Order implements JsonParsable {
 

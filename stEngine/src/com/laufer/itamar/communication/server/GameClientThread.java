@@ -88,12 +88,12 @@ public class GameClientThread implements Runnable {
                         Order order = orders.get(orderId);
                         order.execute();
                         update = order.orderDelta(client.getGame().getGame().getCurrentPlayer());
-                        update.put("turn", client.getGame().getGame().getCurrentPlayer().getId() ^ 1);
+                        update.put("turn", 0);
                         //Todo maybe another data should be added like battle results, safe boat etc.
                         ServerUtils.send(client.getSocket(), "5_" + update.toJSONString());
                         client.getGame().getGame().turnBoard();
                         update = order.orderDelta(client.getGame().getGame().getOtherPlayer());
-                        update.put("turn", client.getGame().getGame().getCurrentPlayer().getId() ^ 1);
+                        update.put("turn", 1);
                         //Todo maybe another data should be added like battle results, safe boat etc.
                         ServerUtils.send(client.getGame().getOtherPlayer(client).getSocket(), "4_" + update.toJSONString());
 
