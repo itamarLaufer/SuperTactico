@@ -32,7 +32,7 @@ public abstract class Order implements JsonParsable {
     @Override
     public JSONObject parseJson(String[]args) {
         JSONObject res = new JSONObject();
-        res.put("location", location.parseJson(null));
+        res.put("location", location.parseJson());
         res.put("typeId", id);
         return res;
     }

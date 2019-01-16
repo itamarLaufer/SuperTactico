@@ -226,7 +226,7 @@ public abstract class Piece implements JsonParsable
         }
         res.put("id", id);
         res.put("loads", arr);
-        res.put("location", location.parseJson(null));
+        res.put("location", location.parseJson());
         return res;
     }
     public JSONObject visibleParseJson(String[]args) {
