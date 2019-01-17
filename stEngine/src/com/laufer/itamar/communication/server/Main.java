@@ -1,11 +1,7 @@
-package com.laufer.itamar.engine;
-
-import com.laufer.itamar.communication.server.GameServer;
-
+package com.laufer.itamar.communication.server;
 
 
 public class Main {
-
     public static void main(String[] args) {
         // Todo handle die of loader with safe boat
         //Todo maybe support pause request
