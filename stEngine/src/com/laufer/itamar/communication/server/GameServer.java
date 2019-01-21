@@ -2,7 +2,8 @@ package com.laufer.itamar.communication.server;
 
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.SuperTacticoGame;
-import com.laufer.itamar.org.json.simple.JSONObject;
+import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

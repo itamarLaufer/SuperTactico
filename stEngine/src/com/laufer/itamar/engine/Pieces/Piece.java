@@ -8,8 +8,8 @@ import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
 import com.laufer.itamar.engine.orders.*;
-import com.laufer.itamar.org.json.simple.JSONArray;
-import com.laufer.itamar.org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

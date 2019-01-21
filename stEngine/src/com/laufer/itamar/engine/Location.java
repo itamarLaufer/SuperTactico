@@ -2,7 +2,7 @@ package com.laufer.itamar.engine;
 
 
 
-import com.laufer.itamar.org.json.simple.JSONArray;
+import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;

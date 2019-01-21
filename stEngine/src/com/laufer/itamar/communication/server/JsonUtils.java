@@ -1,7 +1,7 @@
 package com.laufer.itamar.communication.server;
 
 import com.laufer.itamar.JsonParsable;
-import com.laufer.itamar.org.json.simple.JSONArray;
+import org.json.simple.JSONArray;
 
 import java.util.List;
 
