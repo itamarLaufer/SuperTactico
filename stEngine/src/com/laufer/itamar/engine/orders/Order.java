@@ -5,7 +5,7 @@ import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
-import org.json.simple.JSONObject;
+import com.laufer.itamar.org.json.simple.JSONObject;
 
 
 public abstract class Order implements JsonParsable {

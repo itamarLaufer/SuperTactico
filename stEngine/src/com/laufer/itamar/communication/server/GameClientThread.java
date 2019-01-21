@@ -5,7 +5,7 @@ import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import com.laufer.itamar.engine.orders.MoveOrder;
 import com.laufer.itamar.engine.orders.Order;
-import org.json.simple.JSONObject;
+import com.laufer.itamar.org.json.simple.JSONObject;
 
 import java.io.*;
 import java.net.Socket;

@@ -4,7 +4,7 @@ import com.laufer.itamar.RandomGenerator;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.Pieces.PieceFactory;
 import com.laufer.itamar.engine.orders.MoveOrder;
-import org.json.simple.JSONArray;
+import com.laufer.itamar.org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
