@@ -93,7 +93,7 @@ public class GameServer {
     }
 
     public void disconnect(PlayerClient disconnecting){
-        if(!disconnecting.getGame().getGame().isFake()) { //in a middle of a game -> needs to update opponent
+        if(disconnecting.getGame() != null && !disconnecting.getGame().getGame().isFake()) { //in a middle of a game -> needs to update opponent
             ServerUtils.send(disconnecting.getGame().getOtherPlayer(disconnecting).getSocket(), "0_Opponent has disconnected");
             disconnecting.getGame().getOtherPlayer(disconnecting).setGame(null);
             removeGame(disconnecting.getGame());
