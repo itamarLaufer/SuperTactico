@@ -59,17 +59,10 @@ public class PlayerClient {
         this.player = player;
     }
     public void run() {
-        SuperTacticoGame game = new SuperTacticoGame();
-        System.out.println("new client has connected " + this.getSocket());
-        this.setGame(new GameClient(game, null, null));
-        JSONObject update = new JSONObject();
-        update.put("board", game.getBoardAsJson());
-        update.put("pieces", JsonUtils.listToJsonArray(game.getAllLivingPieces(), new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
-        ServerUtils.send(this.getSocket(), "4_" + update.toJSONString());
+        sendPrimaryData();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.getSocket().getInputStream()));
             String inputLine;
-            String name;
             while ((inputLine = in.readLine()) != null) {
                 String[]args = inputLine.split("_");
                 if(args.length == 0) {
@@ -99,63 +92,88 @@ public class PlayerClient {
         }
     }
 
+    private void sendPrimaryData() {
+        SuperTacticoGame game = new SuperTacticoGame();
+        System.out.println("new client has connected " + this.getSocket());
+        this.setGame(new GameClient(game, null, null));
+        JSONObject update = new JSONObject();
+        update.put("board", game.getBoardAsJson());
+        update.put("pieces", JsonUtils.listToJsonArray(game.getAllLivingPieces(), new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
+        ServerUtils.send(this.getSocket(), "4_" + update.toJSONString());
+    }
+
     private void handleExecuteOrderRequest(String[] args) {
-        SuperTacticoGame game = this.getGame().getGame();
-        JSONObject update;
-        if (args.length == 3) {
+        if (args.length != 3) {
+            ServerUtils.send(this.getSocket(), "0_" + "invalid request");
+        }
+        else{
             int actorId;
             int orderId;
             try {
                 actorId = Integer.parseInt(args[1]);
                 orderId = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                ServerUtils.send(this.getSocket(), "0_" + "invalid request");
+                ServerUtils.send(this.getSocket(), "0_" + "invalid request no integers");
                 return;
             }
             Piece actor = this.getGame().getGame().getPieceById(actorId);
-            if (actor != null) {
-                if (!this.getGame().getGame().isFake()) {
-                    //Todo validate, Execute the order, update all players, move turn to the next player
-                    if(this.getPlayer() != this.getGame().getGame().getCurrentPlayer()){
-                        ServerUtils.send(this.getSocket(), "0_" + "not your turn");
-                        return;
-                    }
-                    List<Order> orders = actor.getPossibleOrders();
-                    if (orderId < orders.size() && orderId >= 0) {
-                        Order order = orders.get(orderId);
-                        order.execute();
-                        update = order.orderDelta(this.getGame().getGame().getCurrentPlayer());
-                        update.put("turn", 0);
-                        //Todo maybe another data should be added like battle results, safe boat etc.
-                        ServerUtils.send(this.getSocket(), "5_" + update.toJSONString());
-                        this.getGame().getGame().turnBoard();
-                        update = order.orderDelta(this.getGame().getGame().getOtherPlayer());
-                        update.put("turn", 1);
-                        //Todo maybe another data should be added like battle results, safe boat etc.
-                        ServerUtils.send(this.getGame().getOtherPlayer(this).getSocket(), "4_" + update.toJSONString());
-
-                        this.getGame().getGame().nextTurn();
-                        timeTheTurn(server);
-                    } else
-                        ServerUtils.send(this.getSocket(), "0_" + "invalid request");
-                } else {
-                    List<MoveOrder> orders = actor.getLocateOrders();
-                    if (orderId < orders.size() && orderId >= 0) {
-                        Order order = orders.get(orderId);
-                        order.execute();
-                        update = order.orderDelta(this.getGame().getGame().getCurrentPlayer());
-                        ServerUtils.send(this.getSocket(), "4_" + update.toJSONString());
-                    } else
-                        ServerUtils.send(this.getSocket(), "0_" + "invalid request");
-
-                }
-            } else
+            if (actor == null) {
                 ServerUtils.send(this.getSocket(), "0_" + "invalid id");
-        } else
-            ServerUtils.send(this.getSocket(), "0_" + "invalid request");
+            }
+            else{
+                if (!game.getGame().isFake())
+                    executeOrderRealGame(orderId, actor);
+                else { //is fake
+                    executeOrderFakeGame(orderId, actor);
+                }
+            }
+        }
     }
 
-    public void timeTheTurn(GameServer server) {
+    private void executeOrderFakeGame(int orderId, Piece actor) {
+        JSONObject update;List<MoveOrder> orders = actor.getLocateOrders();
+        if (orderId >= orders.size() || orderId < 0) {
+            ServerUtils.send(this.getSocket(), "0_" + "invalid order id");
+        }
+        else{
+            Order order = orders.get(orderId);
+            order.execute();
+            update = order.orderDelta(this.getGame().getGame().getCurrentPlayer());
+            ServerUtils.send(this.getSocket(), "4_" + update.toJSONString());
+        }
+    }
+
+    private void executeOrderRealGame(int orderId, Piece actor) {
+        if(this.getPlayer() != this.getGame().getGame().getCurrentPlayer())
+            ServerUtils.send(this.getSocket(), "0_" + "not your turn");
+        else{
+            List<Order> orders = actor.getPossibleOrders();
+            if (orderId >= orders.size() || orderId < 0)
+                ServerUtils.send(this.getSocket(), "0_" + "invalid order id");
+            else
+                realGameOrderExecution(orderId, orders);
+        }
+    }
+
+    private void realGameOrderExecution(int orderId, List<Order> orders) {
+        JSONObject update;
+        Order order = orders.get(orderId);
+        order.execute();
+        update = order.orderDelta(this.getGame().getGame().getCurrentPlayer());
+        update.put("turn", 0);
+        //Todo maybe another data should be added like battle results, safe boat etc.
+        ServerUtils.send(this.getSocket(), "5_" + update.toJSONString());
+        this.getGame().getGame().turnBoard();
+        update = order.orderDelta(this.getGame().getGame().getOtherPlayer());
+        update.put("turn", 1);
+        //Todo maybe another data should be added like battle results, safe boat etc.
+        ServerUtils.send(this.getGame().getOtherPlayer(this).getSocket(), "4_" + update.toJSONString());
+
+        this.getGame().getGame().nextTurn();
+        timeTheTurn(server);
+    }
+
+    void timeTheTurn(GameServer server) {
         PlayerClient current = this;
         SuperTacticoGame finalGame = getGame().getGame();
         server.getExecutor().execute(new TurnTaskForTime(1200000, finalGame.getTurns()) { //Todo constant
@@ -178,33 +196,39 @@ public class PlayerClient {
     }
 
     private void handlePossibleOrdersRequest(String[] args) {
-        JSONObject update;
+        //validation
         if (args.length == 2) {
             int actorId;
             try {
                 actorId = Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                ServerUtils.send(this.getSocket(), "0_" + "invalid request");
+                ServerUtils.send(this.getSocket(), "0_" + "invalid request no integers");
                 return;
             }
             if(this.getPlayer() != this.getGame().getGame().getCurrentPlayer()){
-                ServerUtils.send(this.getSocket(), "0_" + "not your turn"); //Todo support possible orders request not at your turn
+                ServerUtils.send(this.getSocket(), "0_" + "not your turn");
                 return;
             }
             Piece actor = this.getGame().getGame().getPieceById(actorId);
             if (actor != null) {
-                update = new JSONObject();
-                update.put("actorId", actor.getId());
-                if (!this.getGame().getGame().isFake()) {
-                    update.put("orders", JsonUtils.listToJsonArray(actor.getPossibleOrders(), null));
-                } else {
-                    update.put("orders", JsonUtils.listToJsonArray(actor.getLocateOrders(), null));
-                }
-                ServerUtils.send(this.getSocket(), "5_" + update.toJSONString());
+                sendPossibleOrdersRespond(actor);
             } else
                 ServerUtils.send(this.getSocket(), "0_" + "invalid id");
-        } else
+        }
+        else
             ServerUtils.send(this.getSocket(), "0_" + "invalid request");
+    }
+
+    private void sendPossibleOrdersRespond(Piece actor) {
+        JSONObject update;
+        update = new JSONObject();
+        update.put("actorId", actor.getId());
+        if (!this.getGame().getGame().isFake()) {
+            update.put("orders", JsonUtils.listToJsonArray(actor.getPossibleOrders(), null));
+        } else {
+            update.put("orders", JsonUtils.listToJsonArray(actor.getLocateOrders(), null));
+        }
+        ServerUtils.send(this.getSocket(), "5_" + update.toJSONString());
     }
 
     private void handleJoinRequest(String[] args) {
@@ -219,5 +243,4 @@ public class PlayerClient {
         } else
             ServerUtils.send(this.getSocket(), "You are already in a game");
     }
-    
 }
