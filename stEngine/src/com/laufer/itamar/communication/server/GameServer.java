@@ -72,7 +72,6 @@ public class GameServer {
             update.put("opponent", waiting.getName());
             ServerUtils.send(client.getSocket(), "4_" + update.toJSONString());
             client.timeTheTurn(this);
-
             waiting = null;
         }
         else {
@@ -85,7 +84,7 @@ public class GameServer {
 
                 @Override
                 public void handleNotDone() {
-                    ServerUtils.send(waiting.getSocket(), "couldn't find :(");
+                    ServerUtils.send(waiting.getSocket(), "0_couldn't find :(");
                     waiting = null;
                 }
             });

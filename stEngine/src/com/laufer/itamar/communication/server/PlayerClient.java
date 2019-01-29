@@ -27,19 +27,15 @@ public class PlayerClient {
         this.name = ""; //name will be initialized later with setName()
     }
 
-    public Socket getSocket() {
+    Socket getSocket() {
         return socket;
     }
 
-    public void setSocket(Socket socket) {
-        this.socket = socket;
-    }
-
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
@@ -58,7 +54,7 @@ public class PlayerClient {
     public void setPlayer(Player player) {
         this.player = player;
     }
-    public void run() {
+    void run() {
         sendPrimaryData();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.getSocket().getInputStream()));

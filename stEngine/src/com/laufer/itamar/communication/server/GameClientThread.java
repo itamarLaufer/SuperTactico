@@ -6,7 +6,7 @@ import java.net.Socket;
 public class GameClientThread implements Runnable {
     private PlayerClient client;
 
-    public GameClientThread(GameServer server, Socket clientSocket) {
+    GameClientThread(GameServer server, Socket clientSocket) {
         this.client = new PlayerClient(clientSocket, server);
     }
 

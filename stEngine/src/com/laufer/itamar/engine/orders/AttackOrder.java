@@ -7,6 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 
+
 public class AttackOrder extends Order{
     private static int ORDER_ID = 1;
     private Piece target;
