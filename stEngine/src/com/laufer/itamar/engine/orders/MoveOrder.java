@@ -22,7 +22,7 @@ public class MoveOrder extends Order {
     public JSONObject orderDelta(Player player) {
         JSONObject res = new JSONObject();
         JSONArray pieces = new JSONArray();
-        pieces.add(actor.parseJson(new String[]{String.valueOf(player.getId())}));
+        pieces.add(actor.parseJson());
         res.put("pieces", pieces);
         return res;
     }

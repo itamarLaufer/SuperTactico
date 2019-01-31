@@ -24,8 +24,8 @@ public class LoadOrder extends Order {
     public JSONObject orderDelta(Player player) {
         JSONObject res = new JSONObject();
         JSONArray pieces = new JSONArray();
-        pieces.add(actor.parseJson(new String[]{String.valueOf(player.getId())}));
-        pieces.add(loaded.parseJson(new String[]{String.valueOf(player.getId())}));
+        pieces.add(actor.parseJson());
+        pieces.add(loaded.parseJson());
         res.put("pieces", pieces);
         return res;
     }

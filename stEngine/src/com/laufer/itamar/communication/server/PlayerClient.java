@@ -94,7 +94,7 @@ public class PlayerClient {
         this.setGame(new GameClient(game, null, null));
         JSONObject update = new JSONObject();
         update.put("board", game.getBoardAsJson());
-        update.put("pieces", JsonUtils.listToJsonArray(game.getAllLivingPieces(), new String[]{String.valueOf(game.getCurrentPlayer().getId())}));
+        update.put("pieces", JsonUtils.piecesListToVisibileJsonArray(game.getAllLivingPieces()));
         ServerUtils.send(this.getSocket(), "4_" + update.toJSONString());
     }
 
@@ -220,9 +220,9 @@ public class PlayerClient {
         update = new JSONObject();
         update.put("actorId", actor.getId());
         if (!this.getGame().getGame().isFake()) {
-            update.put("orders", JsonUtils.listToJsonArray(actor.getPossibleOrders(), null));
+            update.put("orders", JsonUtils.listToJsonArray(actor.getPossibleOrders()));
         } else {
-            update.put("orders", JsonUtils.listToJsonArray(actor.getLocateOrders(), null));
+            update.put("orders", JsonUtils.listToJsonArray(actor.getLocateOrders()));
         }
         ServerUtils.send(this.getSocket(), "5_" + update.toJSONString());
     }
