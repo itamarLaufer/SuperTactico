@@ -19,7 +19,10 @@ public class AttackOrder extends Order{
 
     @Override
     public void execute() {
+        Location targetLoaction = target.getLocation();
         result = actor.attack(target);
+        if(result)
+            actor.move(targetLoaction);
     }
 
     @Override
