@@ -2,12 +2,13 @@ package com.laufer.itamar.engine;
 
 
 
+import com.laufer.itamar.JsonParsable;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Location
+public class Location implements JsonParsable
 {
     private int row;
     private int col;

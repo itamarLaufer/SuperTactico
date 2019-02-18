@@ -5,6 +5,7 @@ import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
+import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
 
@@ -30,7 +31,7 @@ public abstract class Order implements JsonParsable {
     public abstract JSONObject orderDelta(Player player);
 
     @Override
-    public JSONObject parseJson(String[]args) {
+    public JSONAware parseJson() {
         JSONObject res = new JSONObject();
         res.put("location", location.parseJson());
         res.put("typeId", id);
