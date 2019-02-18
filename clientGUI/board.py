@@ -41,3 +41,15 @@ class Board(tk.Frame):
                                                     activefill='purple')
                 self.canvas_tiles[i].append(rect)
 
+    def _click(self, event):
+        """take care of a click on a screen"""
+        # print 'c', event
+        self.canvas.itemconfig('current', fill='silver')
+        return
+
+    def color_tile(self, x, y, color="yellow"):
+        self._refresh()
+        self.canvas.itemconfig(self.canvas_tiles[x][y], fill=color)
+        self.canvas.update()
+        self.update_idletasks()
+
