@@ -1,7 +1,6 @@
 package com.laufer.itamar.engine;
 
 import com.laufer.itamar.engine.Pieces.Piece;
-import org.json.simple.JSONObject;
 
 public class Square {
     private LocType locType;

@@ -211,26 +211,19 @@ public abstract class Piece implements JsonParsable
         return res;
     }
 
-    public JSONObject parseJson(String[]args) {
-        if(args == null || args.length < 1)
-            throw new IllegalArgumentException("Must receive argument for whether this piece should be represented as visible or invisible!");
-        if(Integer.parseInt(args[0]) == owner.getId())
-            return visibleParseJson(args);
-        return invisibleParseJson(args);
-    }
-    public JSONObject invisibleParseJson(String[]args) {
+    public JSONObject parseJson() {
         JSONObject res = new JSONObject();
         JSONArray arr = new JSONArray();
         for(Piece piece: getAllLoads()){
-            arr.add(piece.parseJson(args));
+            arr.add(piece.parseJson());
         }
         res.put("id", id);
         res.put("loads", arr);
         res.put("location", location.parseJson());
         return res;
     }
-    public JSONObject visibleParseJson(String[]args) {
-        JSONObject res = invisibleParseJson(args);
+    public JSONObject visibleParseJson() {
+        JSONObject res = parseJson();
         res.put("typeId", getType());
         return res;
     }

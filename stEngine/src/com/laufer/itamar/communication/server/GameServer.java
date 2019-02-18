@@ -3,6 +3,7 @@ package com.laufer.itamar.communication.server;
 import com.laufer.itamar.engine.Pieces.Piece;
 import com.laufer.itamar.engine.SuperTacticoGame;
 import org.json.simple.JSONObject;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -57,7 +58,7 @@ public class GameServer {
             JSONObject update = new JSONObject();
             List<Piece>pieces = new LinkedList<>(game.getOtherPlayer().getLivingPieces());
             Collections.shuffle(pieces);
-            update.put("pieces", JsonUtils.listToJsonArray(pieces, new String[]{"0"}));
+            update.put("pieces", JsonUtils.piecesListToVisibileJsonArray(pieces));
             update.put("newIds", game.getCurrentPlayer().getLivingPieces().stream().map(Piece::getId).collect(Collectors.toList()));
             update.put("turn", 1);
             update.put("opponent", client.getName());
@@ -65,13 +66,12 @@ public class GameServer {
             game.turnBoard();
             pieces = new LinkedList<>(game.getCurrentPlayer().getLivingPieces());
             Collections.shuffle(pieces);
-            update.put("pieces", JsonUtils.listToJsonArray(pieces, new String[]{"1"}));
+            update.put("pieces", JsonUtils.listToJsonArray(pieces));
             update.put("newIds", game.getOtherPlayer().getLivingPieces().stream().map(Piece::getId).collect(Collectors.toList()));
             update.put("turn", 0);
             update.put("opponent", waiting.getName());
             ServerUtils.send(client.getSocket(), "4_" + update.toJSONString());
-            GameClientThread.timeTheTurn(client, this);
-
+            client.timeTheTurn(this);
             waiting = null;
         }
         else {
@@ -84,7 +84,7 @@ public class GameServer {
 
                 @Override
                 public void handleNotDone() {
-                    ServerUtils.send(waiting.getSocket(), "couldn't find :(");
+                    ServerUtils.send(waiting.getSocket(), "0_couldn't find :(");
                     waiting = null;
                 }
             });
@@ -92,7 +92,7 @@ public class GameServer {
     }
 
     public void disconnect(PlayerClient disconnecting){
-        if(!disconnecting.getGame().getGame().isFake()) { //in a middle of a game -> needs to update opponent
+        if(disconnecting.getGame() != null && !disconnecting.getGame().getGame().isFake()) { //in a middle of a game -> needs to update opponent
             ServerUtils.send(disconnecting.getGame().getOtherPlayer(disconnecting).getSocket(), "0_Opponent has disconnected");
             disconnecting.getGame().getOtherPlayer(disconnecting).setGame(null);
             removeGame(disconnecting.getGame());

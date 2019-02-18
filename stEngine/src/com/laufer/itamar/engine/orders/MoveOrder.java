@@ -6,6 +6,7 @@ import com.laufer.itamar.engine.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+
 public class MoveOrder extends Order {
     private static int ORDER_ID = 0;
     public MoveOrder(Piece actor, Location location) {
@@ -21,7 +22,7 @@ public class MoveOrder extends Order {
     public JSONObject orderDelta(Player player) {
         JSONObject res = new JSONObject();
         JSONArray pieces = new JSONArray();
-        pieces.add(actor.parseJson(new String[]{String.valueOf(player.getId())}));
+        pieces.add(actor.parseJson());
         res.put("pieces", pieces);
         return res;
     }
