@@ -1,8 +1,8 @@
 package com.laufer.itamar;
 
 
-import org.json.simple.JSONObject;
+import org.json.simple.JSONAware;
 
 public interface JsonParsable {
-    JSONObject parseJson(String[]args);
+    JSONAware parseJson();
 }
