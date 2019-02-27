@@ -12,7 +12,7 @@ import org.junit.Test;
 import static com.laufer.itamar.engine.Location.generateLocation;
 import static org.junit.Assert.assertFalse;
 
-class TestBasicMove {
+public class TestBasicMove {
     private SuperTacticoGame game;
 
     @Test
@@ -33,6 +33,8 @@ class TestBasicMove {
         init();
         Piece mover = new LieutenantGeneral(game, game.getCurrentPlayer(), generateLocation(0, 0), 0);
         Piece blocking = new LieutenantGeneral(game, game.getCurrentPlayer(), generateLocation(1, 0), 1);
+        game.insertPiece(blocking);
+        System.out.println(game.getPieceFromBoard(1, 0));
         assertFalse(mover.canMove(generateLocation(1, 0)));
     }
     @Test

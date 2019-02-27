@@ -105,7 +105,7 @@ public abstract class Piece implements JsonParsable
         return locType.canStandHere(game.getLocTypeInLocation(dest));
     }
     public boolean canMove(Location dest){
-        return moveType.getPossibleMoveLocations(this).contains(dest);
+        return basicCanMove(dest) && moveType.getPossibleMoveLocations(this).contains(dest);
     }
     public List<Order>getPossibleOrders(){
         List<Order>orders = new LinkedList<>();

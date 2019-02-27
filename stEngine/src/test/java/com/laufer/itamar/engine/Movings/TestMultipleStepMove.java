@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertFalse;
 
-class TestMultipleStepMove {
+public class TestMultipleStepMove {
     private SuperTacticoGame game;
     @Test
     public void testCanMoveSingleStep(){

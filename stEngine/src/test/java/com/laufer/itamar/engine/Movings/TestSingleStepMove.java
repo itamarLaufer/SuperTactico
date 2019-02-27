@@ -12,10 +12,8 @@ import static com.laufer.itamar.engine.Location.generateLocation;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-class TestSingleStepMove {
+public class TestSingleStepMove {
     private SuperTacticoGame game;
-    public TestSingleStepMove(){
-    }
     @Test
     public void testCanMoveSingleStep(){
         init();
