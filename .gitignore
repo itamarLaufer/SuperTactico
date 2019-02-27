@@ -1,0 +1,4 @@
+*.jar
+.idea
+clientGUI/test.py
+*.pyc
