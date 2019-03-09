@@ -21,7 +21,6 @@ public class SuperTacticoGame {
 
     /**
      * Initializes a game for testing reasons, *with no pieces*
-     *
      * @param board the board of the game
      */
     public SuperTacticoGame(Square[][] board) {
@@ -88,6 +87,8 @@ public class SuperTacticoGame {
                 List<MoveOrder>orders = piece.getLocateOrders();
                 if(!orders.isEmpty())
                     piece.getLocateOrders().get(0).execute();
+                else
+                    System.out.println("error! piece has no place to sit");
             }
         }
     }
@@ -101,6 +102,7 @@ public class SuperTacticoGame {
         board[1][4] = new Square(LocType.LAND);
         board[1][7] = new Square(LocType.LAND);
         board[1][10] = new Square(LocType.LAND);
+        board[1][11] = new Square(LocType.LAND);
         board[2][2] = new Square(LocType.LAND);
         board[2][3] = new Square(LocType.LAND);
         board[2][4] = new Square(LocType.LAND);
@@ -108,6 +110,7 @@ public class SuperTacticoGame {
         board[2][6] = new Square(LocType.LAND);
         board[2][7] = new Square(LocType.LAND);
         board[2][10] = new Square(LocType.LAND);
+        board[2][11] = new Square(LocType.LAND);
         board[2][14] = new Square(LocType.LAND);
         board[2][14] = new Square(LocType.LAND);
         board[3][2] = new Square(LocType.LAND);
@@ -122,6 +125,30 @@ public class SuperTacticoGame {
         board[3][12] = new Square(LocType.LAND);
         board[3][13] = new Square(LocType.LAND);
         board[3][14] = new Square(LocType.LAND);
+        board[4][3] = new Square(LocType.LAND);
+        board[4][4] = new Square(LocType.LAND);
+        board[4][5] = new Square(LocType.LAND);
+        board[4][6] = new Square(LocType.LAND);
+        board[4][7] = new Square(LocType.LAND);
+        board[4][8] = new Square(LocType.LAND);
+        board[4][9] = new Square(LocType.LAND);
+        board[4][10] = new Square(LocType.LAND);
+        board[4][10] = new Square(LocType.LAND);
+        board[4][11] = new Square(LocType.LAND);
+        board[4][12] = new Square(LocType.LAND);
+        board[4][13] = new Square(LocType.LAND);
+        board[4][3] = new Square(LocType.LAND);
+        board[4][5] = new Square(LocType.LAND);
+        board[4][5] = new Square(LocType.LAND);
+        board[4][6] = new Square(LocType.LAND);
+        board[4][7] = new Square(LocType.LAND);
+        board[4][8] = new Square(LocType.LAND);
+        board[4][9] = new Square(LocType.LAND);
+        board[4][10] = new Square(LocType.LAND);
+        board[4][10] = new Square(LocType.LAND);
+        board[4][11] = new Square(LocType.LAND);
+        board[4][12] = new Square(LocType.LAND);
+        board[4][13] = new Square(LocType.LAND);
         board[5][3] = new Square(LocType.LAND);
         board[5][4] = new Square(LocType.LAND);
         board[5][5] = new Square(LocType.LAND);
@@ -134,18 +161,7 @@ public class SuperTacticoGame {
         board[5][11] = new Square(LocType.LAND);
         board[5][12] = new Square(LocType.LAND);
         board[5][13] = new Square(LocType.LAND);
-        board[5][3] = new Square(LocType.LAND);
-        board[5][5] = new Square(LocType.LAND);
-        board[5][5] = new Square(LocType.LAND);
-        board[5][6] = new Square(LocType.LAND);
-        board[5][7] = new Square(LocType.LAND);
-        board[5][8] = new Square(LocType.LAND);
-        board[5][9] = new Square(LocType.LAND);
-        board[5][10] = new Square(LocType.LAND);
-        board[5][10] = new Square(LocType.LAND);
-        board[5][11] = new Square(LocType.LAND);
-        board[5][12] = new Square(LocType.LAND);
-        board[5][13] = new Square(LocType.LAND);
+        board[5][17] = new Square(LocType.LAND);
         board[6][5] = new Square(LocType.LAND);
         board[6][6] = new Square(LocType.LAND);
         board[6][7] = new Square(LocType.LAND);
@@ -154,6 +170,8 @@ public class SuperTacticoGame {
         board[6][10] = new Square(LocType.LAND);
         board[6][11] = new Square(LocType.LAND);
         board[6][12] = new Square(LocType.LAND);
+        board[6][16] = new Square(LocType.LAND);
+        board[6][17] = new Square(LocType.LAND);
         board[7][3] = new Square(LocType.LAND);
         board[7][4] = new Square(LocType.LAND);
         board[7][5] = new Square(LocType.LAND);
@@ -173,6 +191,7 @@ public class SuperTacticoGame {
         board[8][7] = new Square(LocType.LAND);
         board[8][8] = new Square(LocType.LAND);
         board[8][8] = new Square(LocType.LAND);
+        board[8][9] = new Square(LocType.LAND);
         board[8][10] = new Square(LocType.LAND);
         board[8][11] = new Square(LocType.LAND);
         board[8][12] = new Square(LocType.LAND);
