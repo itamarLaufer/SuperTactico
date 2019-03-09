@@ -3,7 +3,6 @@ import Tkinter as tk
 import client
 import logging
 
-
 try:
     # create a client to talk to server
     player = client.Client()
@@ -11,7 +10,7 @@ try:
     tiles, pieces = player.connect()
     # create a game board
     game_window = tk.Tk()
-    game = board.Board(game_window, tiles)
+    game = board.Board(game_window, tiles, pieces)
     game.pack(side="left", fill="both", expand="true", padx=4, pady=4)
     player.mainloop()
     game.mainloop()
