@@ -48,7 +48,7 @@ class Board(tk.Frame):
         for i, piece in enumerate(self.pieces):
             print piece
             location = piece['location']
-            self.place_piece(location[1], location[0], piece['id'])
+            self.place_piece(location[1], location[0], piece['typeId'])
 
     def place_piece(self, x, y, piece_id):
         tile_size = self.tile_size

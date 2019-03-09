@@ -2,8 +2,11 @@ import board
 import Tkinter as tk
 import client
 import logging
+import subprocess
 
 try:
+    # run the server
+    server = subprocess.Popen(r'java -jar ..\stEngine\stEngine.jar')
     # create a client to talk to server
     player = client.Client()
     # connect to the server, and get the info needed to start the game
@@ -19,3 +22,4 @@ except Exception, e:
 finally:
     # end the things that are still running
     player.end()
+    server.kill()
