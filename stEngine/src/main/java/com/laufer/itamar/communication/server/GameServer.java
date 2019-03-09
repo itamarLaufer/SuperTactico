@@ -42,7 +42,7 @@ public class GameServer {
                 System.out.println("I/O error: " + e);
             }
             // new thread for a client
-            executor.execute(new GameClientThread(this, socket));
+            executor.execute(new PlayerClient(socket, this));
         }
     }
 

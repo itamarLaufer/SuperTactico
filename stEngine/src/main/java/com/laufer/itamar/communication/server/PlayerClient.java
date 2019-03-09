@@ -14,7 +14,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
 
-public class PlayerClient {
+public class PlayerClient implements Runnable {
     private Player player;
     private Socket socket;
     private String name;
@@ -54,7 +54,7 @@ public class PlayerClient {
     public void setPlayer(Player player) {
         this.player = player;
     }
-    void run() {
+    public void run() {
         sendPrimaryData();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.getSocket().getInputStream()));
