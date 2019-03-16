@@ -201,7 +201,7 @@ public class PlayerClient implements Runnable {
                 ServerUtils.send(this.getSocket(), "0_" + "invalid request no integers");
                 return;
             }
-            if(this.getPlayer() != this.getGame().getGame().getCurrentPlayer()){
+            if(!this.game.getGame().isFake() && this.getPlayer() != this.getGame().getGame().getCurrentPlayer()){
                 ServerUtils.send(this.getSocket(), "0_" + "not your turn");
                 return;
             }
