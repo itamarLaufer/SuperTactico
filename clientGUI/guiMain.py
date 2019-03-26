@@ -3,6 +3,7 @@ import Tkinter as tk
 import client
 import logging
 import subprocess
+from piece_container import PieceContainer
 
 try:
     # run the server
@@ -11,6 +12,7 @@ try:
     player = client.Client()
     # connect to the server, and get the info needed to start the game
     tiles, pieces = player.connect()
+    pieces = PieceContainer(pieces)
     # create a game board
     game_window = tk.Tk()
     game = board.Board(game_window, tiles, pieces)
