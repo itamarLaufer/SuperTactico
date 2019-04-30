@@ -3,6 +3,7 @@ from piece import Piece
 
 class PieceContainer:
     """An object to contain piece objects. Will be more useful later on"""
+
     def __init__(self, pieces):
         self.pieces = []
         for piece in pieces:
@@ -18,4 +19,3 @@ class PieceContainer:
         """The ids are updated by the server, so we need to update as well"""
         for i in range(len(self.pieces)):
             self.pieces[i] = new_ids[i]
-            
