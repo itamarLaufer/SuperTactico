@@ -1,11 +1,15 @@
 class Piece:
     """An object to represent a piece in the game"""
-    def __init__(self, info):
+    def __init__(self, info, team):
         self.type_id = info['typeId']
         self.loads = info['loads']
         self.y, self.x = info['location']
         self.id = info['id']
-        self.image_path = r'res\pics\pieces\pieceb{}.png'.format(self.type_id)
+        if team == 'g':
+            self.image_path = r'res\pics\pieces\pieceb{}.png'.format(self.type_id)
+        else:
+            self.image_path = r'res\pics\pieces\piecew.png'.format(self.type_id)
+            self.hidden_image_path = r'res\pics\pieces\piecew{}.png'.format(self.type_id)
 
     def add_load(self, piece):
         self.loads.append(piece)

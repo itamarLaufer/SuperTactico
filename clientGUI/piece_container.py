@@ -4,16 +4,22 @@ from piece import Piece
 class PieceContainer:
     """An object to contain piece objects. Will be more useful later on"""
 
-    def __init__(self, pieces):
-        self.pieces = []
+    def __init__(self, pieces=None):
+        self.pieces = {}
         for piece in pieces:
-            self.pieces.append(Piece(piece))
+            current = Piece(piece, 'g')
+            self.pieces[current.id] = current
 
     def __iter__(self):
-        return self.pieces.__iter__()
+        return self.pieces.values().__iter__()
 
     def __getitem__(self, item):
         return self.pieces[item]
+
+    def add(self, pieces):
+        for piece in pieces:
+            current = Piece(piece, 'b')
+            self.pieces[current.id] = current
 
     def update(self, new_ids):
         """The ids are updated by the server, so we need to update as well"""
