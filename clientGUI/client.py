@@ -37,10 +37,11 @@ class Client:
                 info = self.client.recv(8192).split(self.info_splitter)
                 # TODO is there more code to add? any reason not to make these two together?
                 # parse message based on type
+                print info
                 if info[0] == '5':
                     piece_info = json_parser.json_loads_byteified(info[1])
                     self.received.append((info[0], piece_info))
-                if info[0] == '4':
+                if info[0] == '4' or info[0] == '6':
                     piece_info = json_parser.json_loads_byteified(info[1])
                     self.received.append((info[0], piece_info))
 
