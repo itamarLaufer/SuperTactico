@@ -6,9 +6,10 @@ class PieceContainer:
 
     def __init__(self, pieces=None):
         self.pieces = {}
-        for piece in pieces:
-            current = Piece(piece, 'g')
-            self.pieces[current.id] = current
+        if pieces:
+            for piece in pieces:
+                current = Piece(piece, 'g')
+                self.pieces[current.id] = current
 
     def __iter__(self):
         return self.pieces.values().__iter__()
