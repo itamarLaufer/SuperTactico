@@ -71,6 +71,7 @@ public class GameServer {
             update.put("turn", 0);
             update.put("opponent", waiting.getName());
             ServerUtils.send(client.getSocket(), "6_" + update.toJSONString());
+            game.turnBoard();
             client.timeTheTurn(this);
             waiting = null;
         }
