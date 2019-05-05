@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface MoveType {
     List<Location> getPossibleMoveLocations(Piece piece);
-
 }
