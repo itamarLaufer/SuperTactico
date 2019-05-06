@@ -54,6 +54,11 @@ class Board(tk.Frame):
                                                     activefill='purple')
                 self.canvas_tiles[i].append(rect)
 
+    def redraw_tiles(self):
+        for row1, row2 in zip(self.tiles, self.canvas_tiles):
+            for color, tile in zip(row1, row2):
+                self.canvas.itemconfig(tile, fill=self.SKY if color == 'S' else self.GROUND)
+
     def place_piece(self, piece):
         """place a picture of a piece in the location of the piece"""
         tile_size = self.tile_size
@@ -72,8 +77,9 @@ class Board(tk.Frame):
             for tk_id, pieces in self.pieces_dict.items():
                 if pieces == piece:
                     self.canvas.coords(tk_id, (piece.x * tile_size, piece.y * tile_size))
-                    self.draw_tiles()
+                    self.redraw_tiles()
                     self.canvas.tag_raise('pic', 'tile')
+                    break
 
     def _refresh(self, event=None):
         """take care of the size of the canvas changing"""
@@ -96,8 +102,11 @@ class Board(tk.Frame):
         current = self.canvas.find_withtag('current')[0]
         # if we clicked a piece
         if current in self.pieces_dict.keys():
+            # erase the previous drawings
+            self.redraw_tiles()
+            self.canvas.tag_raise('pic', 'tile')
             piece = self.pieces_dict[current]
-            # if the piece is on a default color (if it isn't, then were clicking it to complete an action)
+            # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
             if self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill") in [self.SKY, self.GROUND]:
                 self.color_tile(piece_id=piece.id)
                 self.events.append(("3", str(piece.id)))
