@@ -58,11 +58,11 @@ public class GameServer {
             JSONObject update = new JSONObject();
             List<Piece>pieces = new LinkedList<>(game.getOtherPlayer().getLivingPieces());
             Collections.shuffle(pieces);
-            update.put("pieces", JsonUtils.piecesListToVisibileJsonArray(pieces));
+            update.put("pieces", JsonUtils.listToJsonArray(pieces));
             update.put("newIds", game.getCurrentPlayer().getLivingPieces().stream().map(Piece::getId).collect(Collectors.toList()));
             update.put("turn", 1);
             update.put("opponent", client.getName());
-            ServerUtils.send(waiting.getSocket(), "4_" + update.toJSONString());
+            ServerUtils.send(waiting.getSocket(), "6_" + update.toJSONString());
             game.turnBoard();
             pieces = new LinkedList<>(game.getCurrentPlayer().getLivingPieces());
             Collections.shuffle(pieces);
@@ -70,7 +70,8 @@ public class GameServer {
             update.put("newIds", game.getOtherPlayer().getLivingPieces().stream().map(Piece::getId).collect(Collectors.toList()));
             update.put("turn", 0);
             update.put("opponent", waiting.getName());
-            ServerUtils.send(client.getSocket(), "4_" + update.toJSONString());
+            ServerUtils.send(client.getSocket(), "6_" + update.toJSONString());
+            game.turnBoard();
             client.timeTheTurn(this);
             waiting = null;
         }

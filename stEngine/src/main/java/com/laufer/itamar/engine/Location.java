@@ -112,6 +112,6 @@ public class Location implements JsonParsable
     }
 
     public Location turned(int boardSize) {
-        return generateLocation(boardSize - row - 1, boardSize - col - 1);
+        return generateLocation(boardSize - row - 1, col);
     }
 }

@@ -49,7 +49,7 @@ public class SuperTacticoGame {
         players[0] = new Player(p1name, 0);
         players[1] = new Player(p2name, 1);
         RandomGenerator randomGenerator = new RandomGenerator(200);
-        diedWithLifeShip = new ArrayList<>(2); //Todo if I will go in it than it should be initialized every turn or something
+        diedWithLifeShip = new ArrayList<>(2); //Todo if I will go in for than it should be initialized every turn or something
         for(Piece piece: p1FakeGame.getPlayers()[0].getLivingPieces()) {
             players[0].addPiece(piece);
             piece.setOwner(players[0]);
@@ -57,7 +57,7 @@ public class SuperTacticoGame {
             insertPiece(piece);
         }
         for(Piece piece: p2FakeGame.getPlayers()[0].getLivingPieces()) {
-            piece.setLocation(generateLocation(boardSize - piece.getLocation().getRow() - 1, boardSize - piece.getLocation().getCol() - 1));
+            piece.setLocation(piece.getLocation().turned(boardSize));
             players[1].addPiece(piece);
             piece.setOwner(players[1]);
             piece.setId(randomGenerator.getRandom());
@@ -80,8 +80,8 @@ public class SuperTacticoGame {
     private void insertPieces() {
         Piece piece;
         PieceFactory factory = new PieceFactory(this, players[0]);
-        for(int i=0; i<pieces_amounts.length; i++){
-            for(int j=0; j<pieces_amounts[i]; j++){
+        for(int i=0; i < pieces_amounts.length; i++){
+            for(int j=0; j < pieces_amounts[i]; j++){
                 piece = factory.createPiece(i, null);
                 players[0].addPiece(piece);
                 List<MoveOrder>orders = piece.getLocateOrders();
