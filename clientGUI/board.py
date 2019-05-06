@@ -16,11 +16,13 @@ class Board(tk.Frame):
     GROUND = 'darkgoldenrod4'
     SKY = 'deepskyblue2'
 
-    def __init__(self, parent, tiles, pieces, tile_size=30):
+    def __init__(self, parent, tiles, pieces, enemy_pieces, tile_size=30):
         """create a board. input - parent, tilemap(list that shows tiles), and the size of each tile."""
         self.tiles = tiles
         self.pieces = pieces
+        self.enemy_pieces = enemy_pieces
         self.pieces_dict = {}
+        self.enemy_pieces_dict = {}
         # calculate how tall the canvas needs to be, based on the size of each tile, and the amount of tiles
         self.canvas_height, self.canvas_width = len(self.tiles) * tile_size, len(self.tiles[0]) * tile_size
         tk.Frame.__init__(self, parent)
@@ -63,18 +65,22 @@ class Board(tk.Frame):
         """place a picture of a piece in the location of the piece"""
         tile_size = self.tile_size
         # if the piece doesn't exist yet, create it
-        if piece not in self.pieces_dict.values():
+        if piece.team == 'g':
+            rel_dict = self.pieces_dict
+        else:
+            rel_dict = self.enemy_pieces_dict
+        if piece not in rel_dict.values():
             img = Image.open(piece.image_path)
             img.thumbnail((tile_size, tile_size))
             tkimg = ImageTk.PhotoImage(image=img)
             id = self.canvas.create_image(piece.x * tile_size, piece.y * tile_size, image=tkimg, tags='pic',
                                           anchor='nw')
-            self.pieces_dict[id] = piece
+            rel_dict[id] = piece
             # if we don't save images, then they don't appear (garbage collector)
             self.images.append(tkimg)
         # if the piece exists already, update it
         else:
-            for tk_id, pieces in self.pieces_dict.items():
+            for tk_id, pieces in rel_dict.items():
                 if pieces == piece:
                     self.canvas.coords(tk_id, (piece.x * tile_size, piece.y * tile_size))
                     self.redraw_tiles()
@@ -92,8 +98,11 @@ class Board(tk.Frame):
         self.canvas.delete('pic')
         self.draw_tiles()
         self.pieces_dict = {}
+        self.enemy_pieces_dict = {}
         self.images = []
         for piece in self.pieces:
+            self.place_piece(piece)
+        for piece in self.enemy_pieces:
             self.place_piece(piece)
 
     def _click(self, event):
@@ -138,7 +147,10 @@ class Board(tk.Frame):
         color = self.color_id_to_color(color_id)
         # if we do it by id
         if piece_id is not None:
-            piece = self.pieces[piece_id]
+            if piece_id in self.pieces.pieces.keys():
+                piece = self.pieces[piece_id]
+            else:
+                piece = self.enemy_pieces[piece_id]
             self.canvas.itemconfig(self.canvas_tiles[piece.y][piece.x], fill=color)
         # if we do it by coordinates
         elif x is not None and y is not None:
