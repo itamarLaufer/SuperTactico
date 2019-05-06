@@ -20,9 +20,12 @@ try:
     enemy_pieces = PieceContainer()
     # create a game board
     game_window = tk.Tk()
-    game = board.Board(game_window, tiles, pieces)
+    game = board.Board(game_window, tiles, player_pieces, enemy_pieces)
     game.pack(side="left", fill="both", expand="true", padx=4, pady=4)
     tk.Button(game_window, text='start', command=lambda: player.todo.append(['1', 'john'])).pack()
+    who = tk.StringVar()
+    lab = tk.Label(game_window, textvariable=who)
+    lab.pack()
     thread.start_new_thread(player.mainloop, ())
     thread.start_new_thread(game.mainloop, ())
     while True:
@@ -56,6 +59,9 @@ try:
                         game.place_piece(moved)
                 else:
                     enemy_pieces.add(changed_pieces)
+                    game._refresh()
+                    who.set(order[1]['turn'])
+                    player_pieces.update(order[1]['newIds'])
         # if there are messages to send to the server
         if game.events:
             event = game.events.pop(0)
