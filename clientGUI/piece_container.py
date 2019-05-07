@@ -24,5 +24,11 @@ class PieceContainer:
 
     def update(self, new_ids):
         """The ids are updated by the server, so we need to update as well"""
-        for i in range(len(self.pieces)):
-            self.pieces[i] = new_ids[i]
+        # for i in range(len(self.pieces)):
+        #     self.pieces[i] = new_ids[i]
+        new = {}
+        for i, id in enumerate(new_ids):
+            new[id] = self.pieces[i]
+            new[id].id = id
+        self.pieces = new
+
