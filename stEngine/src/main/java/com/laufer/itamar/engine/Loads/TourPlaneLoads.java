@@ -24,7 +24,7 @@ public class TourPlaneLoads extends Loads {
     }
 
     @Override
-    public Boolean canLoad(TourPlaneLoads tourPlaneLoads) {
+    public Boolean canLoad(TourPlane tourPlane) {
         return false;
     }
 

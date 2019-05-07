@@ -30,7 +30,7 @@ public abstract class Loads
     public abstract Boolean canLoad(Bomb bomb);
     public abstract Boolean canLoad(SpyShip spyShip);
     public abstract Boolean canLoad(Soldier soldier);
-    public abstract Boolean canLoad(TourPlaneLoads tourPlaneLoads);
+    public abstract Boolean canLoad(TourPlane tourPlane);
     public abstract Boolean canLoad(Flag flag);
     public Boolean canLoad(Ship ship){return false;} //cannot load ships that are not life or spy
     public Boolean canLoad(FighterPlane fighterPlane){return false;}//no one can load a fighter plane

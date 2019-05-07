@@ -24,7 +24,7 @@ public class SoldierLoads extends Loads {
     }
 
     @Override
-    public Boolean canLoad(TourPlaneLoads tourPlaneLoads) {
+    public Boolean canLoad(TourPlane tourPlane) {
         return false;
     }
 
