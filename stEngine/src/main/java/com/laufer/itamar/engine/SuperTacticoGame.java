@@ -55,6 +55,7 @@ public class SuperTacticoGame {
             piece.setOwner(players[0]);
             piece.setId(randomGenerator.getRandom());
             insertPiece(piece);
+            piece.setGame(this);
         }
         for(Piece piece: p2FakeGame.getPlayers()[0].getLivingPieces()) {
             piece.setLocation(piece.getLocation().turned(boardSize));
@@ -62,7 +63,18 @@ public class SuperTacticoGame {
             piece.setOwner(players[1]);
             piece.setId(randomGenerator.getRandom());
             insertPiece(piece);
+            piece.setGame(this);
         }
+    printPieces();
+    }
+
+    private void printPieces() {
+//        for(int i = 0; i< 20; i++){
+//            for(int j = 0; j< 20; j++){
+//                if(getPieceFromBoard(i, j) != null)
+//                    System.out.println(getPieceFromBoard(i, j).visibleParseJson());
+//            }
+//        }
     }
 
     /**

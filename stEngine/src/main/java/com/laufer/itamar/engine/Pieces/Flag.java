@@ -29,13 +29,6 @@ public class Flag extends Soldier {
 
     }
     @Override
-    public Player getOwnerWhoCanLoad() {
-        for(Player player:game.getPlayers())
-            if(player!=owner) //return the opposite player because flag can be loaded only be enemy
-                return player;
-        return null;
-    }
-    @Override
     public boolean canAttack(Piece other) {
         return false;
     }

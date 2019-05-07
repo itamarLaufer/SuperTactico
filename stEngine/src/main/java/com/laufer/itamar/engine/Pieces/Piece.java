@@ -76,7 +76,7 @@ public abstract class Piece implements JsonParsable
             return false;
         if(!touches(other))
             return false;
-        if(getOwnerWhoCanLoad() != owner)
+        if(other.owner != owner)
             return false;
         if(!other.getAllLoads().isEmpty() && !(other.getAllLoads().get(0) instanceof Flag)) //Todo find another way that is not instanceof
             return false;
@@ -85,10 +85,6 @@ public abstract class Piece implements JsonParsable
     public void load(Piece toLoad){
         loads.load(toLoad);
         toLoad.loader = this;
-    }
-
-    public Player getOwnerWhoCanLoad() {
-        return owner;
     }
 
     public LocType getLocType() {
@@ -108,6 +104,7 @@ public abstract class Piece implements JsonParsable
         return basicCanMove(dest) && moveType.getPossibleMoveLocations(this).contains(dest);
     }
     public List<Order>getPossibleOrders(){
+        System.out.println(getClass().getName());
         List<Order>orders = new LinkedList<>();
         orders.addAll(getPossibleMoveOrders());
         orders.addAll(getPossibleAttackOrders());
@@ -138,6 +135,7 @@ public abstract class Piece implements JsonParsable
         this.location = location;
     }
     public void move(Location dest){
+        game.movePiece(this, dest);
         for(Piece piece:getPieceAndItsLoads()){
             game.movePiece(piece, dest);
         }
@@ -226,5 +224,9 @@ public abstract class Piece implements JsonParsable
         JSONObject res = parseJson();
         res.put("typeId", getType());
         return res;
+    }
+
+    public void setGame(SuperTacticoGame game) {
+        this.game = game;
     }
 }
