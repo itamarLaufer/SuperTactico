@@ -72,7 +72,7 @@ public class CanLoadVisitor<Boolean> implements ReturningVisitor {
 
     @Override
     public java.lang.Boolean visit(M4Ship m4Ship) {
-        return null;
+        return loads.canLoad(m4Ship);
     }
 
 }
