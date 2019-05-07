@@ -33,7 +33,8 @@ class Client:
             if self.todo:
                 # send the first message to the server
                 command = self.format_command(self.todo.pop(0))
-                self.client.send(command)
+                if command != '\n':
+                    self.client.send(command)
                 info = self.client.recv(8192).split(self.info_splitter)
                 # TODO is there more code to add? any reason not to make these two together?
                 # parse message based on type
