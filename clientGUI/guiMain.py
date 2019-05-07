@@ -52,7 +52,11 @@ try:
                 changed_pieces = order[1]['pieces']
                 if enemy_pieces.pieces:
                     for piece in changed_pieces:
-                        moved = player_pieces[piece['id']]
+                        pid = piece['id']
+                        if pid in player_pieces.pieces:
+                            moved = player_pieces[pid]
+                        else:
+                            moved = enemy_pieces[pid]
                         location = piece['location']
                         moved.y = location[0]
                         moved.x = location[1]
@@ -60,8 +64,10 @@ try:
                 else:
                     enemy_pieces.add(changed_pieces)
                     game._refresh()
-                    who.set(order[1]['turn'])
                     player_pieces.update(order[1]['newIds'])
+                who.set(order[1]['turn'])
+                if order[1]['turn'] == 0:
+                    player.todo.append('')
         # if there are messages to send to the server
         if game.events:
             event = game.events.pop(0)
