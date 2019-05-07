@@ -158,12 +158,12 @@ public class PlayerClient implements Runnable {
         update = order.orderDelta(this.getGame().getGame().getCurrentPlayer());
         update.put("turn", 0);
         //Todo maybe another data should be added like battle results, safe boat etc.
-        ServerUtils.send(this.getSocket(), "4_" + update.toJSONString());
+        ServerUtils.send(this.getSocket(), "6_" + update.toJSONString());
         this.getGame().getGame().turnBoard();
         update = order.orderDelta(this.getGame().getGame().getOtherPlayer());
         update.put("turn", 1);
         //Todo maybe another data should be added like battle results, safe boat etc.
-        ServerUtils.send(this.getGame().getOtherPlayer(this).getSocket(), "4_" + update.toJSONString());
+        ServerUtils.send(this.getGame().getOtherPlayer(this).getSocket(), "6_" + update.toJSONString());
 
         this.getGame().getGame().nextTurn();
         timeTheTurn(server);
