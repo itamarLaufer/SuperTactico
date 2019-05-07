@@ -63,7 +63,8 @@ try:
                         game.place_piece(moved)
                 else:
                     enemy_pieces.add(changed_pieces)
-                    game._refresh()
+                    for piece in game.enemy_pieces:
+                        game.place_piece(piece)
                     player_pieces.update(order[1]['newIds'])
                 who.set(order[1]['turn'])
                 if order[1]['turn'] == 0:
