@@ -47,11 +47,9 @@ public abstract class Piece implements JsonParsable
         this.attackVisitor = new AttackVisitor(this);
     }
     public boolean canAttack(Piece other){
-        if(other == null || !(location.touches(other.location)&&locType.canStandHere(other.locType))) //is not close enough or is on unreachable location?
+        if(other == null || !(location.touches(other.location) && locType.canStandHere(game.getLocTypeInLocation(other.location)))) //is not close enough or is on unreachable location?
             return false;
-        if(owner == other.owner) //cannot attack pieces in his side
-            return false;
-        return true;
+        return owner != other.owner;
     }
     public boolean canUnload(Location dest){
         return !dest.notInBoard(game.getBoardSize()) && this.location.touches(dest) && loader != null && locType.canStandHere(game.getLocTypeInLocation(dest));
