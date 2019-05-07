@@ -8,22 +8,25 @@ from piece_container import PieceContainer
 # TODO make constants file?
 # message types from server
 ERROR = '0'
-UPDATE = '4'
+SETUP_UPDATE = '4'
 MOVES = '5'
+GAME_UPDATE = '6'
 try:
-    # run the server
-    server = subprocess.Popen(r'java -jar ..\stEngine\stEngine.jar')
     # create a client to talk to server
     player = client.Client()
     # connect to the server, and get the info needed to start the game
-    tiles, pieces = player.connect()
-    pieces = PieceContainer(pieces)
+    tiles, player_pieces = player.connect()
+    player_pieces = PieceContainer(player_pieces)
+    enemy_pieces = PieceContainer()
     # create a game board
     game_window = tk.Tk()
-    game = board.Board(game_window, tiles, pieces)
+    game = board.Board(game_window, tiles, player_pieces, enemy_pieces)
     game.pack(side="left", fill="both", expand="true", padx=4, pady=4)
-    tk.Button(game_window, text='start', command=lambda: thread.start_new_thread(player.mainloop, ())).pack()
-    # thread.start_new_thread(player.mainloop, ())
+    tk.Button(game_window, text='start', command=lambda: player.todo.append(['1', 'john'])).pack()
+    who = tk.StringVar()
+    lab = tk.Label(game_window, textvariable=who)
+    lab.pack()
+    thread.start_new_thread(player.mainloop, ())
     thread.start_new_thread(game.mainloop, ())
     while True:
         # if there are messages to process from server
@@ -37,14 +40,28 @@ try:
                 for location in locations:
                     game.color_tile(x=location['location'][0], y=location['location'][1], color_id=location['typeId'])
             # if order is location to move pieces to
-            elif order[0] == UPDATE:
+            elif order[0] == SETUP_UPDATE:
                 changed_pieces = order[1]['pieces']
                 for piece in changed_pieces:
-                    moved = pieces[piece['id']]
+                    moved = player_pieces[piece['id']]
                     location = piece['location']
                     moved.y = location[0]
                     moved.x = location[1]
                     game.place_piece(moved)
+            elif order[0] == GAME_UPDATE:
+                changed_pieces = order[1]['pieces']
+                if enemy_pieces.pieces:
+                    for piece in changed_pieces:
+                        moved = player_pieces[piece['id']]
+                        location = piece['location']
+                        moved.y = location[0]
+                        moved.x = location[1]
+                        game.place_piece(moved)
+                else:
+                    enemy_pieces.add(changed_pieces)
+                    game._refresh()
+                    who.set(order[1]['turn'])
+                    player_pieces.update(order[1]['newIds'])
         # if there are messages to send to the server
         if game.events:
             event = game.events.pop(0)
@@ -61,4 +78,3 @@ except Exception, e:
 finally:
     # end the things that are still running
     player.end()
-    server.kill()

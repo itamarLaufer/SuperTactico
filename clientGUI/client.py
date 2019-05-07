@@ -40,7 +40,7 @@ class Client:
                 if info[0] == '5':
                     piece_info = json_parser.json_loads_byteified(info[1])
                     self.received.append((info[0], piece_info))
-                if info[0] == '4':
+                if info[0] == '4' or info[0] == '6':
                     piece_info = json_parser.json_loads_byteified(info[1])
                     self.received.append((info[0], piece_info))
 
