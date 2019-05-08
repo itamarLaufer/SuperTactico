@@ -63,6 +63,7 @@ try:
                         game.place_piece(moved)
                 else:
                     enemy_pieces.add(changed_pieces)
+                    game.redraw_tiles()
                     for piece in game.enemy_pieces:
                         game.place_piece(piece)
                     player_pieces.update(order[1]['newIds'])
