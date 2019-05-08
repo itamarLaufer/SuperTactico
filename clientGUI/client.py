@@ -13,6 +13,7 @@ class Client:
         self.client.connect(('127.0.0.1', 1978))
         self.todo = []
         self.received = []
+        self.not_end = True
 
     def connect(self):
         """connect the client to the server, get back important initial information"""
@@ -48,3 +49,6 @@ class Client:
     def end(self):
         """close everything that's still running"""
         self.client.close()
+
+    def set(self, bool1):
+        self.not_end = bool1

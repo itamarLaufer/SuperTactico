@@ -26,9 +26,11 @@ try:
     who = tk.StringVar()
     lab = tk.Label(game_window, textvariable=who)
     lab.pack()
+    player.set(True)
+    game_window.protocol("WM_DELETE_WINDOW", lambda: player.set(False))
     thread.start_new_thread(player.mainloop, ())
     thread.start_new_thread(game.mainloop, ())
-    while True:
+    while player.not_end:
         # if there are messages to process from server
         if player.received:
             order = player.received.pop(0)
