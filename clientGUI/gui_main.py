@@ -44,30 +44,14 @@ try:
             # if order is location to move pieces to
             elif order[0] == SETUP_UPDATE:
                 changed_pieces = order[1]['pieces']
-                for piece in changed_pieces:
-                    moved = player_pieces[piece['id']]
-                    location = piece['location']
-                    moved.y = location[0]
-                    moved.x = location[1]
-                    game.place_piece(moved)
+                game.turn(changed_pieces)
             elif order[0] == GAME_UPDATE:
                 changed_pieces = order[1]['pieces']
                 if enemy_pieces.pieces:
-                    for piece in changed_pieces:
-                        pid = piece['id']
-                        if pid in player_pieces.pieces:
-                            moved = player_pieces[pid]
-                        else:
-                            moved = enemy_pieces[pid]
-                        location = piece['location']
-                        moved.y = location[0]
-                        moved.x = location[1]
-                        game.place_piece(moved)
+                    game.turn(changed_pieces)
                 else:
                     enemy_pieces.add(changed_pieces)
-                    game.redraw_tiles()
-                    for piece in game.enemy_pieces:
-                        game.place_piece(piece)
+                    game.add_enemies()
                     player_pieces.update(order[1]['newIds'])
                 who.set(order[1]['turn'])
                 if order[1]['turn'] == 0:

@@ -15,6 +15,12 @@ class Board(tk.Frame):
     CLICKED_COLOR = 'orange'
     GROUND = 'darkgoldenrod4'
     SKY = 'deepskyblue2'
+    color_id_to_color = {
+        ORDER_MOVE: MOVE_COLOR,
+        ORDER_ATTACK: ATTACK_COLOR,
+        ORDER_LOAD: LOAD_COLOR,
+        ORDER_UNLOAD: UNLOAD_COLOR
+    }
 
     def __init__(self, parent, tiles, pieces, enemy_pieces, tile_size=30):
         """create a board. input - parent, tilemap(list that shows tiles), and the size of each tile."""
@@ -128,24 +134,26 @@ class Board(tk.Frame):
                 coordinates = self.canvas.coords(current)[:2][::-1]
                 self.events.append(("2", [int(i / self.tile_size) for i in coordinates]))
 
-    def color_id_to_color(self, color_id):
-        """get a color based on a colors id"""
-        # TODO make into dictionary?
-        if color_id == self.ORDER_MOVE:
-            color_id = self.MOVE_COLOR
-        elif color_id == self.ORDER_ATTACK:
-            color_id = self.ATTACK_COLOR
-        elif color_id == self.ORDER_LOAD:
-            color_id = self.LOAD_COLOR
-        elif color_id == self.ORDER_UNLOAD:
-            color_id = self.UNLOAD_COLOR
-        else:
-            color_id = self.CLICKED_COLOR
-        return color_id
+    def turn(self, changed_pieces):
+        for piece in changed_pieces:
+            pid = piece['id']
+            if pid in self.pieces.pieces:
+                moved = self.pieces[pid]
+            else:
+                moved = self.enemy_pieces[pid]
+            location = piece['location']
+            moved.y = location[0]
+            moved.x = location[1]
+            self.place_piece(moved)
+
+    def add_enemies(self):
+        self.redraw_tiles()
+        for piece in self.enemy_pieces:
+            self.place_piece(piece)
 
     def color_tile(self, x=None, y=None, piece_id=None, color_id=None):
         """set the of a tile (by x y coords or by the id of a piece) to the chosen color. default color is orange"""
-        color = self.color_id_to_color(color_id)
+        color = self.color_id_to_color.get(color_id, self.CLICKED_COLOR)
         # if we do it by id
         if piece_id is not None:
             if piece_id in self.pieces.pieces.keys():
