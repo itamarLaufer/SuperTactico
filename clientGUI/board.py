@@ -2,7 +2,6 @@ import Tkinter as tk
 from PIL import ImageTk, Image
 from itertools import chain
 
-
 class Board(tk.Frame):
     ORDER_MOVE = 0
     ORDER_ATTACK = 1
@@ -66,6 +65,7 @@ class Board(tk.Frame):
         for row1, row2 in zip(self.tiles, self.canvas_tiles):
             for color, tile in zip(row1, row2):
                 self.canvas.itemconfig(tile, fill=self.SKY if color == 'S' else self.GROUND)
+        self.canvas.tag_raise('pic', 'tile')
 
     def place_piece(self, piece):
         """place a picture of a piece in the location of the piece"""
@@ -91,7 +91,6 @@ class Board(tk.Frame):
                 if pieces == piece:
                     self.canvas.coords(tk_id, (piece.x * tile_size, piece.y * tile_size))
                     self.redraw_tiles()
-                    self.canvas.tag_raise('pic', 'tile')
                     break
 
     def _refresh(self, event=None):
@@ -119,13 +118,15 @@ class Board(tk.Frame):
         # if we clicked a piece
         if current in self.pieces_dict.keys():
             # erase the previous drawings
-            self.redraw_tiles()
-            self.canvas.tag_raise('pic', 'tile')
             piece = self.pieces_dict[current]
             # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
-            if self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill") in [self.SKY, self.GROUND]:
+            tile_color = self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill")
+            if tile_color in [self.SKY, self.GROUND]:
+                self.redraw_tiles()
                 self.color_tile(piece_id=piece.id)
                 self.events.append(("3", str(piece.id)))
+            else:
+                self.redraw_tiles()
         # if we clicked a tile
         elif current in list(chain.from_iterable(self.canvas_tiles)):
             # if the tile is not a default color (meaning it is something to do)
