@@ -40,6 +40,11 @@ class Board(tk.Frame):
         self.canvas.bind("<Button-1>", self._click)
         self.images = []
         self.events = []
+        self.moover = None
+        # if mouse moves, call movement function
+        self.canvas.bind('<B1-Motion>', self._click_move)
+        # when mouse releases - end the process
+        self.canvas.bind('<ButtonRelease-1>', self._click_end)
 
     def draw_tiles(self):
         """draw all of the tiles on the board"""
@@ -121,6 +126,7 @@ class Board(tk.Frame):
             # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
             tile_color = self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill")
             if tile_color in [self.SKY, self.GROUND]:
+                self._click_setup(current, event)
                 self.redraw_tiles()
                 self.color_tile(piece_id=piece.id)
                 self.events.append(("3", str(piece.id)))
@@ -133,6 +139,28 @@ class Board(tk.Frame):
                 # get the x and y of the tile, but reverse them because thats the format used by the API
                 coordinates = self.canvas.coords(current)[:2][::-1]
                 self.events.append(("2", [int(i / self.tile_size) for i in coordinates]))
+
+    def _click_setup(self, current, event):
+        self.moover = current
+        self._orig_mouse_x = event.x
+        self._orig_mouse_y = event.y
+        self._orig_x, self._orig_y = self.canvas.coords(self.moover)
+        # save the cursor that is meant to be shown when on the widget
+        self._save_cursor = self.canvas['cursor'] or ""
+        # replace the cursor with the hand cursor, to show the widget is grabbed
+        self.canvas['cursor'] = "hand2"
+
+    def _click_move(self, event):
+        if self.moover:
+            diffx = self._orig_mouse_x - event.x
+            diffy = self._orig_mouse_y - event.y
+            self.canvas.coords(self.moover, (self._orig_x - diffx, self._orig_y - diffy))
+
+    def _click_end(self, event):
+        if self.moover:
+            self.canvas['cursor'] = self._save_cursor
+            self.canvas.coords(self.moover, (self._orig_x, self._orig_y))
+            self.moover = None
 
     def turn(self, changed_pieces):
         for piece in changed_pieces:
