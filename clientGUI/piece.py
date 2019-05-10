@@ -27,10 +27,11 @@ class Piece:
     def __str__(self):
         return ' '.join(
             [
-                'Type:', str(self.type_id),
+                'Type:', str(self.type_id) if self.team == 'g' else '?',
                 'Carrying:', str(self.loads),
                 'Y:', str(self.y),
                 'X:', str(self.x),
-                'Personal ID:', str(self.id)
+                'Personal ID:', str(self.id),
+                'Team:', self.team
             ]
         )
