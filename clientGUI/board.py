@@ -82,7 +82,6 @@ class Board(tk.Frame):
             id = self.canvas.create_image(piece.x * tile_size, piece.y * tile_size, image=tkimg, tags='pic',
                                           anchor='nw')
             rel_dict[id] = piece
-            self.pieces_dict[id] = piece
             # if we don't save images, then they don't appear (garbage collector)
             self.images.append(tkimg)
         # if the piece exists already, update it
