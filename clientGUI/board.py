@@ -149,6 +149,8 @@ class Board(tk.Frame):
         self._save_cursor = self.canvas['cursor'] or ""
         # replace the cursor with the hand cursor, to show the widget is grabbed
         self.canvas['cursor'] = "hand2"
+        self.canvas.addtag_withtag('moover', self.moover)
+        self.canvas.tag_raise('moover', 'pic')
 
     def _click_move(self, event):
         if self.moover:
@@ -160,6 +162,7 @@ class Board(tk.Frame):
         if self.moover:
             self.canvas['cursor'] = self._save_cursor
             self.canvas.coords(self.moover, (self._orig_x, self._orig_y))
+            self.canvas.dtag(self.moover, 'moover')
             self.moover = None
 
     def turn(self, changed_pieces):
