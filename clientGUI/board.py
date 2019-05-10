@@ -2,6 +2,7 @@ import Tkinter as tk
 from PIL import ImageTk, Image
 from itertools import chain
 
+
 class Board(tk.Frame):
     ORDER_MOVE = 0
     ORDER_ATTACK = 1
@@ -121,7 +122,6 @@ class Board(tk.Frame):
         current = self.canvas.find_withtag('current')[0]
         # if we clicked a piece
         if current in self.pieces_dict.keys():
-            # erase the previous drawings
             piece = self.pieces_dict[current]
             # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
             tile_color = self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill")
