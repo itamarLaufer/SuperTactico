@@ -42,10 +42,10 @@ class Board(tk.Frame):
         self.images = []
         self.events = []
         self.moover = None
-        # if mouse moves, call movement function
-        self.canvas.bind('<B1-Motion>', self._click_move)
-        # when mouse releases - end the process
-        self.canvas.bind('<ButtonRelease-1>', self._click_end)
+        # # if mouse moves, call movement function
+        # self.canvas.bind('<B1-Motion>', self._click_move)
+        # # when mouse releases - end the process
+        # self.canvas.bind('<ButtonRelease-1>', self._click_end)
 
     def draw_tiles(self):
         """draw all of the tiles on the board"""
@@ -126,7 +126,7 @@ class Board(tk.Frame):
             # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
             tile_color = self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill")
             if tile_color in [self.SKY, self.GROUND]:
-                self._click_setup(current, event)
+                # self._click_setup(current, event)
                 self.redraw_tiles()
                 self.color_tile(piece_id=piece.id)
                 self.events.append(("3", str(piece.id)))
@@ -158,11 +158,19 @@ class Board(tk.Frame):
             diffy = self._orig_mouse_y - event.y
             self.canvas.coords(self.moover, (self._orig_x - diffx, self._orig_y - diffy))
 
+
     def _click_end(self, event):
         if self.moover:
             self.canvas['cursor'] = self._save_cursor
-            self.canvas.coords(self.moover, (self._orig_x, self._orig_y))
+            cur_loc = self.canvas.coords(self.moover)
             self.canvas.dtag(self.moover, 'moover')
+            x, y = event.x / self.tile_size, event.y / self.tile_size
+            if self.canvas.itemcget(self.canvas_tiles[y][x], 'fill') == self.MOVE_COLOR:
+                self.events.append(("2", [y, x]))
+            else:
+                self.canvas.coords(self.moover, (self._orig_x, self._orig_y))
+            if cur_loc != [self._orig_x, self._orig_y]:
+                self.redraw_tiles()
             self.moover = None
 
     def turn(self, changed_pieces):
