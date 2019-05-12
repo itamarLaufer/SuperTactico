@@ -2,6 +2,7 @@ package com.laufer.itamar.engine.Pieces;
 
 
 import com.laufer.itamar.engine.Loads.CannotLoadLoads;
+import com.laufer.itamar.engine.LocType;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Movings.NotMove;
 import com.laufer.itamar.engine.Player;
@@ -10,12 +11,10 @@ import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
 
-public class Flag extends Soldier {
+public class Flag extends Piece {
 
     public Flag(SuperTacticoGame game, Player owner, Location location, int id) {
-        super(game, owner, location, id);
-        this.loads = new CannotLoadLoads();
-        this.moveType = new NotMove();
+        super(game, location, LocType.LAND, new NotMove(), new CannotLoadLoads(), owner, id);
     }
 
     @Override

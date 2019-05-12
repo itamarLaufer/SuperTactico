@@ -9,7 +9,7 @@ import org.json.simple.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.laufer.itamar.engine.Location.generateLocation;
+import static java.util.stream.Collectors.toList;
 
 public class SuperTacticoGame {
     private Player[] players;
@@ -65,16 +65,15 @@ public class SuperTacticoGame {
             insertPiece(piece);
             piece.setGame(this);
         }
-    printPieces();
     }
 
     private void printPieces() {
-//        for(int i = 0; i< 20; i++){
-//            for(int j = 0; j< 20; j++){
-//                if(getPieceFromBoard(i, j) != null)
-//                    System.out.println(getPieceFromBoard(i, j).visibleParseJson());
-//            }
-//        }
+        for(int i = 0; i< 20; i++){
+            for(int j = 0; j< 20; j++){
+                if(getPieceFromBoard(i, j) != null)
+                    System.out.println(getPieceFromBoard(i, j).visibleParseJson());
+            }
+        }
     }
 
     /**
@@ -227,7 +226,8 @@ public class SuperTacticoGame {
     }
 
     public void insertPiece(Piece piece) {
-        board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
+        if(piece.getLoader() == null)
+            board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
     }
 
     public Piece getPieceFromBoard(Location location) {
@@ -245,7 +245,7 @@ public class SuperTacticoGame {
     }
 
     public void movePiece(Piece piece, Location location) {
-        if(piece.getLocation() != null)
+        if(piece.getLocation() != null && piece.getLoader() != null)
             board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(null);
         piece.setLocation(location);
         insertPiece(piece);
@@ -284,6 +284,7 @@ public class SuperTacticoGame {
             res.addAll(players[1].getLivingPieces());
         return res;
     }
+
     //method mor debug purposes only
     public void printBoard(){
         for(int i=0;i<board.length;i++){
@@ -310,8 +311,12 @@ public class SuperTacticoGame {
     }
     public void turnBoard(){
         for(Piece piece: getAllLivingPieces()){
-            piece.setLocation(piece.getLocation().turned(boardSize));
-            board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
+            if(piece.getLoader() == null) {
+                if(getPieceFromBoard(piece.getLocation()) == piece)
+                    board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(null);
+                piece.setLocation(piece.getLocation().turned(boardSize));
+                board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
+            }
         }
     }
     public Piece getPieceById(int id){

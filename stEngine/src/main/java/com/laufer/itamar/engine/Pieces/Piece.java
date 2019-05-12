@@ -47,7 +47,13 @@ public abstract class Piece implements JsonParsable
         this.attackVisitor = new AttackVisitor(this);
     }
     public boolean canAttack(Piece other){
-        if(other == null || !(location.touches(other.location) && locType.canStandHere(game.getLocTypeInLocation(other.location)))) //is not close enough or is on unreachable location?
+        if(other == null)
+            return false;
+        if(!location.touches(other.location))
+                return false;
+        if(loader != null)
+            return false;
+        if(!locType.canStandHere(game.getLocTypeInLocation(other.location))) //Todo fix bug of planes here
             return false;
         return owner != other.owner;
     }
@@ -76,13 +82,14 @@ public abstract class Piece implements JsonParsable
             return false;
         if(other.owner != owner)
             return false;
-        if(!other.getAllLoads().isEmpty() && !(other.getAllLoads().get(0) instanceof Flag)) //Todo find another way that is not instanceof
+        if(loader != null)
             return false;
         return loads.canLoad(other);
     }
     public void load(Piece toLoad){
         loads.load(toLoad);
         toLoad.loader = this;
+        game.movePiece(toLoad, location);
     }
 
     public LocType getLocType() {
@@ -94,6 +101,8 @@ public abstract class Piece implements JsonParsable
             return false;
         if(dest.notInBoard(game.getBoardSize()))
             return false;
+        if(loader == null) // the piece is currently loaded
+            return false;
         if(game.getPieceFromBoard(dest) != null) //square is taken
             return false;
         return locType.canStandHere(game.getLocTypeInLocation(dest));
@@ -102,7 +111,6 @@ public abstract class Piece implements JsonParsable
         return basicCanMove(dest) && moveType.getPossibleMoveLocations(this).contains(dest);
     }
     public List<Order>getPossibleOrders(){
-        System.out.println(getClass().getName());
         List<Order>orders = new LinkedList<>();
         orders.addAll(getPossibleMoveOrders());
         orders.addAll(getPossibleAttackOrders());
@@ -226,5 +234,15 @@ public abstract class Piece implements JsonParsable
 
     public void setGame(SuperTacticoGame game) {
         this.game = game;
+    }
+
+    @Override
+    public String toString() {
+        return "Piece{" +
+                "id=" + id +
+                ", location=" + location +
+                ", owner=" + owner.getId() +
+                ", loads=" + loads.getAllLoads() +
+                '}';
     }
 }
