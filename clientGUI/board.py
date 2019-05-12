@@ -2,7 +2,6 @@ import Tkinter as tk
 from PIL import ImageTk, Image
 from itertools import chain
 
-
 class Board(tk.Frame):
     ORDER_MOVE = 0
     ORDER_ATTACK = 1

@@ -18,7 +18,6 @@ class Client:
     def connect(self):
         """connect the client to the server, get back important initial information"""
         first_info = self.client.recv(8192).split(self.info_splitter)
-        print first_info[0]
         # get the important information into a dictionary from JSON
         start_info = json_parser.json_loads_byteified(first_info[1])
         # give back the important information
