@@ -26,6 +26,9 @@ try:
     who = tk.StringVar()
     lab = tk.Label(game_window, textvariable=who)
     lab.pack()
+    pid = tk.StringVar()
+    lab2 = tk.Label(game_window, textvariable=pid)
+    lab2.pack()
     player.set(True)
     game_window.protocol("WM_DELETE_WINDOW", lambda: player.set(False))
     thread.start_new_thread(player.mainloop, ())
@@ -62,6 +65,7 @@ try:
             # find out what a piece can do
             if event[0] == "3":
                 player.todo.append(event)
+                pid.set(event[1])
             # execute an option
             elif event[0] == "2":
                 for i, location in enumerate(locations):
