@@ -2,12 +2,14 @@ import Tkinter as tk
 from PIL import ImageTk, Image
 from itertools import chain
 
+
 class Board(tk.Frame):
     ORDER_MOVE = 0
     ORDER_ATTACK = 1
     ORDER_LOAD = 2
     ORDER_UNLOAD = 3
-    MOVE_COLOR = 'green'
+    MOVE_COLOR_SEA = 'green'
+    MOVE_COLOR_LAND = 'darkgreen'
     ATTACK_COLOR = 'red'
     LOAD_COLOR = 'blue'
     UNLOAD_COLOR = 'yellow'
@@ -15,7 +17,7 @@ class Board(tk.Frame):
     GROUND = 'darkgoldenrod4'
     SKY = 'deepskyblue2'
     color_id_to_color = {
-        ORDER_MOVE: MOVE_COLOR,
+        ORDER_MOVE: MOVE_COLOR_SEA,
         ORDER_ATTACK: ATTACK_COLOR,
         ORDER_LOAD: LOAD_COLOR,
         ORDER_UNLOAD: UNLOAD_COLOR
@@ -165,7 +167,6 @@ class Board(tk.Frame):
             diffy = self._orig_mouse_y - event.y
             self.canvas.coords(self.moover, (self._orig_x - diffx, self._orig_y - diffy))
 
-
     def _click_end(self, event):
         if self.moover:
             self.canvas['cursor'] = self._save_cursor
@@ -206,9 +207,15 @@ class Board(tk.Frame):
                 piece = self.pieces[piece_id]
             else:
                 piece = self.pieces[piece_id]
+            tile = self.tiles[piece.x][piece.y]
+            if color == self.MOVE_COLOR_SEA and tile == 'L':
+                color = self.MOVE_COLOR_LAND
             self.canvas.itemconfig(self.canvas_tiles[piece.y][piece.x], fill=color)
         # if we do it by coordinates
         elif x is not None and y is not None:
+            tile = self.tiles[x][y]
+            if color == self.MOVE_COLOR_SEA and tile == 'L':
+                color = self.MOVE_COLOR_LAND
             self.canvas.itemconfig(self.canvas_tiles[x][y], fill=color)
         self.canvas.update()
         self.update_idletasks()
