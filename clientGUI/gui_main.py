@@ -3,8 +3,9 @@ import Tkinter as tk
 import client
 import logging
 import subprocess
-import thread
+import threading
 from piece_container import PieceContainer
+
 # TODO make constants file?
 # message types from server
 ERROR = '0'
@@ -31,8 +32,8 @@ try:
     lab2.pack()
     player.set(True)
     game_window.protocol("WM_DELETE_WINDOW", lambda: player.set(False))
-    thread.start_new_thread(player.mainloop, ())
-    thread.start_new_thread(game.mainloop, ())
+    threading.Thread(target=player.mainloop).start()
+    threading.Thread(target=game.mainloop).start()
     while player.not_end:
         # if there are messages to process from server
         if player.received:
