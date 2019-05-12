@@ -2,7 +2,6 @@ import Tkinter as tk
 from PIL import ImageTk, Image
 from itertools import chain
 
-
 class Board(tk.Frame):
     ORDER_MOVE = 0
     ORDER_ATTACK = 1
@@ -15,6 +14,12 @@ class Board(tk.Frame):
     CLICKED_COLOR = 'orange'
     GROUND = 'darkgoldenrod4'
     SKY = 'deepskyblue2'
+    color_id_to_color = {
+        ORDER_MOVE: MOVE_COLOR,
+        ORDER_ATTACK: ATTACK_COLOR,
+        ORDER_LOAD: LOAD_COLOR,
+        ORDER_UNLOAD: UNLOAD_COLOR
+    }
 
     def __init__(self, parent, tiles, pieces, enemy_pieces, tile_size=30):
         """create a board. input - parent, tilemap(list that shows tiles), and the size of each tile."""
@@ -35,6 +40,11 @@ class Board(tk.Frame):
         self.canvas.bind("<Button-1>", self._click)
         self.images = []
         self.events = []
+        self.moover = None
+        # # if mouse moves, call movement function
+        # self.canvas.bind('<B1-Motion>', self._click_move)
+        # # when mouse releases - end the process
+        # self.canvas.bind('<ButtonRelease-1>', self._click_end)
 
     def draw_tiles(self):
         """draw all of the tiles on the board"""
@@ -60,6 +70,7 @@ class Board(tk.Frame):
         for row1, row2 in zip(self.tiles, self.canvas_tiles):
             for color, tile in zip(row1, row2):
                 self.canvas.itemconfig(tile, fill=self.SKY if color == 'S' else self.GROUND)
+        self.canvas.tag_raise('pic', 'tile')
 
     def place_piece(self, piece):
         """place a picture of a piece in the location of the piece"""
@@ -76,7 +87,6 @@ class Board(tk.Frame):
             id = self.canvas.create_image(piece.x * tile_size, piece.y * tile_size, image=tkimg, tags='pic',
                                           anchor='nw')
             rel_dict[id] = piece
-            self.pieces_dict[id] = piece
             # if we don't save images, then they don't appear (garbage collector)
             self.images.append(tkimg)
         # if the piece exists already, update it
@@ -85,7 +95,6 @@ class Board(tk.Frame):
                 if pieces == piece:
                     self.canvas.coords(tk_id, (piece.x * tile_size, piece.y * tile_size))
                     self.redraw_tiles()
-                    self.canvas.tag_raise('pic', 'tile')
                     break
 
     def _refresh(self, event=None):
@@ -112,40 +121,85 @@ class Board(tk.Frame):
         current = self.canvas.find_withtag('current')[0]
         # if we clicked a piece
         if current in self.pieces_dict.keys():
-            # erase the previous drawings
-            self.redraw_tiles()
-            self.canvas.tag_raise('pic', 'tile')
             piece = self.pieces_dict[current]
             # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
-            if self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill") in [self.SKY, self.GROUND]:
+            tile_color = self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill")
+            if tile_color in [self.SKY, self.GROUND]:
+                # self._click_setup(current, event)
+                self.redraw_tiles()
                 self.color_tile(piece_id=piece.id)
                 self.events.append(("3", str(piece.id)))
+            else:
+                self.redraw_tiles()
         # if we clicked a tile
         elif current in list(chain.from_iterable(self.canvas_tiles)):
             # if the tile is not a default color (meaning it is something to do)
             if self.canvas.itemcget(current, "fill") not in [self.SKY, self.GROUND]:
-                # get the x and y of the tile, but reverse them because thats the format used by the API
+                # get the x and y of the tile, but reverse them because that's the format used by the API
                 coordinates = self.canvas.coords(current)[:2][::-1]
                 self.events.append(("2", [int(i / self.tile_size) for i in coordinates]))
+        if current in self.enemy_pieces_dict.keys():
+            piece = self.enemy_pieces_dict[current]
+            # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
+            tile_color = self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill")
+            if tile_color == self.ATTACK_COLOR:
+                self.redraw_tiles()
+                coordinates = self.canvas.coords(self.canvas_tiles[piece.y][piece.x])[:2][::-1]
+                self.events.append(("2", [int(i / self.tile_size) for i in coordinates]))
 
-    def color_id_to_color(self, color_id):
-        """get a color based on a colors id"""
-        # TODO make into dictionary?
-        if color_id == self.ORDER_MOVE:
-            color_id = self.MOVE_COLOR
-        elif color_id == self.ORDER_ATTACK:
-            color_id = self.ATTACK_COLOR
-        elif color_id == self.ORDER_LOAD:
-            color_id = self.LOAD_COLOR
-        elif color_id == self.ORDER_UNLOAD:
-            color_id = self.UNLOAD_COLOR
-        else:
-            color_id = self.CLICKED_COLOR
-        return color_id
+    def _click_setup(self, current, event):
+        self.moover = current
+        self._orig_mouse_x = event.x
+        self._orig_mouse_y = event.y
+        self._orig_x, self._orig_y = self.canvas.coords(self.moover)
+        # save the cursor that is meant to be shown when on the widget
+        self._save_cursor = self.canvas['cursor'] or ""
+        # replace the cursor with the hand cursor, to show the widget is grabbed
+        self.canvas['cursor'] = "hand2"
+        self.canvas.addtag_withtag('moover', self.moover)
+        self.canvas.tag_raise('moover', 'pic')
+
+    def _click_move(self, event):
+        if self.moover:
+            diffx = self._orig_mouse_x - event.x
+            diffy = self._orig_mouse_y - event.y
+            self.canvas.coords(self.moover, (self._orig_x - diffx, self._orig_y - diffy))
+
+
+    def _click_end(self, event):
+        if self.moover:
+            self.canvas['cursor'] = self._save_cursor
+            cur_loc = self.canvas.coords(self.moover)
+            self.canvas.dtag(self.moover, 'moover')
+            x, y = event.x / self.tile_size, event.y / self.tile_size
+            if self.canvas.itemcget(self.canvas_tiles[y][x], 'fill') == self.MOVE_COLOR:
+                self.events.append(("2", [y, x]))
+            else:
+                self.canvas.coords(self.moover, (self._orig_x, self._orig_y))
+            if cur_loc != [self._orig_x, self._orig_y]:
+                self.redraw_tiles()
+            self.moover = None
+
+    def turn(self, changed_pieces):
+        for piece in changed_pieces:
+            pid = piece['id']
+            if pid in self.pieces.pieces:
+                moved = self.pieces[pid]
+            else:
+                moved = self.enemy_pieces[pid]
+            location = piece['location']
+            moved.y = location[0]
+            moved.x = location[1]
+            self.place_piece(moved)
+
+    def add_enemies(self):
+        self.redraw_tiles()
+        for piece in self.enemy_pieces:
+            self.place_piece(piece)
 
     def color_tile(self, x=None, y=None, piece_id=None, color_id=None):
         """set the of a tile (by x y coords or by the id of a piece) to the chosen color. default color is orange"""
-        color = self.color_id_to_color(color_id)
+        color = self.color_id_to_color.get(color_id, self.CLICKED_COLOR)
         # if we do it by id
         if piece_id is not None:
             if piece_id in self.pieces.pieces.keys():

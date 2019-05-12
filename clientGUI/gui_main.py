@@ -3,8 +3,9 @@ import Tkinter as tk
 import client
 import logging
 import subprocess
-import thread
+import threading
 from piece_container import PieceContainer
+
 # TODO make constants file?
 # message types from server
 ERROR = '0'
@@ -26,9 +27,14 @@ try:
     who = tk.StringVar()
     lab = tk.Label(game_window, textvariable=who)
     lab.pack()
-    thread.start_new_thread(player.mainloop, ())
-    thread.start_new_thread(game.mainloop, ())
-    while True:
+    pid = tk.StringVar()
+    lab2 = tk.Label(game_window, textvariable=pid)
+    lab2.pack()
+    player.set(True)
+    game_window.protocol("WM_DELETE_WINDOW", lambda: player.set(False))
+    threading.Thread(target=player.mainloop).start()
+    threading.Thread(target=game.mainloop).start()
+    while player.not_end:
         # if there are messages to process from server
         if player.received:
             order = player.received.pop(0)
@@ -42,38 +48,29 @@ try:
             # if order is location to move pieces to
             elif order[0] == SETUP_UPDATE:
                 changed_pieces = order[1]['pieces']
-                for piece in changed_pieces:
-                    moved = player_pieces[piece['id']]
-                    location = piece['location']
-                    moved.y = location[0]
-                    moved.x = location[1]
-                    game.place_piece(moved)
+                game.turn(changed_pieces)
             elif order[0] == GAME_UPDATE:
                 changed_pieces = order[1]['pieces']
                 if enemy_pieces.pieces:
-                    for piece in changed_pieces:
-                        pid = piece['id']
-                        if pid in player_pieces.pieces:
-                            moved = player_pieces[pid]
-                        else:
-                            moved = enemy_pieces[pid]
-                        location = piece['location']
-                        moved.y = location[0]
-                        moved.x = location[1]
-                        game.place_piece(moved)
+                    game.turn(changed_pieces)
                 else:
                     enemy_pieces.add(changed_pieces)
-                    game._refresh()
+                    game.add_enemies()
                     player_pieces.update(order[1]['newIds'])
                 who.set(order[1]['turn'])
+                turn = order[1]['turn'] == 1
                 if order[1]['turn'] == 0:
                     player.todo.append('')
         # if there are messages to send to the server
         if game.events:
             event = game.events.pop(0)
+            if not turn:
+                event = None
+                continue
             # find out what a piece can do
             if event[0] == "3":
                 player.todo.append(event)
+                pid.set(event[1])
             # execute an option
             elif event[0] == "2":
                 for i, location in enumerate(locations):
