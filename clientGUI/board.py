@@ -135,8 +135,16 @@ class Board(tk.Frame):
         elif current in list(chain.from_iterable(self.canvas_tiles)):
             # if the tile is not a default color (meaning it is something to do)
             if self.canvas.itemcget(current, "fill") not in [self.SKY, self.GROUND]:
-                # get the x and y of the tile, but reverse them because thats the format used by the API
+                # get the x and y of the tile, but reverse them because that's the format used by the API
                 coordinates = self.canvas.coords(current)[:2][::-1]
+                self.events.append(("2", [int(i / self.tile_size) for i in coordinates]))
+        if current in self.enemy_pieces_dict.keys():
+            piece = self.enemy_pieces_dict[current]
+            # if the piece is on a default color (if it isn't, then we're clicking it to complete an action)
+            tile_color = self.canvas.itemcget(self.canvas_tiles[piece.y][piece.x], "fill")
+            if tile_color == self.ATTACK_COLOR:
+                self.redraw_tiles()
+                coordinates = self.canvas.coords(self.canvas_tiles[piece.y][piece.x])[:2][::-1]
                 self.events.append(("2", [int(i / self.tile_size) for i in coordinates]))
 
     def _click_setup(self, current, event):
