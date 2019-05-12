@@ -101,7 +101,7 @@ public abstract class Piece implements JsonParsable
             return false;
         if(dest.notInBoard(game.getBoardSize()))
             return false;
-        if(loader == null) // the piece is currently loaded
+        if(loader != null) // the piece is currently loaded
             return false;
         if(game.getPieceFromBoard(dest) != null) //square is taken
             return false;
