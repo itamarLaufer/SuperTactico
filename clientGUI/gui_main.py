@@ -32,8 +32,13 @@ try:
     lab2.pack()
     player.set(True)
     game_window.protocol("WM_DELETE_WINDOW", lambda: player.set(False))
-    threading.Thread(target=player.mainloop).start()
-    threading.Thread(target=game.mainloop).start()
+    pmain = threading.Thread(target=player.mainloop)
+    pmain.setDaemon(True)
+    pmain.start()
+    gmain = threading.Thread(target=game.mainloop)
+    gmain.setDaemon(True)
+    gmain.start()
+    turn = True
     while player.not_end:
         # if there are messages to process from server
         if player.received:
