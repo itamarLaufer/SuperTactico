@@ -58,11 +58,15 @@ try:
                     game.add_enemies()
                     player_pieces.update(order[1]['newIds'])
                 who.set(order[1]['turn'])
+                turn = order[1]['turn'] == 1
                 if order[1]['turn'] == 0:
                     player.todo.append('')
         # if there are messages to send to the server
         if game.events:
             event = game.events.pop(0)
+            if not turn:
+                event = None
+                continue
             # find out what a piece can do
             if event[0] == "3":
                 player.todo.append(event)
