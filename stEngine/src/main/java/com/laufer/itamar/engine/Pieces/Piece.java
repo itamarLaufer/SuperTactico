@@ -53,7 +53,7 @@ public abstract class Piece implements JsonParsable
                 return false;
         if(loader != null)
             return false;
-        if(!locType.canStandHere(game.getLocTypeInLocation(other.location))) //Todo fix bug of planes here
+        if(game.getLocTypeInLocation(location) != game.getLocTypeInLocation(other.location))
             return false;
         return owner != other.owner;
     }
