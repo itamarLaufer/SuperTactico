@@ -7,9 +7,10 @@ import com.laufer.itamar.engine.orders.MoveOrder;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import static java.util.stream.Collectors.toList;
 
 public class SuperTacticoGame {
     private Player[] players;
@@ -245,7 +246,7 @@ public class SuperTacticoGame {
     }
 
     public void movePiece(Piece piece, Location location) {
-        if(piece.getLocation() != null && piece.getLoader() != null)
+        if(piece.getLocation() != null && piece.getLoader() == null)
             board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(null);
         piece.setLocation(location);
         insertPiece(piece);
@@ -330,8 +331,34 @@ public class SuperTacticoGame {
     public int getTurns() {
         return turns;
     }
+    // debug method
     public Square[][]getBoard(){
         return board;
+    }
+    public List<Piece>getAllPiecesOnBoard(){
+        List<Piece> res = new ArrayList<>(200);
+        for(int i = 0; i< board.length; i++){
+            for(int j = 0; j< board[i].length;j++){
+                if(getPieceFromBoard(i, j) != null)
+                    res.add(getPieceFromBoard(i, j));
+            }
+        }
+        return res;
+    }
+    // debug method
+    private int getAmountOfPiecesOnBoard(){
+        return getAllPiecesOnBoard().size();
+    }
+    // debug method
+    private List<Piece> doublePieces(){
+        List<Piece>res = new ArrayList<>(10);
+        Set<Piece>set = new HashSet<>();
+        for(Piece piece: getAllPiecesOnBoard()){
+            if(set.contains(piece))
+                res.add(piece);
+            set.add(piece);
+        }
+        return res;
     }
 }
 
