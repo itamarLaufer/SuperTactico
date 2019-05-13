@@ -40,7 +40,7 @@ class Board(tk.Frame):
         self.canvas_tiles = []
         self.canvas.bind("<Configure>", self._refresh)
         self.canvas.bind("<Button-1>", self._click)
-        self.images = []
+        self.images = {}
         self.events = []
         self.moover = None
         # # if mouse moves, call movement function
@@ -83,14 +83,17 @@ class Board(tk.Frame):
         else:
             rel_dict = self.enemy_pieces_dict
         if piece not in rel_dict.values():
-            img = Image.open(piece.image_path)
-            img.thumbnail((tile_size, tile_size))
-            tkimg = ImageTk.PhotoImage(image=img)
+            if piece.image_path not in self.images:
+                img = Image.open(piece.image_path)
+                img.thumbnail((tile_size, tile_size))
+                tkimg = ImageTk.PhotoImage(image=img)
+                self.images[piece.image_path] = tkimg
+            else:
+                tkimg = self.images[piece.image_path]
             id = self.canvas.create_image(piece.x * tile_size, piece.y * tile_size, image=tkimg, tags='pic',
                                           anchor='nw')
             rel_dict[id] = piece
             # if we don't save images, then they don't appear (garbage collector)
-            self.images.append(tkimg)
         # if the piece exists already, update it
         else:
             for tk_id, pieces in rel_dict.items():
@@ -111,7 +114,7 @@ class Board(tk.Frame):
         self.draw_tiles()
         self.pieces_dict = {}
         self.enemy_pieces_dict = {}
-        self.images = []
+        self.images = {}
         for piece in self.pieces:
             self.place_piece(piece)
         for piece in self.enemy_pieces:
