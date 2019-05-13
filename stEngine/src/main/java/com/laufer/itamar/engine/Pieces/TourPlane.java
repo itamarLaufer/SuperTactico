@@ -34,6 +34,7 @@ public class TourPlane extends Plane {
 
     public boolean attack(TourPlane tourPlane){
         tourPlane.die();
+        die();
         return true;
     }
 

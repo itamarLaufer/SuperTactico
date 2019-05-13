@@ -32,11 +32,17 @@ public class LandSapper extends Soldier {
     public boolean attack(Soldier soldier) {
         return false; // Todo implement all the different type of soldier that it can attack
     }
-
+    @Override
     public boolean attack(LandBomb landBomb){
         landBomb.die();
         return true;
     }
+    public boolean attack(LandSapper landSapper){
+        landSapper.die();
+        die();
+        return true;
+    }
+
 
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {

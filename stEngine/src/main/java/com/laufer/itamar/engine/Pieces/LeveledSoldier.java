@@ -42,9 +42,15 @@ public class LeveledSoldier extends Soldier {
     }
 
     public boolean attack(LeveledSoldier leveledSoldier) {
-        Piece loser = this.soldierLevel.getLevel() >= leveledSoldier.soldierLevel.getLevel() ? leveledSoldier : this;
-        loser.die();
-        return loser != this;
+        if(soldierLevel.getLevel() > leveledSoldier.soldierLevel.getLevel()){
+            leveledSoldier.die();
+            return true;
+        }
+        die();
+        if(soldierLevel.getLevel() < leveledSoldier.soldierLevel.getLevel())
+            return false;
+        leveledSoldier.die();
+        return true;
     }
 
     public boolean attack(LandSapper landSapper) {

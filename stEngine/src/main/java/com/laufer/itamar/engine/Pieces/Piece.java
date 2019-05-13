@@ -184,6 +184,12 @@ public abstract class Piece implements JsonParsable
         die();
         return false;
     }
+    public boolean attack(LandBomb landBomb){
+        return attack((Bomb)landBomb);
+    }
+    public boolean attack(SeaBomb seaBomb){
+        return attack((Bomb)seaBomb);
+    }
     public abstract boolean attack(Plane plane);
     public boolean attack(FighterPlane fighterPlane){
         return attack((Plane)fighterPlane);
@@ -224,6 +230,7 @@ public abstract class Piece implements JsonParsable
         load(flag);
         return true; //Todo there may be bugs here
     }
+
 
 
     public Player getOwner() {

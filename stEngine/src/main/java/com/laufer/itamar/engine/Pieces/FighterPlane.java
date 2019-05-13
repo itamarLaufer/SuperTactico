@@ -44,6 +44,7 @@ public class FighterPlane extends Plane {
 
     public boolean attack(FighterPlane fighterPlane){
         fighterPlane.die();
+        die();
         return true;
     }
     @Override

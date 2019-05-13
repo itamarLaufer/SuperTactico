@@ -43,13 +43,19 @@ public class SeaSapper extends Soldier {
         die();
         return false;
     }
+    @Override
+    public boolean attack(SeaSapper seaSapper){
+        seaSapper.die();
+        die();
+        return true;
+    }
 
     @Override
     public boolean attack(Flag flag) {
         die();
         return false;
     }
-
+    @Override
     public boolean attack(SeaBomb seaBomb){
         seaBomb.die();
         return true;

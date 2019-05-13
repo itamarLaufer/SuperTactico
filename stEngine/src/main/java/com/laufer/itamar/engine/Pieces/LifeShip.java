@@ -47,6 +47,7 @@ public class LifeShip extends Ship {
     }
     public boolean attack(LifeShip lifeShip){
         lifeShip.die();
+        die();
         return true;
     }
     @Override

@@ -21,7 +21,7 @@ public class AttackOrder extends Order{
     public void execute() {
         Location targetLocation = target.getLocation();
         result = actor.attack(target);
-        if(result) // Todo there's gonna be a bug when it's a tie
+        if(result && actor.getLocation() != Location.OUT_LOCATION) // Todo there's gonna be a bug when it's a tie
             actor.move(targetLocation);
     }
 

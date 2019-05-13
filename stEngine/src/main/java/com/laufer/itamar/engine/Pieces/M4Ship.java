@@ -40,6 +40,7 @@ public class M4Ship extends Ship {
     }
     public boolean attack(M4Ship m4Ship){
         m4Ship.die();
+        die();
         return true;
     }
     public boolean attack(SpyShip spyShip){
