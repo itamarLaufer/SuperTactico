@@ -27,9 +27,4 @@ public class SpyShipLoads extends Loads {
     public Boolean canLoad(TourPlane tourPlane) {
         return false; //can'nt load planes
     }
-
-    @Override
-    public Boolean canLoad(Flag flag) {
-        return false;
-    }
 }

@@ -26,9 +26,4 @@ public class M7Loads extends Loads {
     public Boolean canLoad(TourPlane tourPlane) {
         return planes.isEmpty(); //can load only one tour plane
     }
-
-    @Override
-    public Boolean canLoad(Flag flag) {
-        return false;
-    }
 }
