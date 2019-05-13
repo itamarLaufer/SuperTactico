@@ -36,6 +36,22 @@ public class Flag extends Piece {
     public int getType() {
         return 19;
     }
+
+    @Override
+    public boolean attack(Plane plane) {
+        return false; //cannot attack
+    }
+
+    @Override
+    public boolean attack(Ship ship) {
+        return false; //cannot attack
+    }
+
+    @Override
+    public boolean attack(Soldier soldier) {
+        return false; //cannot attack
+    }
+
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {
         return canLoadVisitor.visit(this);

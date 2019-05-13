@@ -31,16 +31,25 @@ public class SeaSapper extends Soldier {
     public int getType() {
         return 10;
     }
-    public boolean attack(LandSapper landSapper){
-        die();
-        return false;
-    }
 
     public boolean attack( M7Ship m7Ship) {
         //first to attack wins
         m7Ship.die();
         return true;
     }
+
+    @Override
+    public boolean attack(Soldier soldier) {
+        die();
+        return false;
+    }
+
+    @Override
+    public boolean attack(Flag flag) {
+        die();
+        return false;
+    }
+
     public boolean attack(SeaBomb seaBomb){
         seaBomb.die();
         return true;

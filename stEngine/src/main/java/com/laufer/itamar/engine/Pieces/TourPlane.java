@@ -27,6 +27,11 @@ public class TourPlane extends Plane {
         return 17;
     }
 
+    @Override
+    public boolean attack(Plane plane) {
+        return false; // will always go to the specific
+    }
+
     public boolean attack(TourPlane tourPlane){
         tourPlane.die();
         return true;

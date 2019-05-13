@@ -36,6 +36,11 @@ public class LeveledSoldier extends Soldier {
         return soldierLevel.getLevel();
     }
 
+    @Override
+    public boolean attack(Soldier soldier) {
+        return false; // will always go the specific
+    }
+
     public boolean attack(LeveledSoldier leveledSoldier) {
         Piece loser = this.soldierLevel.getLevel() >= leveledSoldier.soldierLevel.getLevel() ? leveledSoldier : this;
         loser.die();

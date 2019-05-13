@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.laufer.itamar.engine.Location.OUT_LOCATION;
 import static com.laufer.itamar.engine.Location.generateLocation;
 
 public abstract class Piece implements JsonParsable
@@ -141,7 +142,6 @@ public abstract class Piece implements JsonParsable
         this.location = location;
     }
     public void move(Location dest){
-        game.movePiece(this, dest);
         for(Piece piece:getPieceAndItsLoads()){
             game.movePiece(piece, dest);
         }
@@ -158,7 +158,7 @@ public abstract class Piece implements JsonParsable
 
     public void die() {
         boolean hasLifeSHip = false;
-        for (Piece piece : getPieceAndItsLoads()) {
+        for (Piece piece : getAllLoads()) {
             if (piece instanceof LifeShip) { //Todo find another way with no instanceof
                 hasLifeSHip = true;
                 break;
@@ -167,8 +167,8 @@ public abstract class Piece implements JsonParsable
         if (!hasLifeSHip) {
             game.removePiece(location);
             owner.removePiece(this);
-            location = Location.OUT_LOCATION;
-            for (Piece piece : getPieceAndItsLoads()) {
+            setLocation(OUT_LOCATION);
+            for (Piece piece : getAllLoads()) {
                 piece.die();
             }
         } else
@@ -184,6 +184,47 @@ public abstract class Piece implements JsonParsable
         die();
         return false;
     }
+    public abstract boolean attack(Plane plane);
+    public boolean attack(FighterPlane fighterPlane){
+        return attack((Plane)fighterPlane);
+    }
+    public boolean attack(TourPlane tourPlane){
+        return attack((Plane)tourPlane);
+    }
+    public abstract boolean attack(Ship ship);
+    public boolean attack(SpyShip spyShip){
+        return attack((Ship)spyShip);
+    }
+    public boolean attack(M7Ship m7Ship){
+        return attack((Ship)m7Ship);
+    }
+    public boolean attack(M4Ship m4Ship){
+        return attack((Ship)m4Ship);
+    }
+
+    public boolean attack(LifeShip lifeShip){
+        return attack((Ship)lifeShip);
+    }
+    public abstract boolean attack(Soldier soldier);
+    public boolean attack(LeveledSoldier leveledSoldier){
+        return attack((Soldier) leveledSoldier);
+    }
+    public boolean attack(LieutenantGeneral lieutenantGeneral){
+        return attack((LeveledSoldier) lieutenantGeneral);
+    }
+    public boolean attack(LandSapper landSapper){
+        return attack((Soldier) landSapper);
+
+    }
+    public boolean attack(SeaSapper seaSapper){
+        return attack((Soldier) seaSapper);
+    }
+
+    public boolean attack(Flag flag){
+        load(flag);
+        return true; //Todo there may be bugs here
+    }
+
 
     public Player getOwner() {
         return owner;

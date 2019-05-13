@@ -27,6 +27,12 @@ public class LifeShip extends Ship {
     public int getType() {
         return 13;
     }
+
+    @Override
+    public boolean attack(Ship ship) {
+        return false; // will always go to the specific
+    }
+
     public boolean attack(M7Ship m7Ship){
         die();
         return false;

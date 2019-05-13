@@ -260,7 +260,7 @@ public class SuperTacticoGame {
     }
 
     public void removePiece(Location location) {
-        board[location.getRow()][location.getCol()] = null;
+        board[location.getRow()][location.getCol()].setPiece(null);
     }
 
     public List<Piece> getDiedWithLifeShip() {

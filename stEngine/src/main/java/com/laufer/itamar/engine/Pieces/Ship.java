@@ -12,13 +12,18 @@ public abstract class Ship extends Piece{
         super(game, location, LocType.SEA, new SingleStepMove(), loads, owner, id);
     }
 
-    public boolean attack(Plane plane){
-        plane.die();
-        return true;
+    @Override
+    public boolean attack(Soldier soldier) {
+        return false; // impossible
     }
     public boolean attack(SeaSapper seaSapper){
         die();
-        return true;
+        return false;
     }
 
+    @Override
+    public boolean attack(Plane plane) {
+        plane.die();
+        return true;
+    }
 }

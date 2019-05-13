@@ -28,6 +28,11 @@ public class SpyShip extends Ship {
         return 14;
     }
 
+    @Override
+    public boolean attack(Ship ship) {
+        return false; //it will always go to the specific
+    }
+
     public boolean attack(M7Ship m7Ship){
         die();
         return false;
