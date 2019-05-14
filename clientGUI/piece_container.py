@@ -8,7 +8,7 @@ class PieceContainer:
         self.pieces = {}
         if pieces:
             for piece in pieces:
-                current = Piece(piece, 'g')
+                current = Piece(piece, 'b')
                 self.pieces[current.id] = current
 
     def __iter__(self):
@@ -19,7 +19,7 @@ class PieceContainer:
 
     def add(self, pieces):
         for piece in pieces:
-            current = Piece(piece, 'b')
+            current = Piece(piece, 'r')
             self.pieces[current.id] = current
 
     def update(self, new_ids):
