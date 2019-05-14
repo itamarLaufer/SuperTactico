@@ -78,7 +78,7 @@ class Board(tk.Frame):
         """place a picture of a piece in the location of the piece"""
         tile_size = self.tile_size
         # if the piece doesn't exist yet, create it
-        if piece.team == 'g':
+        if piece.team == 'b':
             rel_dict = self.pieces_dict
         else:
             rel_dict = self.enemy_pieces_dict
