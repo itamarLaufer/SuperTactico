@@ -23,7 +23,7 @@ try:
     game_window = tk.Tk()
     game = board.Board(game_window, tiles, player_pieces, enemy_pieces)
     game.pack(side="left", fill="both", expand="true", padx=4, pady=4)
-    tk.Button(game_window, text='start', command=lambda: player.todo.append(['1', 'john'])).pack()
+    tk.Button(game_window, text="start", command=lambda: player.todo.append(['1', 'john'])).pack()
     who = tk.StringVar()
     lab = tk.Label(game_window, textvariable=who)
     lab.pack()

@@ -47,7 +47,7 @@ class Board(tk.Frame):
         # self.canvas.bind('<B1-Motion>', self._click_move)
         # # when mouse releases - end the process
         # self.canvas.bind('<ButtonRelease-1>', self._click_end)
-
+        
     def draw_tiles(self):
         """draw all of the tiles on the board"""
         # erase all of the tiles, so we can draw new ones
