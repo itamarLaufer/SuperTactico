@@ -46,4 +46,13 @@ public abstract class Order implements JsonParsable {
                 ", id=" + id +
                 '}';
     }
+
+    public Piece getActor() {
+        return actor;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
 }

@@ -12,8 +12,16 @@ public abstract class Soldier extends Piece {
         super(game, location, LocType.LAND, new SingleStepMove(), new SoldierLoads(), owner, id);
     }
 
-    public boolean attack(Plane plane) {
-        plane.die();
+
+    @Override
+    public boolean attack(FighterPlane fighterPlane) {
+        fighterPlane.die();
+        return true;
+    }
+
+    @Override
+    public boolean attack(TourPlane tourPlane) {
+        tourPlane.die();
         return true;
     }
 
@@ -22,7 +30,18 @@ public abstract class Soldier extends Piece {
         return true;
     }
 
+    @Override
+    public boolean attack(Ship ship) {
+        return false; // impossible
+    }
+
+    @Override
+    public boolean attack(Plane plane) {
+        plane.die();
+        return true;
+    }
+
     public boolean hasFlag(){
         return getAllLoads().size() > 0;
-    }
+    } //Todo maybe redundant
 }

@@ -25,12 +25,7 @@ public class FigtherPlaneLoads extends Loads {
     }
 
     @Override
-    public Boolean canLoad(TourPlaneLoads tourPlaneLoads) {
-        return false;
-    }
-
-    @Override
-    public Boolean canLoad(Flag flag) {
+    public Boolean canLoad(TourPlane tourPlane) {
         return false;
     }
 }

@@ -19,10 +19,10 @@ public class AttackOrder extends Order{
 
     @Override
     public void execute() {
-        Location targetLoaction = target.getLocation();
+        Location targetLocation = target.getLocation();
         result = actor.attack(target);
-        if(result)
-            actor.move(targetLoaction);
+        if(result && actor.getLocation() != Location.OUT_LOCATION) // Todo there's gonna be a bug when it's a tie
+            actor.move(targetLocation);
     }
 
     @Override

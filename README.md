@@ -2,5 +2,6 @@
 * Java Game Engine
 * Python GUI
 
-Art credit - [Avi Breslauer][https://www.instagram.com/avidrawings/]
+Art credit - [Avi Breslauer](https://www.instagram.com/avidrawings/)
+
 

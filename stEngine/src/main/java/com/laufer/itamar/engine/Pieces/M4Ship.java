@@ -28,12 +28,19 @@ public class M4Ship extends Ship {
     public int getType() {
         return 15;
     }
+
+    @Override
+    public boolean attack(Ship ship) {
+        return false; // will always go to the specific
+    }
+
     public boolean attack(M7Ship m7Ship){
         die();
         return false;
     }
     public boolean attack(M4Ship m4Ship){
         m4Ship.die();
+        die();
         return true;
     }
     public boolean attack(SpyShip spyShip){

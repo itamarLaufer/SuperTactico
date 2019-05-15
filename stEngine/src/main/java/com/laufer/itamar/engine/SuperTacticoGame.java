@@ -7,9 +7,10 @@ import com.laufer.itamar.engine.orders.MoveOrder;
 import org.json.simple.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import static com.laufer.itamar.engine.Location.generateLocation;
 
 public class SuperTacticoGame {
     private Player[] players;
@@ -55,6 +56,7 @@ public class SuperTacticoGame {
             piece.setOwner(players[0]);
             piece.setId(randomGenerator.getRandom());
             insertPiece(piece);
+            piece.setGame(this);
         }
         for(Piece piece: p2FakeGame.getPlayers()[0].getLivingPieces()) {
             piece.setLocation(piece.getLocation().turned(boardSize));
@@ -62,6 +64,16 @@ public class SuperTacticoGame {
             piece.setOwner(players[1]);
             piece.setId(randomGenerator.getRandom());
             insertPiece(piece);
+            piece.setGame(this);
+        }
+    }
+
+    private void printPieces() {
+        for(int i = 0; i< 20; i++){
+            for(int j = 0; j< 20; j++){
+                if(getPieceFromBoard(i, j) != null)
+                    System.out.println(getPieceFromBoard(i, j).visibleParseJson());
+            }
         }
     }
 
@@ -215,7 +227,8 @@ public class SuperTacticoGame {
     }
 
     public void insertPiece(Piece piece) {
-        board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
+        if(piece.getLoader() == null)
+            board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
     }
 
     public Piece getPieceFromBoard(Location location) {
@@ -233,7 +246,7 @@ public class SuperTacticoGame {
     }
 
     public void movePiece(Piece piece, Location location) {
-        if(piece.getLocation() != null)
+        if(piece.getLocation() != null && piece.getLoader() == null)
             board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(null);
         piece.setLocation(location);
         insertPiece(piece);
@@ -248,7 +261,7 @@ public class SuperTacticoGame {
     }
 
     public void removePiece(Location location) {
-        board[location.getRow()][location.getCol()] = null;
+        board[location.getRow()][location.getCol()].setPiece(null);
     }
 
     public List<Piece> getDiedWithLifeShip() {
@@ -272,6 +285,7 @@ public class SuperTacticoGame {
             res.addAll(players[1].getLivingPieces());
         return res;
     }
+
     //method mor debug purposes only
     public void printBoard(){
         for(int i=0;i<board.length;i++){
@@ -298,8 +312,12 @@ public class SuperTacticoGame {
     }
     public void turnBoard(){
         for(Piece piece: getAllLivingPieces()){
-            piece.setLocation(piece.getLocation().turned(boardSize));
-            board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
+            if(piece.getLoader() == null) {
+                if(getPieceFromBoard(piece.getLocation()) == piece)
+                    board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(null);
+                piece.setLocation(piece.getLocation().turned(boardSize));
+                board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
+            }
         }
     }
     public Piece getPieceById(int id){
@@ -313,8 +331,34 @@ public class SuperTacticoGame {
     public int getTurns() {
         return turns;
     }
+    // debug method
     public Square[][]getBoard(){
         return board;
+    }
+    public List<Piece>getAllPiecesOnBoard(){
+        List<Piece> res = new ArrayList<>(200);
+        for(int i = 0; i< board.length; i++){
+            for(int j = 0; j< board[i].length;j++){
+                if(getPieceFromBoard(i, j) != null)
+                    res.add(getPieceFromBoard(i, j));
+            }
+        }
+        return res;
+    }
+    // debug method
+    private int getAmountOfPiecesOnBoard(){
+        return getAllPiecesOnBoard().size();
+    }
+    // debug method
+    private List<Piece> doublePieces(){
+        List<Piece>res = new ArrayList<>(10);
+        Set<Piece>set = new HashSet<>();
+        for(Piece piece: getAllPiecesOnBoard()){
+            if(set.contains(piece))
+                res.add(piece);
+            set.add(piece);
+        }
+        return res;
     }
 }
 

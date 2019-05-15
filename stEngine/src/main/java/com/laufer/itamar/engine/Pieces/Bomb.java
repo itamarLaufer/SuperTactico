@@ -18,4 +18,20 @@ public abstract class Bomb extends Piece {
     public boolean canAttack(Piece other) {
         return false;
     }
+
+    @Override
+    public boolean attack(Plane plane) {
+        return false; // cannot attack
+    }
+
+    @Override
+    public boolean attack(Ship ship) {
+        return false; // cannot attack
+    }
+
+    @Override
+    public boolean attack(Soldier soldier) {
+        return false; // cannot attack
+    }
+
 }
