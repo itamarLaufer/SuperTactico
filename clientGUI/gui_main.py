@@ -56,6 +56,11 @@ try:
                 game.turn(changed_pieces)
             elif order[0] == GAME_UPDATE:
                 changed_pieces = order[1]['pieces']
+                if 'battleResult' in order[1]:
+                    enemies = []
+                    for piece in changed_pieces:
+                        if piece['id'] in enemy_pieces.pieces:
+                            game.fight(piece, piece['typeId'])
                 if enemy_pieces.pieces:
                     game.turn(changed_pieces)
                 else:
