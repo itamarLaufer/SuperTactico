@@ -83,7 +83,9 @@ public abstract class Piece implements JsonParsable
             return false;
         if(other.owner != owner)
             return false;
-        if(loader != null)
+        if(loader != null) // loaded piece cannot load
+            return false;
+        if(other.isLoading()) // cannot load loading piece
             return false;
         return loads.canLoad(other);
     }
@@ -292,5 +294,8 @@ public abstract class Piece implements JsonParsable
                 ", owner=" + owner.getId() +
                 ", loads=" + loads.getAllLoads() +
                 '}';
+    }
+    public boolean isLoading(){
+        return !getAllLoads().isEmpty();
     }
 }
