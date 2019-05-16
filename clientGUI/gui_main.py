@@ -2,7 +2,6 @@ import board
 import Tkinter as tk
 import client
 import logging
-import subprocess
 import threading
 from piece_container import PieceContainer
 
