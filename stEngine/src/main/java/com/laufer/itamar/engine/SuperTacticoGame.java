@@ -12,6 +12,7 @@ import static com.laufer.itamar.engine.Location.generateLocation;
 
 
 public class SuperTacticoGame {
+    private static final int MAX_PIECES_ON_ISLAND_AT_BEGINNING = 3;
     private Player[] players;
     private Square[][] board;
     private int turns;
@@ -370,5 +371,15 @@ public class SuperTacticoGame {
     public Location[] getIslandLocations() {
         return islandLocations;
     }
+    public int numOfPiecsOnIsland(){
+        int res = 0;
+        for(Location location : islandLocations){
+            if(getPieceFromBoard(location) != null)
+                res++;
+        }
+        return res;
+    }
+    public boolean isIslandCaught(){
+        return numOfPiecsOnIsland() >= MAX_PIECES_ON_ISLAND_AT_BEGINNING;
+    }
 }
-
