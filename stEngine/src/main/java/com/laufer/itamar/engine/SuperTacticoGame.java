@@ -6,10 +6,9 @@ import com.laufer.itamar.engine.Pieces.PieceFactory;
 import com.laufer.itamar.engine.orders.MoveOrder;
 import org.json.simple.JSONArray;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static com.laufer.itamar.engine.Location.generateLocation;
 
 
 public class SuperTacticoGame {
@@ -19,6 +18,7 @@ public class SuperTacticoGame {
     private List<Piece> diedWithLifeShip; //to show dialog to select which pieces to save and kill the rest
     private int boardSize;
     private final int[] pieces_amounts = {5, 5, 4, 4, 3, 3, 2, 1, 1, 1, 1, 3, 3, 3, 4, 2, 2, 2, 2, 1};
+    private Location[] islandLocations;
 
     /**
      * Initializes a game for testing reasons, *with no pieces*
@@ -211,6 +211,9 @@ public class SuperTacticoGame {
         board[9][5] = new Square(LocType.LAND);
         board[9][6] = new Square(LocType.LAND);
 
+        this.islandLocations = new Location[]{generateLocation(14, 17), generateLocation(13, 17), generateLocation(13, 16), generateLocation(12, 17), generateLocation(12, 16), generateLocation(12, 15)};
+
+
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
@@ -359,6 +362,14 @@ public class SuperTacticoGame {
             set.add(piece);
         }
         return res;
+    }
+    public boolean isInIsland(Location location){
+        final Location[] islandLocations = {generateLocation(5, 17), generateLocation(6, 17), generateLocation(6, 16), generateLocation(7, 17), generateLocation(7, 16), generateLocation(7, 15)};
+        return Arrays.asList(islandLocations).contains(location);
+    }
+
+    public Location[] getIslandLocations() {
+        return islandLocations;
     }
 }
 
