@@ -27,6 +27,7 @@ public class LandBomb extends Bomb {
     public int getType() {
         return 11;
     }
+
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {
         return canLoadVisitor.visit(this);

@@ -1,6 +1,7 @@
 import Tkinter as tk
 from PIL import ImageTk, Image
 from itertools import chain
+from time import sleep
 
 
 class Board(tk.Frame):
@@ -83,13 +84,7 @@ class Board(tk.Frame):
         else:
             rel_dict = self.enemy_pieces_dict
         if piece not in rel_dict.values():
-            if piece.image_path not in self.images:
-                img = Image.open(piece.image_path)
-                img.thumbnail((tile_size, tile_size))
-                tkimg = ImageTk.PhotoImage(image=img)
-                self.images[piece.image_path] = tkimg
-            else:
-                tkimg = self.images[piece.image_path]
+            tkimg = self.open_img(piece.image_path)
             id = self.canvas.create_image(piece.x * tile_size, piece.y * tile_size, image=tkimg, tags='pic',
                                           anchor='nw')
             rel_dict[id] = piece
@@ -101,6 +96,18 @@ class Board(tk.Frame):
                     self.canvas.coords(tk_id, (piece.x * tile_size, piece.y * tile_size))
                     self.redraw_tiles()
                     break
+
+    def open_img(self, path, flip=False):
+        if path not in self.images:
+            img = Image.open(path)
+            if flip:
+                img = img.rotate(180)
+            img.thumbnail((self.tile_size, self.tile_size))
+            tkimg = ImageTk.PhotoImage(image=img)
+            self.images[path] = tkimg
+        else:
+            tkimg = self.images[path]
+        return tkimg
 
     def _refresh(self, event=None):
         """take care of the size of the canvas changing"""
@@ -200,6 +207,21 @@ class Board(tk.Frame):
         self.redraw_tiles()
         for piece in self.enemy_pieces:
             self.place_piece(piece)
+
+    def fight(self, piece, typeId):
+        temp_piece = self.enemy_pieces[piece['id']]
+        for tk_id, pieces in self.enemy_pieces_dict.items():
+            if pieces == temp_piece:
+                break
+        self.canvas.itemconfig(tk_id, state="hidden")
+        tkimg = self.open_img(temp_piece.path.format(temp_piece.team + str(typeId)), flip=13 <= typeId <= 18)
+        tile_size = self.tile_size
+        temp = self.canvas.create_image(temp_piece.x * tile_size, temp_piece.y * tile_size, image=tkimg, tags='pic',
+                                        anchor='nw')
+        sleep(2)
+        self.canvas.delete(temp)
+        if piece['location'] != [-1, -1]:
+            self.canvas.itemconfig(tk_id, state="normal")
 
     def color_tile(self, x=None, y=None, piece_id=None, color_id=None):
         """set the of a tile (by x y coords or by the id of a piece) to the chosen color. default color is orange"""

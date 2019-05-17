@@ -11,7 +11,6 @@ public abstract class TaskForTime implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("starting"); //Todo remove
         try {
             Thread.sleep(time);
             if (!isDone()) {

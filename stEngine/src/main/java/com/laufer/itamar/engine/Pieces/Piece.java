@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.laufer.itamar.engine.Location.OUT_LOCATION;
 import static com.laufer.itamar.engine.Location.generateLocation;
 
 public abstract class Piece implements JsonParsable
@@ -47,11 +48,15 @@ public abstract class Piece implements JsonParsable
         this.attackVisitor = new AttackVisitor(this);
     }
     public boolean canAttack(Piece other){
-        if(other == null || !(location.touches(other.location)&&locType.canStandHere(other.locType))) //is not close enough or is on unreachable location?
+        if(other == null)
             return false;
-        if(owner == other.owner) //cannot attack pieces in his side
+        if(!location.touches(other.location))
+                return false;
+        if(loader != null)
             return false;
-        return true;
+        if(game.getLocTypeInLocation(location) != game.getLocTypeInLocation(other.location))
+            return false;
+        return owner != other.owner;
     }
     public boolean canUnload(Location dest){
         return !dest.notInBoard(game.getBoardSize()) && this.location.touches(dest) && loader != null && locType.canStandHere(game.getLocTypeInLocation(dest));
@@ -76,19 +81,16 @@ public abstract class Piece implements JsonParsable
             return false;
         if(!touches(other))
             return false;
-        if(getOwnerWhoCanLoad() != owner)
+        if(other.owner != owner)
             return false;
-        if(!other.getAllLoads().isEmpty() && !(other.getAllLoads().get(0) instanceof Flag)) //Todo find another way that is not instanceof
+        if(loader != null)
             return false;
         return loads.canLoad(other);
     }
     public void load(Piece toLoad){
         loads.load(toLoad);
         toLoad.loader = this;
-    }
-
-    public Player getOwnerWhoCanLoad() {
-        return owner;
+        game.movePiece(toLoad, location);
     }
 
     public LocType getLocType() {
@@ -99,6 +101,8 @@ public abstract class Piece implements JsonParsable
         if(dest == null || location.equals(dest)) //it cannot move to it's current place
             return false;
         if(dest.notInBoard(game.getBoardSize()))
+            return false;
+        if(loader != null) // the piece is currently loaded
             return false;
         if(game.getPieceFromBoard(dest) != null) //square is taken
             return false;
@@ -154,7 +158,7 @@ public abstract class Piece implements JsonParsable
 
     public void die() {
         boolean hasLifeSHip = false;
-        for (Piece piece : getPieceAndItsLoads()) {
+        for (Piece piece : getAllLoads()) {
             if (piece instanceof LifeShip) { //Todo find another way with no instanceof
                 hasLifeSHip = true;
                 break;
@@ -163,8 +167,8 @@ public abstract class Piece implements JsonParsable
         if (!hasLifeSHip) {
             game.removePiece(location);
             owner.removePiece(this);
-            location = Location.OUT_LOCATION;
-            for (Piece piece : getPieceAndItsLoads()) {
+            setLocation(OUT_LOCATION);
+            for (Piece piece : getAllLoads()) {
                 piece.die();
             }
         } else
@@ -180,6 +184,54 @@ public abstract class Piece implements JsonParsable
         die();
         return false;
     }
+    public boolean attack(LandBomb landBomb){
+        return attack((Bomb)landBomb);
+    }
+    public boolean attack(SeaBomb seaBomb){
+        return attack((Bomb)seaBomb);
+    }
+    public abstract boolean attack(Plane plane);
+    public boolean attack(FighterPlane fighterPlane){
+        return attack((Plane)fighterPlane);
+    }
+    public boolean attack(TourPlane tourPlane){
+        return attack((Plane)tourPlane);
+    }
+    public abstract boolean attack(Ship ship);
+    public boolean attack(SpyShip spyShip){
+        return attack((Ship)spyShip);
+    }
+    public boolean attack(M7Ship m7Ship){
+        return attack((Ship)m7Ship);
+    }
+    public boolean attack(M4Ship m4Ship){
+        return attack((Ship)m4Ship);
+    }
+
+    public boolean attack(LifeShip lifeShip){
+        return attack((Ship)lifeShip);
+    }
+    public abstract boolean attack(Soldier soldier);
+    public boolean attack(LeveledSoldier leveledSoldier){
+        return attack((Soldier) leveledSoldier);
+    }
+    public boolean attack(LieutenantGeneral lieutenantGeneral){
+        return attack((LeveledSoldier) lieutenantGeneral);
+    }
+    public boolean attack(LandSapper landSapper){
+        return attack((Soldier) landSapper);
+
+    }
+    public boolean attack(SeaSapper seaSapper){
+        return attack((Soldier) seaSapper);
+    }
+
+    public boolean attack(Flag flag){
+        load(flag);
+        return true; //Todo there may be bugs here
+    }
+
+
 
     public Player getOwner() {
         return owner;
@@ -226,5 +278,19 @@ public abstract class Piece implements JsonParsable
         JSONObject res = parseJson();
         res.put("typeId", getType());
         return res;
+    }
+
+    public void setGame(SuperTacticoGame game) {
+        this.game = game;
+    }
+
+    @Override
+    public String toString() {
+        return "Piece{" +
+                "id=" + id +
+                ", location=" + location +
+                ", owner=" + owner.getId() +
+                ", loads=" + loads.getAllLoads() +
+                '}';
     }
 }

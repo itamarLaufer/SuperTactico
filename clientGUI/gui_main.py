@@ -2,7 +2,6 @@ import board
 import Tkinter as tk
 import client
 import logging
-import subprocess
 import threading
 from piece_container import PieceContainer
 
@@ -23,7 +22,7 @@ try:
     game_window = tk.Tk()
     game = board.Board(game_window, tiles, player_pieces, enemy_pieces)
     game.pack(side="left", fill="both", expand="true", padx=4, pady=4)
-    tk.Button(game_window, text='start', command=lambda: player.todo.append(['1', 'john'])).pack()
+    tk.Button(game_window, text="start", command=lambda: player.todo.append(['1', 'john'])).pack()
     who = tk.StringVar()
     lab = tk.Label(game_window, textvariable=who)
     lab.pack()
@@ -56,6 +55,11 @@ try:
                 game.turn(changed_pieces)
             elif order[0] == GAME_UPDATE:
                 changed_pieces = order[1]['pieces']
+                if 'battleResult' in order[1]:
+                    enemies = []
+                    for piece in changed_pieces:
+                        if piece['id'] in enemy_pieces.pieces:
+                            game.fight(piece, piece['typeId'])
                 if enemy_pieces.pieces:
                     game.turn(changed_pieces)
                 else:

@@ -32,6 +32,11 @@ public class FighterPlane extends Plane {
         return 18;
     }
 
+    @Override
+    public boolean attack(Plane plane) {
+        return false; // will always go to the specific
+    }
+
     public boolean attack(TourPlane tourPlane){
         tourPlane.die();
         return true;
@@ -39,6 +44,7 @@ public class FighterPlane extends Plane {
 
     public boolean attack(FighterPlane fighterPlane){
         fighterPlane.die();
+        die();
         return true;
     }
     @Override

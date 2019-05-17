@@ -27,6 +27,12 @@ public class M7Ship extends Ship {
     public int getType() {
         return 16;
     }
+
+    @Override
+    public boolean attack(Ship ship) {
+        return false; // will always go to the specific
+    }
+
     public boolean attack(SeaSapper seaSapper){
         //first to attack wins
         seaSapper.die();
@@ -34,6 +40,7 @@ public class M7Ship extends Ship {
     }
     public boolean attack(M7Ship m7Ship){
         m7Ship.die();
+        die();
         return true;
     }
     public boolean attack(M4Ship m4Ship){
