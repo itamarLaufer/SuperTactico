@@ -66,4 +66,11 @@ public class Flag extends Piece {
         res.removeIf(moveOrder -> game.isIsland(moveOrder.getLocation()));
         return res;
     }
+
+    @Override
+    public void move(Location dest) {
+        super.move(dest);
+        if(game.isIsland(location))
+            game.endGame();
+    }
 }
