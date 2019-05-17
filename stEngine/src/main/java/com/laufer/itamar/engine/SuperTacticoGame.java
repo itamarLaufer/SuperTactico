@@ -20,6 +20,7 @@ public class SuperTacticoGame {
     private int boardSize;
     private final int[] pieces_amounts = {5, 5, 4, 4, 3, 3, 2, 1, 1, 1, 1, 3, 3, 3, 4, 2, 2, 2, 2, 1};
     private Location[] islandLocations;
+    private boolean active; // Whether the game is active (= not ended by enemy flag held on player's island)
 
     /**
      * Initializes a game for testing reasons, *with no pieces*
@@ -67,6 +68,7 @@ public class SuperTacticoGame {
             insertPiece(piece);
             piece.setGame(this);
         }
+        active = true;
     }
 
     private void printPieces() {
@@ -381,5 +383,17 @@ public class SuperTacticoGame {
     }
     public boolean isIslandCaught(){
         return numOfPiecsOnIsland() >= MAX_PIECES_ON_ISLAND_AT_BEGINNING;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Ends the game
+     * P.S I hate this movie
+     */
+    public void endGame(){
+        active = false;
     }
 }
