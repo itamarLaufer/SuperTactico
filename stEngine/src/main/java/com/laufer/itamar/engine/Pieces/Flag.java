@@ -12,7 +12,6 @@ import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
 import com.laufer.itamar.engine.orders.MoveOrder;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class Flag extends Piece {
@@ -64,14 +63,7 @@ public class Flag extends Piece {
     @Override
     public List<MoveOrder> getLocateOrders() {
         List<MoveOrder> res = super.getLocateOrders();
-        Iterator<MoveOrder>iterator;
-        for(Location location : game.getIslandLocations()) {
-            iterator = res.iterator();
-            while (iterator.hasNext()){
-                if(iterator.next().getLocation() == location)
-                    iterator.remove();
-            }
-        }
+        res.removeIf(moveOrder -> game.isIsland(moveOrder.getLocation()));
         return res;
     }
 }

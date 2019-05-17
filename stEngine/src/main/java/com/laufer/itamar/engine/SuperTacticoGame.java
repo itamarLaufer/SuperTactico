@@ -363,8 +363,7 @@ public class SuperTacticoGame {
         }
         return res;
     }
-    public boolean isInIsland(Location location){
-        final Location[] islandLocations = {generateLocation(5, 17), generateLocation(6, 17), generateLocation(6, 16), generateLocation(7, 17), generateLocation(7, 16), generateLocation(7, 15)};
+    public boolean isIsland(Location location){
         return Arrays.asList(islandLocations).contains(location);
     }
 
