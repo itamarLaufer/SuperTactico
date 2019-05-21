@@ -2,3 +2,4 @@
 .idea
 clientGUI/test.py
 *.pyc
+venv
