@@ -3,7 +3,7 @@ package com.laufer.itamar.engine.Loads;
 
 import com.laufer.itamar.engine.Pieces.*;
 
-public class FigtherPlaneLoads extends Loads {
+public class FighterPlaneLoads extends Loads {
     @Override
     public Boolean canLoad(LifeShip lifeShip) {
         return false;
@@ -21,7 +21,7 @@ public class FigtherPlaneLoads extends Loads {
 
     @Override
     public Boolean canLoad(Soldier soldier) {
-        return soldiers.size()<5;
+        return !soldier.hasFlag() && soldiers.size() < 5;
     }
 
     @Override

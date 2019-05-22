@@ -83,7 +83,9 @@ public abstract class Piece implements JsonParsable
             return false;
         if(other.owner != owner)
             return false;
-        if(loader != null)
+        if(loader != null) // loaded piece cannot load
+            return false;
+        if(other.isLoading()) // cannot load loading piece
             return false;
         return loads.canLoad(other);
     }
@@ -253,11 +255,13 @@ public abstract class Piece implements JsonParsable
         return loader;
     }
     public List<MoveOrder>getLocateOrders(){
+        boolean islandIsCaught = game.isIslandCaught();
         List<MoveOrder>res = new ArrayList<>(game.getBoardSize() * game.getBoardSize() / 2);
         for(int i=game.getBoardSize() - 1; i > 0.5 * game.getBoardSize(); i--){
             for(int j=0;j<game.getBoardSize();j++){
                 if(locType.canStandHere(game.getLocTypeInLocation(i, j)) && game.getPieceFromBoard(i, j) == null)
-                    res.add(new MoveOrder(this, generateLocation(i, j)));
+                    if(!islandIsCaught || !game.isIsland(generateLocation(i, j)))
+                        res.add(new MoveOrder(this, generateLocation(i, j)));
             }
         }
         return res;
@@ -292,5 +296,8 @@ public abstract class Piece implements JsonParsable
                 ", owner=" + owner.getId() +
                 ", loads=" + loads.getAllLoads() +
                 '}';
+    }
+    public boolean isLoading(){
+        return !getAllLoads().isEmpty();
     }
 }

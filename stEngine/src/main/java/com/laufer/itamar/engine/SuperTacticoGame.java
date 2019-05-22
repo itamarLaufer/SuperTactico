@@ -6,19 +6,21 @@ import com.laufer.itamar.engine.Pieces.PieceFactory;
 import com.laufer.itamar.engine.orders.MoveOrder;
 import org.json.simple.JSONArray;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static com.laufer.itamar.engine.Location.generateLocation;
 
 
 public class SuperTacticoGame {
+    private static final int MAX_PIECES_ON_ISLAND_AT_BEGINNING = 3;
     private Player[] players;
     private Square[][] board;
     private int turns;
     private List<Piece> diedWithLifeShip; //to show dialog to select which pieces to save and kill the rest
     private int boardSize;
     private final int[] pieces_amounts = {5, 5, 4, 4, 3, 3, 2, 1, 1, 1, 1, 3, 3, 3, 4, 2, 2, 2, 2, 1};
+    private Location[] islandLocations;
+    private boolean active; // Whether the game is active (= not ended by enemy flag held on player's island)
 
     /**
      * Initializes a game for testing reasons, *with no pieces*
@@ -66,6 +68,7 @@ public class SuperTacticoGame {
             insertPiece(piece);
             piece.setGame(this);
         }
+        active = true;
     }
 
     private void printPieces() {
@@ -210,6 +213,9 @@ public class SuperTacticoGame {
         board[9][4] = new Square(LocType.LAND);
         board[9][5] = new Square(LocType.LAND);
         board[9][6] = new Square(LocType.LAND);
+
+        this.islandLocations = new Location[]{generateLocation(14, 17), generateLocation(13, 17), generateLocation(13, 16), generateLocation(12, 17), generateLocation(12, 16), generateLocation(12, 15)};
+
 
 
         for (int i = 0; i < board.length; i++) {
@@ -360,5 +366,34 @@ public class SuperTacticoGame {
         }
         return res;
     }
-}
+    public boolean isIsland(Location location){
+        return Arrays.asList(islandLocations).contains(location);
+    }
 
+    public Location[] getIslandLocations() {
+        return islandLocations;
+    }
+    public int numOfPiecsOnIsland(){
+        int res = 0;
+        for(Location location : islandLocations){
+            if(getPieceFromBoard(location) != null)
+                res++;
+        }
+        return res;
+    }
+    public boolean isIslandCaught(){
+        return numOfPiecsOnIsland() >= MAX_PIECES_ON_ISLAND_AT_BEGINNING;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Ends the game
+     * P.S I hate this movie
+     */
+    public void endGame(){
+        active = false;
+    }
+}
