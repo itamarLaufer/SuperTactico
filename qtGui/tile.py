@@ -9,8 +9,9 @@ class Tile(QtWidgets.QGraphicsRectItem):
         self.setAcceptDrops(True)
 
     def dragEnterEvent(self, event):
+        """Take care of dnd item entering tile"""
         if event.mimeData().property('piece'):
-            color = self.brush().color().darker(200)
+            color = self.brush().color().darker(200)  # so we can tell what tile we are over
             brush = QtGui.QBrush(color, bs=QtCore.Qt.SolidPattern)
             self.setBrush(brush)
             event.setAccepted(True)
@@ -19,12 +20,12 @@ class Tile(QtWidgets.QGraphicsRectItem):
 
     def dropEvent(self, event):
         point = self.rect().topLeft()
-        event.mimeData().property('piece').setPos(point.x(), point.y())
-        color = self.brush().color().lighter(200)
+        event.mimeData().property('piece').setPos(point.x(), point.y())  # move the dragged item to this tile
+        color = self.brush().color().lighter(200)  # returns tile color to normal
         brush = QtGui.QBrush(color, bs=QtCore.Qt.SolidPattern)
         self.setBrush(brush)
 
     def dragLeaveEvent(self, event):
-        color = self.brush().color().lighter(200)
+        color = self.brush().color().lighter(200)  # returns tile color to normal
         brush = QtGui.QBrush(color, bs=QtCore.Qt.SolidPattern)
         self.setBrush(brush)
