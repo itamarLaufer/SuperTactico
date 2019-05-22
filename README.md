@@ -13,4 +13,6 @@ There are two parts to getting set up:
 
 Art credit - [Avi Breslauer](https://www.instagram.com/avidrawings/)
 
+[Art](/tkinterGUI/res/pics/pieces)
+
 
