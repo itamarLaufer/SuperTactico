@@ -31,10 +31,10 @@ class Board(QtWidgets.QGraphicsView):
             rect.setBrush(brush)
             self.a = self.scene.addItem(rect)
         pic = QtGui.QPixmap(
-            r'C:\gvahim\mythings\guistuff\Games\SuperTactico\SuperTactico\tkinterGui\res\pics\pieces\pieceb5.png')
+            r'C:\gvahim\mythings\guistuff\Games\SuperTactico\SuperTactico\res\pics\pieces\pieceb5.png')
         self.b = piece.Piece(pic)
         pic = QtGui.QPixmap(
-            r'C:\gvahim\mythings\guistuff\Games\SuperTactico\SuperTactico\tkinterGui\res\pics\pieces\pieceb9.png')
+            r'C:\gvahim\mythings\guistuff\Games\SuperTactico\SuperTactico\res\pics\pieces\pieceb9.png')
         self.c = piece.Piece(pic)
         self.c.setPos(30, 0)
         self.scene.addItem(self.b)
