@@ -20,24 +20,16 @@ class Board(QtWidgets.QGraphicsView):
         self.scales = []
 
         # setup all of the tiles
-        for i in range(self.rect_row):
-            for j in range(self.rect_col):
+        for i, row in enumerate(self.tiles):
+            for j, color in enumerate(row):
                 x = j * self.rect_size
                 y = i * self.rect_size
                 rect = QtCore.QRect(x, y, self.rect_size, self.rect_size)
-                new = tile.Tile(tiles[i][j], rect)
-                self.scene.addItem(new)
-        # add some pictures for demonstrating dnd and zoom
-        pic = QtGui.QPixmap(
-            r'C:\gvahim\mythings\guistuff\Games\SuperTactico\SuperTactico\res\pics\pieces\pieceb5.png')
-        self.b = piece.Piece(pic)
-        pic = QtGui.QPixmap(
-            r'C:\gvahim\mythings\guistuff\Games\SuperTactico\SuperTactico\res\pics\pieces\pieceb9.png')
-        self.c = piece.Piece(pic)
-        self.c.setPos(30, 0)
-        self.scene.addItem(self.b)
-        self.scene.addItem(self.c)
-        # self.scene.addPixmap(pic)
+                self.tiles[i][j] = tile.Tile(color, rect)
+                self.scene.addItem(self.tiles[i][j])
+        for i in pieces:
+            new = piece.Piece(i)
+            self.scene.addItem(new)
         self.setScene(self.scene)
         self.setMinimumSize(self.rect_size * self.rect_row + 3, self.rect_size * self.rect_col + 3)
 

@@ -4,13 +4,24 @@ import PySide2.QtGui as QtGui
 
 
 class Piece(QtWidgets.QGraphicsPixmapItem):
-    def __init__(self, *args, **kwargs):
+    path = r'..\res\pics\pieces\pieceb{}.png'
+
+    def __init__(self, piece_info, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # setup
         self.setToolTip("Click and drag this to another square!")
         self.setScale(0.1)
-        self.scale() # make piece fit on a square
+        self.scale()  # make piece fit on a square
         self.mini = self.pixmap().scaled(20, 20)
+        self.rect_size = 30
+
+        self.type_id = piece_info['typeId']
+        self.image_path = self.path.format(str(self.type_id))
+        self.loads = piece_info['loads']
+        self.y, self.x = piece_info['location']
+        self.id = piece_info['id']
+        self.setPixmap(QtGui.QPixmap(self.image_path))
+        self.setPos(self.x * self.rect_size, self.y * self.rect_size)
 
     def mousePressEvent(self, event):
         """Currently does nothing, need to override the function so mouseMoveEvent gets called"""
