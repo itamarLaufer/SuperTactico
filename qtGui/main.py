@@ -3,9 +3,12 @@ import PySide2.QtCore as QtCore
 import PySide2.QtWidgets as QtWidgets
 import PySide2.QtGui as QtGui
 import board
+import client
 
+player = client.Client()
+tiles, player_pieces = player.connect()
 app = QtWidgets.QApplication(sys.argv)
-game = board.Board()
+game = board.Board(tiles, player_pieces)
 window = QtWidgets.QWidget()
 layout = QtWidgets.QVBoxLayout()
 scene = QtWidgets.QGraphicsScene()

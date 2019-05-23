@@ -4,9 +4,18 @@ import PySide2.QtGui as QtGui
 
 
 class Tile(QtWidgets.QGraphicsRectItem):
-    def __init__(self, *args, **kwargs):
+    SEA_COLOR = QtGui.QColor('#00B2EE')
+    LAND_COLOR = QtGui.QColor('#8B6508')
+
+    def __init__(self, tile_type: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setAcceptDrops(True)
+        self.tile_type = tile_type
+        if tile_type == 'S':
+            brush = QtGui.QBrush(self.SEA_COLOR, bs=QtCore.Qt.SolidPattern)
+        if tile_type == 'L':
+            brush = QtGui.QBrush(self.LAND_COLOR, bs=QtCore.Qt.SolidPattern)
+        self.setBrush(brush)
 
     def dragEnterEvent(self, event):
         """Take care of dnd item entering tile"""

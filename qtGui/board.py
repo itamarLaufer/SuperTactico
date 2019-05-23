@@ -8,8 +8,9 @@ import tile
 class Board(QtWidgets.QGraphicsView):
     land_color = QtGui.QColor('#8B6508')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, tiles, pieces, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.tiles = tiles
         self.board = []
         self.rect_size = 30
         self.rect_row = 20
@@ -18,17 +19,14 @@ class Board(QtWidgets.QGraphicsView):
         self.scaled = 0
         self.scales = []
 
-        brush = QtGui.QBrush(self.land_color, bs=QtCore.Qt.SolidPattern)
-        brush.setColor(self.land_color)
-        brush.setStyle(QtCore.Qt.SolidPattern)
         # setup all of the tiles
         for i in range(self.rect_row):
             for j in range(self.rect_col):
-                rect = QtCore.QRect(i * self.rect_size, j * self.rect_size, self.rect_size, self.rect_size)
-                new = tile.Tile(rect)
-                new.setPen(QtGui.QPen('black'))
-                new.setBrush(brush)
-                self.a = self.scene.addItem(new)
+                x = j * self.rect_size
+                y = i * self.rect_size
+                rect = QtCore.QRect(x, y, self.rect_size, self.rect_size)
+                new = tile.Tile(tiles[i][j], rect)
+                self.scene.addItem(new)
         # add some pictures for demonstrating dnd and zoom
         pic = QtGui.QPixmap(
             r'C:\gvahim\mythings\guistuff\Games\SuperTactico\SuperTactico\res\pics\pieces\pieceb5.png')
