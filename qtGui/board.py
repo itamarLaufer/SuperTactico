@@ -31,7 +31,9 @@ class Board(QtWidgets.QGraphicsView):
             new = piece.Piece(i)
             self.scene.addItem(new)
         self.setScene(self.scene)
-        self.setMinimumSize(self.rect_size * self.rect_row + 3, self.rect_size * self.rect_col + 3)
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setMinimumSize(self.rect_size * self.rect_row, self.rect_size * self.rect_col)
 
     def wheelEvent(self, event):
         dir = event.delta()
@@ -47,3 +49,12 @@ class Board(QtWidgets.QGraphicsView):
             self.scaled -= 1
         else:
             return
+
+    def mousePressEvent(self, event):
+        if self.scales:
+            self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
+            super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
+        super().mouseReleaseEvent(event)
