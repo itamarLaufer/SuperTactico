@@ -3,12 +3,13 @@ import PySide2.QtWidgets as QtWidgets
 import PySide2.QtGui as QtGui
 import piece
 import tile
+from typing import List, Dict
 
 
 class Board(QtWidgets.QGraphicsView):
     land_color = QtGui.QColor('#8B6508')
 
-    def __init__(self, tiles, pieces, *args, **kwargs):
+    def __init__(self, tiles: List, pieces: Dict, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tiles = tiles
         self.board = []

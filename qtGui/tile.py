@@ -13,7 +13,7 @@ class Tile(QtWidgets.QGraphicsRectItem):
         self.tile_type = tile_type
         if tile_type == 'S':
             brush = QtGui.QBrush(self.SEA_COLOR, bs=QtCore.Qt.SolidPattern)
-        if tile_type == 'L':
+        elif tile_type == 'L':
             brush = QtGui.QBrush(self.LAND_COLOR, bs=QtCore.Qt.SolidPattern)
         self.setBrush(brush)
 
