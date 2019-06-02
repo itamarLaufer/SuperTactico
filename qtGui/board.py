@@ -4,14 +4,18 @@ import PySide2.QtGui as QtGui
 import piece
 import tile
 from typing import List, Dict
+import time
 
 
 class Board(QtWidgets.QGraphicsView):
-    land_color = QtGui.QColor('#8B6508')
+    UPDATE = '4'
+    MOVES = '5'
 
-    def __init__(self, tiles: List, pieces: Dict, *args, **kwargs):
+    def __init__(self, tiles: List, pieces: Dict, client, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.bla = QtCore.QObject()
         self.tiles = tiles
+        self.changed_tiles = []
         self.board = []
         self.rect_size = 30
         self.rect_row = 20
@@ -19,22 +23,26 @@ class Board(QtWidgets.QGraphicsView):
         self.scene = QtWidgets.QGraphicsScene()
         self.scaled = 0
         self.scales = []
-
+        self.client = client
         # setup all of the tiles
         for i, row in enumerate(self.tiles):
             for j, color in enumerate(row):
                 x = j * self.rect_size
                 y = i * self.rect_size
                 rect = QtCore.QRect(x, y, self.rect_size, self.rect_size)
-                self.tiles[i][j] = tile.Tile(color, rect)
+                self.tiles[i][j] = tile.Tile(color, client.todo, rect)
                 self.scene.addItem(self.tiles[i][j])
         for i in pieces:
-            new = piece.Piece(i)
+            new = piece.Piece(i, client.todo)
             self.scene.addItem(new)
         self.setScene(self.scene)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setMinimumSize(self.rect_size * self.rect_row, self.rect_size * self.rect_col)
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(500)
+        self.timer.timeout.connect(self.communicate)
+        self.timer.start()
 
     def wheelEvent(self, event):
         dir = event.delta()
@@ -54,8 +62,42 @@ class Board(QtWidgets.QGraphicsView):
     def mousePressEvent(self, event):
         if self.scales:
             self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
-            super().mousePressEvent(event)
+        for i in self.changed_tiles:
+            i.accepting = False
+        super().mousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
-        self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
+        if self.scales:
+            self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
         super().mouseReleaseEvent(event)
+
+    def communicate(self):
+        if not self.client.received.empty():
+            order = self.client.received.get_nowait()
+            if order:
+                new = []
+                if order[0] == self.MOVES:
+                    actor_id = order[1]['actorId']
+                    locations = order[1]['orders']
+                    # color all locations of piece options
+                    for i, location in enumerate(locations):
+                        x = location['location'][0]
+                        y = location['location'][1]
+                        cur = self.tiles[x][y]
+                        new.append(cur)
+                        cur.setColor(location['typeId'])
+                        cur.accepting = True
+                        cur.color()
+                        cur.order_id = [str(actor_id), str(i)]
+                elif order[0] == self.UPDATE:
+                    pass
+                new = set(new)
+                changed_tiles = set(self.changed_tiles)
+                intersection = changed_tiles & new
+                changed_remainder = changed_tiles - new
+                new_remainder = new - changed_tiles
+                self.changed_tiles = intersection.union(new_remainder)
+                for i in changed_remainder:
+                    i.accepting = False
+                    i.setColor(-1)
+                    i.color()

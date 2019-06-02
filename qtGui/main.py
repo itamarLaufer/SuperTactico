@@ -4,11 +4,27 @@ import PySide2.QtWidgets as QtWidgets
 import PySide2.QtGui as QtGui
 import board
 import client
+import asyncio
+from asyncqt import QEventLoop, QThreadExecutor
+
+
+async def main(loop, player):
+    write = loop.create_task(player.send())
+    read = loop.create_task(player.receive())
+    await write
+    await read
+    # await player.send()
+
+
+app = QtWidgets.QApplication(sys.argv)
+loop = QEventLoop(app)
+asyncio.set_event_loop(loop)
 
 player = client.Client()
-tiles, player_pieces = player.connect()
-app = QtWidgets.QApplication(sys.argv)
-game = board.Board(tiles, player_pieces)
+tiles, player_pieces = loop.run_until_complete(player.connect())
+
+game = board.Board(tiles, player_pieces, player)
+
 window = QtWidgets.QWidget()
 layout = QtWidgets.QVBoxLayout()
 scene = QtWidgets.QGraphicsScene()
@@ -16,11 +32,9 @@ layout.addWidget(game)
 button = QtWidgets.QPushButton('start')
 button.clicked.connect(lambda x: print('ok'))
 layout.addWidget(button)
-qe = QtWidgets.QLineEdit('')
-qe.setDragEnabled(True)
-layout.addWidget(qe)
-size = QtWidgets.QDesktopWidget().size()
+
 window.setLayout(layout)
 window.show()
-game.setMinimumSize(game.rect_size * game.rect_row + 3, game.rect_size * game.rect_col + 3)
-app.exec_()
+# app.exec_()
+with loop:
+    loop.run_until_complete(main(loop, player))
