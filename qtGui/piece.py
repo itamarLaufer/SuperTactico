@@ -4,14 +4,15 @@ import PySide2.QtGui as QtGui
 
 
 class Piece(QtWidgets.QGraphicsPixmapItem):
-    path = r'..\res\pics\pieces\pieceb{}.png'
+    path = r'..\res\pics\pieces\piece{}.png'
 
-    def __init__(self, piece_info, messages, *args, **kwargs):
+    def __init__(self, piece_info, team, messages, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # setup
         self.rect_size = 30
+        self.team = team
         self.type_id = piece_info['typeId']
-        self.image_path = self.path.format(str(self.type_id))
+        self.image_path = self.path.format(self.team + str(self.type_id))
         self.loads = piece_info['loads']
         self.y, self.x = piece_info['location']
         self.id = piece_info['id']
@@ -25,7 +26,6 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
         self.mini = self.pixmap().scaled(20, 20)
 
     def mousePressEvent(self, event):
-        """Currently does nothing, need to override the function so mouseMoveEvent gets called"""
         self.messages.put_nowait(['3', str(self.id)])
 
     def mouseMoveEvent(self, event):

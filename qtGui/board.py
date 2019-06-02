@@ -5,7 +5,7 @@ import piece
 import tile
 from typing import List, Dict
 import time
-
+import piece_container
 
 class Board(QtWidgets.QGraphicsView):
     UPDATE = '4'
@@ -13,7 +13,6 @@ class Board(QtWidgets.QGraphicsView):
 
     def __init__(self, tiles: List, pieces: Dict, client, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.bla = QtCore.QObject()
         self.tiles = tiles
         self.changed_tiles = []
         self.board = []
@@ -24,6 +23,9 @@ class Board(QtWidgets.QGraphicsView):
         self.scaled = 0
         self.scales = []
         self.client = client
+        self.player_pieces = piece_container.PieceContainer(client.todo, pieces=pieces)
+        self.enemy_pieces = piece_container.PieceContainer(client.todo)
+
         # setup all of the tiles
         for i, row in enumerate(self.tiles):
             for j, color in enumerate(row):
@@ -32,9 +34,8 @@ class Board(QtWidgets.QGraphicsView):
                 rect = QtCore.QRect(x, y, self.rect_size, self.rect_size)
                 self.tiles[i][j] = tile.Tile(color, client.todo, rect)
                 self.scene.addItem(self.tiles[i][j])
-        for i in pieces:
-            new = piece.Piece(i, client.todo)
-            self.scene.addItem(new)
+        for i in self.player_pieces:
+            self.scene.addItem(i)
         self.setScene(self.scene)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
