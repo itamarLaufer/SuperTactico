@@ -30,7 +30,7 @@ layout = QtWidgets.QVBoxLayout()
 scene = QtWidgets.QGraphicsScene()
 layout.addWidget(game)
 button = QtWidgets.QPushButton('start')
-button.clicked.connect(lambda x: print('ok'))
+button.clicked.connect(lambda x: player.todo.put_nowait(['1', 'john']))
 layout.addWidget(button)
 
 window.setLayout(layout)

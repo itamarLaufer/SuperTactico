@@ -1,15 +1,16 @@
 import PySide2.QtCore as QtCore
 import PySide2.QtWidgets as QtWidgets
 import PySide2.QtGui as QtGui
-import piece
 import tile
 from typing import List, Dict
 import time
 import piece_container
 
+
 class Board(QtWidgets.QGraphicsView):
     UPDATE = '4'
     MOVES = '5'
+    GAME = '6'
 
     def __init__(self, tiles: List, pieces: Dict, client, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,7 +26,7 @@ class Board(QtWidgets.QGraphicsView):
         self.client = client
         self.player_pieces = piece_container.PieceContainer(client.todo, pieces=pieces)
         self.enemy_pieces = piece_container.PieceContainer(client.todo)
-
+        self.animation = None
         # setup all of the tiles
         for i, row in enumerate(self.tiles):
             for j, color in enumerate(row):
@@ -72,6 +73,30 @@ class Board(QtWidgets.QGraphicsView):
             self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
         super().mouseReleaseEvent(event)
 
+    def piece_move(self, pieces):
+        for i in pieces:
+            loc = i['location']
+            x, y = loc[1] * self.rect_size, loc[0] * self.rect_size
+            pid = i['id']
+            if pid in self.player_pieces.pieces:
+                cur_piece = self.player_pieces[pid]
+            else:
+                cur_piece = self.enemy_pieces[pid]
+            piece_x, piece_y = cur_piece.pos().x(), cur_piece.pos().y()
+            if piece_x != x or piece_y != y:
+                timer = QtCore.QTimeLine(1000)
+                timer.setFrameRange(0, 100)
+
+                self.animation = QtWidgets.QGraphicsItemAnimation()
+                self.animation.setItem(cur_piece)
+                self.animation.setTimeLine(timer)
+                frames = 200
+                for i in range(1, frames - 1):
+                    self.animation.setPosAt(i / frames, QtCore.QPointF(piece_x + ((x - piece_x) * i / frames),
+                                                                       piece_y + ((y - piece_y) * i / frames)))
+                self.animation.setPosAt(frames - 1 / frames, QtCore.QPointF(x, y))
+                timer.start()
+
     def communicate(self):
         if not self.client.received.empty():
             order = self.client.received.get_nowait()
@@ -91,7 +116,19 @@ class Board(QtWidgets.QGraphicsView):
                         cur.color()
                         cur.order_id = [str(actor_id), str(i)]
                 elif order[0] == self.UPDATE:
-                    pass
+                    changed_pieces = order[1]['pieces']
+                    self.piece_move(changed_pieces)
+                            # piece.setPos(x, y)
+                elif order[0] == self.GAME:
+                    changed_pieces = order[1]['pieces']
+                    if self.enemy_pieces.pieces:
+                        changed_pieces = order[1]['pieces']
+                        self.piece_move(changed_pieces)
+                    else:
+                        self.enemy_pieces.add(changed_pieces)
+                        for i in self.enemy_pieces:
+                            self.scene.addItem(i)
+                        self.player_pieces.update(order[1]['newIds'])
                 new = set(new)
                 changed_tiles = set(self.changed_tiles)
                 intersection = changed_tiles & new

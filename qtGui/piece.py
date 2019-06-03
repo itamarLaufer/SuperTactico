@@ -11,8 +11,11 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
         # setup
         self.rect_size = 30
         self.team = team
-        self.type_id = piece_info['typeId']
-        self.image_path = self.path.format(self.team + str(self.type_id))
+        if team == 'b':
+            self.type_id = piece_info['typeId']
+            self.image_path = self.path.format(self.team + str(self.type_id))
+        else:
+            self.image_path = self.path.format(self.team)
         self.loads = piece_info['loads']
         self.y, self.x = piece_info['location']
         self.id = piece_info['id']
@@ -26,16 +29,18 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
         self.mini = self.pixmap().scaled(20, 20)
 
     def mousePressEvent(self, event):
-        self.messages.put_nowait(['3', str(self.id)])
+        if self.team == 'b':
+            self.messages.put_nowait(['3', str(self.id)])
 
     def mouseMoveEvent(self, event):
         """Take care of drag and drop"""
         # put necessary data unto dnd item
-        data = QtCore.QMimeData()
-        data.setProperty('piece', self)
-        # setup the drag event
-        drag = QtGui.QDrag(event.widget())
-        drag.setPixmap(self.mini)
-        drag.setHotSpot(QtCore.QPoint(10, 10))
-        drag.setMimeData(data)
-        drag.start()
+        if self.team == 'b':
+            data = QtCore.QMimeData()
+            data.setProperty('piece', self)
+            # setup the drag event
+            drag = QtGui.QDrag(event.widget())
+            drag.setPixmap(self.mini)
+            drag.setHotSpot(QtCore.QPoint(10, 10))
+            drag.setMimeData(data)
+            drag.start()

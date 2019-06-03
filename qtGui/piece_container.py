@@ -5,10 +5,11 @@ class PieceContainer:
     """An object to contain piece objects. Will be more useful later on"""
 
     def __init__(self, messages, pieces=None):
+        self.messages = messages
         self.pieces = {}
         if pieces:
             for piece in pieces:
-                current = Piece(piece, 'b', messages)
+                current = Piece(piece, 'b', self.messages)
                 self.pieces[current.id] = current
 
     def __iter__(self):
@@ -19,7 +20,7 @@ class PieceContainer:
 
     def add(self, pieces):
         for piece in pieces:
-            current = Piece(piece, 'r')
+            current = Piece(piece, 'r', self.messages)
             self.pieces[current.id] = current
 
     def update(self, new_ids):
