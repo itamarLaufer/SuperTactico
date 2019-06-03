@@ -34,6 +34,16 @@ button.clicked.connect(lambda x: player.todo.put_nowait(['1', 'john']))
 layout.addWidget(button)
 
 window.setLayout(layout)
+if sys.argv[1] == 'r':
+    desk = app.desktop()
+    x = desk.width() - window.size().width()
+    y = 0
+    window.move(x, y)
+else:
+    desk = app.desktop()
+    x = 0
+    y = 0
+    window.move(x, y)
 window.show()
 # app.exec_()
 with loop:

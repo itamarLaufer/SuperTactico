@@ -95,6 +95,7 @@ class Board(QtWidgets.QGraphicsView):
                     self.animation.setPosAt(i / frames, QtCore.QPointF(piece_x + ((x - piece_x) * i / frames),
                                                                        piece_y + ((y - piece_y) * i / frames)))
                 self.animation.setPosAt(frames - 1 / frames, QtCore.QPointF(x, y))
+                print(x, y)
                 timer.start()
 
     def communicate(self):
@@ -118,7 +119,7 @@ class Board(QtWidgets.QGraphicsView):
                 elif order[0] == self.UPDATE:
                     changed_pieces = order[1]['pieces']
                     self.piece_move(changed_pieces)
-                            # piece.setPos(x, y)
+                    # piece.setPos(x, y)
                 elif order[0] == self.GAME:
                     changed_pieces = order[1]['pieces']
                     if self.enemy_pieces.pieces:
