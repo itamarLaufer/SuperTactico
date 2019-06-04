@@ -7,6 +7,8 @@ class Tile(QtWidgets.QGraphicsRectItem):
     SEA_COLOR = QtGui.QBrush(QtGui.QColor('#00B2EE'), bs=QtCore.Qt.SolidPattern)
     LAND_COLOR = QtGui.QBrush(QtGui.QColor('#8B6508'), bs=QtCore.Qt.SolidPattern)
     MOVE_COLOR = QtGui.QColor('#00FF00')
+    ATTACK_COLOR = QtGui.QColor('#FF0000')
+    LOAD_COLOR = QtGui.QColor('#0000FF')
 
     def __init__(self, tile_type: str, messages,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -15,15 +17,21 @@ class Tile(QtWidgets.QGraphicsRectItem):
         if tile_type == 'S':
             brush = self.SEA_COLOR
             move_color = self.MOVE_COLOR
+            attack_color = self.ATTACK_COLOR
+            load_color = self.LOAD_COLOR
         elif tile_type == 'L':
             brush = self.LAND_COLOR
             move_color = self.MOVE_COLOR.darker(300)
+            attack_color = self.ATTACK_COLOR.darker(300)
+            load_color = self.LOAD_COLOR.darker(300)
         self.setBrush(brush)
         self.DEFAULT_COLOR = brush
         self.tile_color = self.DEFAULT_COLOR.color()
         self.COLOR_DICT = {
             -1: self.DEFAULT_COLOR,
-            0: move_color
+            0: move_color,
+            1: attack_color,
+            2: load_color
         }
         self.messages = messages
         self.accepting = False
