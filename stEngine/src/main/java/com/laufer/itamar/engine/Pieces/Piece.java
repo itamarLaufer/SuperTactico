@@ -229,8 +229,7 @@ public abstract class Piece implements JsonParsable
     }
 
     public boolean attack(Flag flag){
-        load(flag);
-        return true; //Todo there may be bugs here
+        return false;
     }
 
 

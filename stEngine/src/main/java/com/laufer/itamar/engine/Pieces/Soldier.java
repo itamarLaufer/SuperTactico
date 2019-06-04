@@ -41,6 +41,12 @@ public abstract class Soldier extends Piece {
         return true;
     }
 
+    @Override
+    public boolean attack(Flag flag) {
+        load(flag);
+        return true;
+    }
+
     public boolean hasFlag(){
         return getAllLoads().size() > 0;
     } //Todo maybe redundant
