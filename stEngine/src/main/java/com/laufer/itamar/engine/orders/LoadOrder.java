@@ -8,16 +8,16 @@ import org.json.simple.JSONObject;
 
 public class LoadOrder extends Order {
     private static int ORDER_ID = 2;
-    private Piece loaded;
+    private Piece loader;
     public LoadOrder(Piece actor, Location location) {
         super(actor, location, ORDER_ID);
-        this.loaded = game.getPieceFromBoard(location);
+        this.loader = game.getPieceFromBoard(location);
 
     }
 
     @Override
     public void execute() {
-        actor.load(loaded);
+        loader.load(actor);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class LoadOrder extends Order {
         JSONObject res = new JSONObject();
         JSONArray pieces = new JSONArray();
         pieces.add(actor.parseJson());
-        pieces.add(loaded.parseJson());
+        pieces.add(loader.parseJson());
         res.put("pieces", pieces);
         return res;
     }

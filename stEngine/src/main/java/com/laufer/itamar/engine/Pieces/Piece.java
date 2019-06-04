@@ -129,7 +129,7 @@ public abstract class Piece implements JsonParsable
     }
 
     private List<LoadOrder> getPossibleLoadOrders(){
-        return location.touchingLocations(game.getBoardSize()).stream().filter(it -> canLoad(game.getPieceFromBoard(it))).map(it -> new LoadOrder(this, it)).collect(Collectors.toList());
+        return location.touchingLocations(game.getBoardSize()).stream().filter(it -> game.getPieceFromBoard(it) != null && game.getPieceFromBoard(it).canLoad(this)).map(it -> new LoadOrder(this, it)).collect(Collectors.toList());
     }
 
     private List<UnloadOrder> getPossibleUnloadOrders(){
