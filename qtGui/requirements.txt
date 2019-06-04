@@ -1,0 +1,2 @@
+asyncqt    0.7.0
+PySide2    5.12.3
