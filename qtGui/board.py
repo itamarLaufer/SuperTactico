@@ -91,11 +91,10 @@ class Board(QtWidgets.QGraphicsView):
                 self.animation.setItem(cur_piece)
                 self.animation.setTimeLine(timer)
                 frames = 200
-                for i in range(1, frames - 1):
-                    self.animation.setPosAt(i / frames, QtCore.QPointF(piece_x + ((x - piece_x) * i / frames),
-                                                                       piece_y + ((y - piece_y) * i / frames)))
-                self.animation.setPosAt(frames - 1 / frames, QtCore.QPointF(x, y))
-                print(x, y)
+                for frame in range(1, frames - 1):
+                    self.animation.setPosAt(frame / frames, QtCore.QPointF(piece_x + ((x - piece_x) * frame / frames),
+                                                                           piece_y + ((y - piece_y) * frame / frames)))
+                self.animation.setPosAt((frames - 1) / frames, QtCore.QPointF(x, y))
                 timer.start()
 
     def communicate(self):
