@@ -15,6 +15,7 @@ import java.net.SocketException;
 import java.util.List;
 
 public class PlayerClient implements Runnable {
+    private static final int TIME_FOR_TURN = 12000000; // Todo change to reasonable number
     private Player player;
     private Socket socket;
     private String name;
@@ -172,7 +173,7 @@ public class PlayerClient implements Runnable {
     void timeTheTurn(GameServer server) {
         PlayerClient current = this;
         SuperTacticoGame finalGame = getGame().getGame();
-        server.getExecutor().execute(new TurnTaskForTime(1200000, finalGame.getTurns()) { //Todo constant
+        server.getExecutor().execute(new TurnTaskForTime(TIME_FOR_TURN, finalGame.getTurns()) { //Todo constant
             @Override
             public boolean isDone() {
                 return getTurn() < finalGame.getTurns();

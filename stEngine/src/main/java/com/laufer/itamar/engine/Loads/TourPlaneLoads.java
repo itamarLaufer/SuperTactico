@@ -20,9 +20,8 @@ public class TourPlaneLoads extends Loads {
 
     @Override
     public Boolean canLoad(Soldier soldier) {
-        return soldiers.size()<2;
+        return !soldier.hasFlag() && soldiers.size() < 2;
     }
-
     @Override
     public Boolean canLoad(TourPlane tourPlane) {
         return false;

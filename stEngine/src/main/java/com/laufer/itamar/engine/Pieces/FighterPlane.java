@@ -1,7 +1,7 @@
 package com.laufer.itamar.engine.Pieces;
 
 
-import com.laufer.itamar.engine.Loads.FigtherPlaneLoads;
+import com.laufer.itamar.engine.Loads.FighterPlaneLoads;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
@@ -12,7 +12,7 @@ import com.laufer.itamar.engine.Visitors.VoidVisitor;
 public class FighterPlane extends Plane {
 
     public FighterPlane(SuperTacticoGame game, Player owner, Location location, int id) {
-        super(game, owner, location, new FigtherPlaneLoads(), id);
+        super(game, owner, location, new FighterPlaneLoads(), id);
     }
 
     @Override

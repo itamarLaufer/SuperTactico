@@ -10,6 +10,9 @@ import com.laufer.itamar.engine.SuperTacticoGame;
 import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
+import com.laufer.itamar.engine.orders.MoveOrder;
+
+import java.util.List;
 
 public class Flag extends Piece {
 
@@ -55,5 +58,19 @@ public class Flag extends Piece {
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {
         return canLoadVisitor.visit(this);
+    }
+
+    @Override
+    public List<MoveOrder> getLocateOrders() {
+        List<MoveOrder> res = super.getLocateOrders();
+        res.removeIf(moveOrder -> game.isIsland(moveOrder.getLocation()));
+        return res;
+    }
+
+    @Override
+    public void move(Location dest) {
+        super.move(dest);
+        if(game.isIsland(location))
+            game.endGame();
     }
 }

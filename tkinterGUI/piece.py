@@ -1,6 +1,6 @@
 class Piece:
     """An object to represent a piece in the game"""
-    path = r'res\pics\pieces\piece{}.png'
+    path = r'..\res\pics\pieces\piece{}.png'
 
     def __init__(self, info, team):
         if 'typeId' in info:

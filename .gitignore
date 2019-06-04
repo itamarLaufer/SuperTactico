@@ -1,4 +1,5 @@
 *.jar
 .idea
-clientGUI/test.py
+test.py
 *.pyc
+venv

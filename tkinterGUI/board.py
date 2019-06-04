@@ -141,8 +141,8 @@ class Board(tk.Frame):
                 self.redraw_tiles()
                 self.color_tile(piece_id=piece.id)
                 self.events.append(("3", str(piece.id)))
-            else:
-                self.redraw_tiles()
+            # else:
+            #     self.redraw_tiles()
         # if we clicked a tile
         elif current in list(chain.from_iterable(self.canvas_tiles)):
             # if the tile is not a default color (meaning it is something to do)
