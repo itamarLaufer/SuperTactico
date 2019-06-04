@@ -1,5 +1,6 @@
 package com.laufer.itamar.engine.Pieces;
 
+import com.laufer.itamar.engine.BattleResult;
 import com.laufer.itamar.engine.Loads.TourPlaneLoads;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
@@ -18,7 +19,7 @@ public class TourPlane extends Plane {
         voidVisitor.visit(this);
     }
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
@@ -28,19 +29,19 @@ public class TourPlane extends Plane {
     }
 
     @Override
-    public boolean attack(Plane plane) {
-        return false; // will always go to the specific
+    public BattleResult attack(Plane plane) {
+        return null; // will always go to the specific
     }
 
-    public boolean attack(TourPlane tourPlane){
+    public BattleResult attack(TourPlane tourPlane){
         tourPlane.die();
         die();
-        return true;
+        return BattleResult.TIE;
     }
 
-    public boolean attack(FighterPlane fighterPlane){
+    public BattleResult attack(FighterPlane fighterPlane){
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {

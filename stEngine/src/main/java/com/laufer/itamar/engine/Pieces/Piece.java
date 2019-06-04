@@ -61,11 +61,11 @@ public abstract class Piece implements JsonParsable
     public boolean canUnload(Location dest){
         return !dest.notInBoard(game.getBoardSize()) && this.location.touches(dest) && loader != null && locType.canStandHere(game.getLocTypeInLocation(dest));
     }
-    public Boolean attack(Piece other){
+    public BattleResult attack(Piece other){
         return other.accept(attackVisitor);
     }
     public abstract void accept(VoidVisitor voidVisitor);
-    public abstract Boolean accept(AttackVisitor attackVisitor);
+    public abstract BattleResult accept(AttackVisitor attackVisitor);
     public abstract boolean accept(CanLoadVisitor canLoadVisitor);
     public boolean touches(Piece other){
         return Location.touches(location,other.location);
@@ -182,54 +182,54 @@ public abstract class Piece implements JsonParsable
         loader = null;
     }
 
-    public Boolean attack(Bomb bomb){
+    public BattleResult attack(Bomb bomb){
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
-    public boolean attack(LandBomb landBomb){
+    public BattleResult attack(LandBomb landBomb){
         return attack((Bomb)landBomb);
     }
-    public boolean attack(SeaBomb seaBomb){
+    public BattleResult attack(SeaBomb seaBomb){
         return attack((Bomb)seaBomb);
     }
-    public abstract boolean attack(Plane plane);
-    public boolean attack(FighterPlane fighterPlane){
+    public abstract BattleResult attack(Plane plane);
+    public BattleResult attack(FighterPlane fighterPlane){
         return attack((Plane)fighterPlane);
     }
-    public boolean attack(TourPlane tourPlane){
+    public BattleResult attack(TourPlane tourPlane){
         return attack((Plane)tourPlane);
     }
-    public abstract boolean attack(Ship ship);
-    public boolean attack(SpyShip spyShip){
+    public abstract BattleResult attack(Ship ship);
+    public BattleResult attack(SpyShip spyShip){
         return attack((Ship)spyShip);
     }
-    public boolean attack(M7Ship m7Ship){
+    public BattleResult attack(M7Ship m7Ship){
         return attack((Ship)m7Ship);
     }
-    public boolean attack(M4Ship m4Ship){
+    public BattleResult attack(M4Ship m4Ship){
         return attack((Ship)m4Ship);
     }
 
-    public boolean attack(LifeShip lifeShip){
+    public BattleResult attack(LifeShip lifeShip){
         return attack((Ship)lifeShip);
     }
-    public abstract boolean attack(Soldier soldier);
-    public boolean attack(LeveledSoldier leveledSoldier){
+    public abstract BattleResult attack(Soldier soldier);
+    public BattleResult attack(LeveledSoldier leveledSoldier){
         return attack((Soldier) leveledSoldier);
     }
-    public boolean attack(LieutenantGeneral lieutenantGeneral){
+    public BattleResult attack(LieutenantGeneral lieutenantGeneral){
         return attack((LeveledSoldier) lieutenantGeneral);
     }
-    public boolean attack(LandSapper landSapper){
+    public BattleResult attack(LandSapper landSapper){
         return attack((Soldier) landSapper);
 
     }
-    public boolean attack(SeaSapper seaSapper){
+    public BattleResult attack(SeaSapper seaSapper){
         return attack((Soldier) seaSapper);
     }
 
-    public boolean attack(Flag flag){
-        return false;
+    public BattleResult attack(Flag flag){
+        return BattleResult.DEFEAT;
     }
 
 
