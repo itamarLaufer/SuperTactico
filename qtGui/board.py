@@ -84,18 +84,7 @@ class Board(QtWidgets.QGraphicsView):
                 cur_piece = self.enemy_pieces[pid]
             piece_x, piece_y = cur_piece.pos().x(), cur_piece.pos().y()
             if piece_x != x or piece_y != y:
-                timer = QtCore.QTimeLine(1000)
-                timer.setFrameRange(0, 100)
-
-                self.animation = QtWidgets.QGraphicsItemAnimation()
-                self.animation.setItem(cur_piece)
-                self.animation.setTimeLine(timer)
-                frames = 200
-                for frame in range(1, frames - 1):
-                    self.animation.setPosAt(frame / frames, QtCore.QPointF(piece_x + ((x - piece_x) * frame / frames),
-                                                                           piece_y + ((y - piece_y) * frame / frames)))
-                self.animation.setPosAt((frames - 1) / frames, QtCore.QPointF(x, y))
-                timer.start()
+                cur_piece.animate(x, y)
 
     def communicate(self):
         if not self.client.received.empty():
@@ -122,7 +111,6 @@ class Board(QtWidgets.QGraphicsView):
                 elif order[0] == self.GAME:
                     changed_pieces = order[1]['pieces']
                     if self.enemy_pieces.pieces:
-                        changed_pieces = order[1]['pieces']
                         self.piece_move(changed_pieces)
                     else:
                         self.enemy_pieces.add(changed_pieces)

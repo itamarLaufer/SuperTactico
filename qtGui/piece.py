@@ -22,11 +22,17 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
         self.setPixmap(QtGui.QPixmap(self.image_path))
         self.setPos(self.x * self.rect_size, self.y * self.rect_size)
         self.messages = messages
-        
-        self.setToolTip("Click and drag this to another square!")
+
+        self.setToolTip(self.__str__())
         self.setScale(0.1)
         self.scale()  # make piece fit on a square
         self.mini = self.pixmap().scaled(20, 20)
+
+        self.timer = QtCore.QTimeLine(1000)
+        self.timer.setFrameRange(0, 100)
+        self.animation = QtWidgets.QGraphicsItemAnimation()
+        self.animation.setItem(self)
+        self.animation.setTimeLine(self.timer)
 
     def mousePressEvent(self, event):
         if self.team == 'b':
@@ -44,3 +50,25 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
             drag.setHotSpot(QtCore.QPoint(10, 10))
             drag.setMimeData(data)
             drag.start()
+
+    def animate(self, x, y):
+        self.animation.clear()
+        piece_x, piece_y = self.pos().x(), self.pos().y()
+        frames = 200
+        for frame in range(1, frames - 1):
+            self.animation.setPosAt(frame / frames, QtCore.QPointF(piece_x + ((x - piece_x) * frame / frames),
+                                                                   piece_y + ((y - piece_y) * frame / frames)))
+        self.animation.setPosAt((frames - 1) / frames, QtCore.QPointF(x, y))
+        self.timer.start()
+
+    def __str__(self):
+        return ' '.join(
+            [
+                'Type:', str(self.type_id) if self.team == 'b' else '?',
+                'Carrying:', str(self.loads),
+                'Y:', str(self.y),
+                'X:', str(self.x),
+                'Personal ID:', str(self.id),
+                'Team:', self.team
+            ]
+        )
