@@ -49,10 +49,11 @@ class Tile(QtWidgets.QGraphicsRectItem):
 
     def dropEvent(self, event):
         if self.accepting:
-            point = self.rect().topLeft()
-            event.mimeData().property('piece').setPos(point.x(), point.y())  # move the dragged item to this tile
-            self.tile_color = self.brush().color().lighter(200)  # returns tile color to normal
-            self.color()
+            if self.brush().color() == self.COLOR_DICT[0].darker(200):
+                point = self.rect().topLeft()
+                event.mimeData().property('piece').setPos(point.x(), point.y())  # move the dragged item to this tile
+            # self.tile_color = self.brush().color().lighter(200)  # returns tile color to normal
+            # self.color()
             self.messages.put_nowait(['2', *self.order_id])
 
     def dragLeaveEvent(self, event):
