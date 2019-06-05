@@ -229,6 +229,7 @@ public abstract class Piece implements JsonParsable
     }
 
     public BattleResult attack(Flag flag){
+        die();
         return BattleResult.DEFEAT;
     }
 
