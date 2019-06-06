@@ -1,7 +1,4 @@
-import PySide2.QtCore as QtCore
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
-
+from PySide2 import QtCore, QtGui, QtWidgets
 
 class Piece(QtWidgets.QGraphicsPixmapItem):
     path = r'..\res\pics\pieces\piece{}.png'

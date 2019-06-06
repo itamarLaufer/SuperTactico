@@ -1,6 +1,4 @@
-import PySide2.QtCore as QtCore
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
+from PySide2 import QtCore, QtGui, QtWidgets
 import tile
 from typing import List, Dict
 import time

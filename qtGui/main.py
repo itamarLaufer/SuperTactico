@@ -1,7 +1,5 @@
 import sys
-import PySide2.QtCore as QtCore
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
+from PySide2 import QtWidgets
 import board
 import client
 import asyncio
