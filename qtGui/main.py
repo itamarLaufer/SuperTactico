@@ -1,12 +1,10 @@
 import sys
-import PySide2.QtCore as QtCore
-import PySide2.QtWidgets as QtWidgets
-import PySide2.QtGui as QtGui
+from PySide2 import QtWidgets
 import board
 import client
 import asyncio
 from asyncqt import QEventLoop, QThreadExecutor
-
+import chat
 
 async def main(loop, player):
     write = loop.create_task(player.send())
@@ -22,18 +20,22 @@ asyncio.set_event_loop(loop)
 
 player = client.Client()
 tiles, player_pieces = loop.run_until_complete(player.connect())
-
-game = board.Board(tiles, player_pieces, player)
+game_chat = chat.Chat(player.todo)
+game = board.Board(tiles, player_pieces, player, game_chat.receive)
 
 window = QtWidgets.QWidget()
-layout = QtWidgets.QVBoxLayout()
+game_layout = QtWidgets.QVBoxLayout()
 scene = QtWidgets.QGraphicsScene()
-layout.addWidget(game)
+game_layout.addWidget(game)
 button = QtWidgets.QPushButton('start')
 button.clicked.connect(lambda x: player.todo.put_nowait(['1', 'john']))
-layout.addWidget(button)
+game_layout.addWidget(button)
 
-window.setLayout(layout)
+full_layout = QtWidgets.QHBoxLayout()
+full_layout.addLayout(game_layout)
+full_layout.addLayout(game_chat)
+
+window.setLayout(full_layout)
 if sys.argv[1] == 'r':
     desk = app.desktop()
     x = desk.width() - window.size().width()
