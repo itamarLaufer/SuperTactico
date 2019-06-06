@@ -30,7 +30,7 @@ class ListViewDelegate(QAbstractItemDelegate):
         bodydoc.setTextWidth(contentswidth)
         bodyheight = bodydoc.size().height()
 
-        outgoing = index.data(Qt.UserRole + 1) == "Outgoing"
+        incoming = index.data(Qt.UserRole + 1) == "Incoming"
 
         painter.save()
         painter.setRenderHint(QPainter.Antialiasing)
@@ -42,7 +42,7 @@ class ListViewDelegate(QAbstractItemDelegate):
 
         # background color for chat bubble
         bgcolor = QColor("#66ff66")
-        if outgoing:
+        if incoming:
             bgcolor = "#DDDDDD"
 
         # create chat bubble
@@ -77,7 +77,7 @@ class ListViewDelegate(QAbstractItemDelegate):
         pointie.closeSubpath()
 
         # rotate bubble for outgoing messages
-        if outgoing:
+        if incoming:
             painter.translate(
                 option.rect.width() - pointie.boundingRect().width() - self.d_horizontalmargin - self.d_pointerwidth, 0)
             painter.translate(pointie.boundingRect().center())
@@ -90,20 +90,20 @@ class ListViewDelegate(QAbstractItemDelegate):
         painter.fillPath(pointie, QBrush(bgcolor))
 
         # rotate back or painter is going to paint the text rotated...
-        if outgoing:
+        if incoming:
             painter.translate(pointie.boundingRect().center())
             painter.rotate(-180)
             painter.translate(-pointie.boundingRect().center())
 
         # set text color used to draw message body
         ctx = QAbstractTextDocumentLayout.PaintContext()
-        if outgoing:
+        if incoming:
             ctx.palette.setColor(QPalette.Text, QColor("black"))
         else:
             ctx.palette.setColor(QPalette.Text, QColor("white"))
 
         # draw body text
-        painter.translate((0 if outgoing else self.d_pointerwidth) + self.d_leftpadding, 0)
+        painter.translate((0 if incoming else self.d_pointerwidth) + self.d_leftpadding, 0)
         bodydoc.documentLayout().draw(painter, ctx)
 
         painter.restore()
