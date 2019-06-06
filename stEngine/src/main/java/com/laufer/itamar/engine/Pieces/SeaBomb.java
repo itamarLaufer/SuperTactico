@@ -18,7 +18,7 @@ public class SeaBomb extends Bomb {
     }
 
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 

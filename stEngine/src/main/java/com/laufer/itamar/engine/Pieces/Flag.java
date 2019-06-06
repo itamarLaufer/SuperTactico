@@ -1,12 +1,9 @@
 package com.laufer.itamar.engine.Pieces;
 
 
+import com.laufer.itamar.engine.*;
 import com.laufer.itamar.engine.Loads.CannotLoadLoads;
-import com.laufer.itamar.engine.LocType;
-import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Movings.NotMove;
-import com.laufer.itamar.engine.Player;
-import com.laufer.itamar.engine.SuperTacticoGame;
 import com.laufer.itamar.engine.Visitors.AttackVisitor;
 import com.laufer.itamar.engine.Visitors.CanLoadVisitor;
 import com.laufer.itamar.engine.Visitors.VoidVisitor;
@@ -21,7 +18,7 @@ public class Flag extends Piece {
     }
 
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
@@ -41,18 +38,18 @@ public class Flag extends Piece {
     }
 
     @Override
-    public boolean attack(Plane plane) {
-        return false; //cannot attack
+    public BattleResult attack(Plane plane) {
+        return null; //cannot attack
     }
 
     @Override
-    public boolean attack(Ship ship) {
-        return false; //cannot attack
+    public BattleResult attack(Ship ship) {
+        return null; //cannot attack
     }
 
     @Override
-    public boolean attack(Soldier soldier) {
-        return false; //cannot attack
+    public BattleResult attack(Soldier soldier) {
+        return null; //cannot attack
     }
 
     @Override

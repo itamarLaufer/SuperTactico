@@ -1,6 +1,7 @@
 package com.laufer.itamar.engine.Pieces;
 
 
+import com.laufer.itamar.engine.BattleResult;
 import com.laufer.itamar.engine.Loads.M4Loads;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
@@ -20,7 +21,7 @@ public class M4Ship extends Ship {
     }
 
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
@@ -30,26 +31,26 @@ public class M4Ship extends Ship {
     }
 
     @Override
-    public boolean attack(Ship ship) {
-        return false; // will always go to the specific
+    public BattleResult attack(Ship ship) {
+        return null; // will always go to the specific
     }
 
-    public boolean attack(M7Ship m7Ship){
+    public BattleResult attack(M7Ship m7Ship){
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
-    public boolean attack(M4Ship m4Ship){
+    public BattleResult attack(M4Ship m4Ship){
         m4Ship.die();
         die();
-        return true;
+        return BattleResult.TIE;
     }
-    public boolean attack(SpyShip spyShip){
+    public BattleResult attack(SpyShip spyShip){
         spyShip.die();
-        return true;
+        return BattleResult.VICTORY;
     }
-    public boolean attack(LifeShip lifeShip) {
+    public BattleResult attack(LifeShip lifeShip) {
         lifeShip.die();
-        return true;
+        return BattleResult.VICTORY;
     }
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {

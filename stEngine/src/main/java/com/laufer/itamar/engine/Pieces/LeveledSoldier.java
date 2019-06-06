@@ -1,6 +1,7 @@
 package com.laufer.itamar.engine.Pieces;
 
 
+import com.laufer.itamar.engine.BattleResult;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
@@ -23,7 +24,7 @@ public class LeveledSoldier extends Soldier {
     }
 
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
@@ -37,30 +38,30 @@ public class LeveledSoldier extends Soldier {
     }
 
     @Override
-    public boolean attack(Soldier soldier) {
-        return false; // will always go the specific
+    public BattleResult attack(Soldier soldier) {
+        return null; // will always go the specific
     }
 
-    public boolean attack(LeveledSoldier leveledSoldier) {
+    public BattleResult attack(LeveledSoldier leveledSoldier) {
         if(soldierLevel.getLevel() > leveledSoldier.soldierLevel.getLevel()){
             leveledSoldier.die();
-            return true;
+            return BattleResult.VICTORY;
         }
         die();
         if(soldierLevel.getLevel() < leveledSoldier.soldierLevel.getLevel())
-            return false;
+            return BattleResult.DEFEAT;
         leveledSoldier.die();
-        return true;
+        return BattleResult.TIE;
     }
 
-    public boolean attack(LandSapper landSapper) {
+    public BattleResult attack(LandSapper landSapper) {
         landSapper.die();
-        return true;
+        return BattleResult.VICTORY;
     }
 
-    public boolean attack(SeaSapper seaSapper) {
+    public BattleResult attack(SeaSapper seaSapper) {
         seaSapper.die();
-        return true;
+        return BattleResult.VICTORY;
     }
     @Override
     public boolean accept(CanLoadVisitor canLoadVisitor) {

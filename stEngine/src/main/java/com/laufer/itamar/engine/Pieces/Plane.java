@@ -12,17 +12,17 @@ public abstract class Plane extends Piece {
     public Plane(SuperTacticoGame game, Player owner, Location location, Loads loads, int id) {
         super(game, location, LocType.ALL, new MultipleStepsMove(), loads, owner, id);
     }
-    public boolean attack(Ship ship){
+    public BattleResult attack(Ship ship){
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
-    public boolean attack(Soldier soldier){
+    public BattleResult attack(Soldier soldier){
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
-    public Boolean attack(Bomb bomb){
+    public BattleResult attack(Bomb bomb){
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
 
     @Override

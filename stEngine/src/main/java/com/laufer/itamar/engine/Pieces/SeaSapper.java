@@ -18,7 +18,7 @@ public class SeaSapper extends Soldier {
     }
 
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
@@ -32,32 +32,32 @@ public class SeaSapper extends Soldier {
         return 10;
     }
 
-    public boolean attack( M7Ship m7Ship) {
+    public BattleResult attack(M7Ship m7Ship) {
         //first to attack wins
         m7Ship.die();
-        return true;
+        return BattleResult.VICTORY;
     }
 
     @Override
-    public boolean attack(Soldier soldier) {
+    public BattleResult attack(Soldier soldier) {
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
     @Override
-    public boolean attack(SeaSapper seaSapper){
+    public BattleResult attack(SeaSapper seaSapper){
         seaSapper.die();
         die();
-        return true;
+        return BattleResult.TIE;
     }
 
     @Override
-    public boolean attack(Flag flag) {
+    public BattleResult attack(Flag flag) {
         die();
-        return false;
+        return BattleResult.DEFEAT;
     }
     @Override
-    public boolean attack(SeaBomb seaBomb){
+    public BattleResult attack(SeaBomb seaBomb){
         seaBomb.die();
-        return true;
+        return BattleResult.VICTORY;
     }
 }

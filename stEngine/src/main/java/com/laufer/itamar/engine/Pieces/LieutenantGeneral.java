@@ -1,6 +1,7 @@
 package com.laufer.itamar.engine.Pieces;
 
 
+import com.laufer.itamar.engine.BattleResult;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
@@ -17,12 +18,12 @@ public class LieutenantGeneral extends LeveledSoldier {
         voidVisitor.visit(this);
     }
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
-    public boolean attack(LandSapper landSapper) {
+    public BattleResult attack(LandSapper landSapper) {
         landSapper.die();
-        return true;
+        return BattleResult.VICTORY;
     }
 }

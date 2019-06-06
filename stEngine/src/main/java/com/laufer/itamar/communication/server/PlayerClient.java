@@ -76,6 +76,9 @@ public class PlayerClient implements Runnable {
                     case "2":
                         handleExecuteOrderRequest(args);
                         break;
+                    case "8":
+                        handleChatMessageRequest(inputLine);
+                        break;
                     default:
                         ServerUtils.send(this.getSocket(), "0_" + "wrong request");
                         break;
@@ -87,6 +90,13 @@ public class PlayerClient implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleChatMessageRequest(String message) {
+        if(game.getGame().isFake())
+            ServerUtils.send(socket, "0_no opponent yet");
+        else
+            ServerUtils.send(game.getOtherPlayer(this).getSocket(), message);
     }
 
     private void sendPrimaryData() {

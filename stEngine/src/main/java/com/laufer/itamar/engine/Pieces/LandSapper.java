@@ -1,6 +1,7 @@
 package com.laufer.itamar.engine.Pieces;
 
 
+import com.laufer.itamar.engine.BattleResult;
 import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Player;
 import com.laufer.itamar.engine.SuperTacticoGame;
@@ -19,7 +20,7 @@ public class LandSapper extends Soldier {
     }
 
     @Override
-    public Boolean accept(AttackVisitor attackVisitor) {
+    public BattleResult accept(AttackVisitor attackVisitor) {
         return attackVisitor.visit(this);
     }
 
@@ -29,19 +30,38 @@ public class LandSapper extends Soldier {
     }
 
     @Override
-    public boolean attack(Soldier soldier) {
-        return false; // Todo implement all the different type of soldier that it can attack
+    public BattleResult attack(LeveledSoldier soldier) {
+        die();
+        return BattleResult.DEFEAT;
     }
     @Override
-    public boolean attack(LandBomb landBomb){
+    public BattleResult attack(LandBomb landBomb){
         landBomb.die();
-        return true;
+        return BattleResult.VICTORY;
     }
-    public boolean attack(LandSapper landSapper){
+
+    @Override
+    public BattleResult attack(Soldier soldier) {
+        return null; //will always go to the specific
+    }
+
+    public BattleResult attack(LandSapper landSapper){
         landSapper.die();
         die();
-        return true;
+        return BattleResult.TIE;
     }
+
+    @Override
+    public BattleResult attack(SeaSapper seaSapper) {
+        seaSapper.die();
+        return BattleResult.VICTORY;
+    }
+    @Override
+    public BattleResult attack(LieutenantGeneral lieutenantGeneral) {
+        lieutenantGeneral.die();
+        return BattleResult.VICTORY;
+    }
+
 
 
     @Override

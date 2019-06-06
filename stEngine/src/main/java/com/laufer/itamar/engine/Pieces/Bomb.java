@@ -10,7 +10,7 @@ public abstract class Bomb extends Piece {
     }
 
     @Override
-    public Boolean attack(Piece other) {
+    public BattleResult attack(Piece other) {
         return null;
     } //cannot attack
 
@@ -20,18 +20,18 @@ public abstract class Bomb extends Piece {
     }
 
     @Override
-    public boolean attack(Plane plane) {
-        return false; // cannot attack
+    public BattleResult attack(Plane plane) {
+        return null; // cannot attack
     }
 
     @Override
-    public boolean attack(Ship ship) {
-        return false; // cannot attack
+    public BattleResult attack(Ship ship) {
+        return null; // cannot attack
     }
 
     @Override
-    public boolean attack(Soldier soldier) {
-        return false; // cannot attack
+    public BattleResult attack(Soldier soldier) {
+        return null; // cannot attack
     }
 
 }

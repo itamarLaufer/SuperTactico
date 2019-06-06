@@ -1,11 +1,8 @@
 package com.laufer.itamar.engine.Pieces;
 
+import com.laufer.itamar.engine.*;
 import com.laufer.itamar.engine.Loads.SoldierLoads;
-import com.laufer.itamar.engine.LocType;
-import com.laufer.itamar.engine.Location;
 import com.laufer.itamar.engine.Movings.SingleStepMove;
-import com.laufer.itamar.engine.Player;
-import com.laufer.itamar.engine.SuperTacticoGame;
 
 public abstract class Soldier extends Piece {
     public Soldier(SuperTacticoGame game, Player owner, Location location, int id) {
@@ -14,31 +11,37 @@ public abstract class Soldier extends Piece {
 
 
     @Override
-    public boolean attack(FighterPlane fighterPlane) {
+    public BattleResult attack(FighterPlane fighterPlane) {
         fighterPlane.die();
-        return true;
+        return BattleResult.VICTORY;
     }
 
     @Override
-    public boolean attack(TourPlane tourPlane) {
+    public BattleResult attack(TourPlane tourPlane) {
         tourPlane.die();
-        return true;
+        return BattleResult.VICTORY;
     }
 
-    public boolean attack(LandSapper landSapper) {
+    public BattleResult attack(LandSapper landSapper) {
         landSapper.die();
-        return true;
+        return BattleResult.VICTORY;
     }
 
     @Override
-    public boolean attack(Ship ship) {
-        return false; // impossible
+    public BattleResult attack(Ship ship) {
+        return null; // impossible
     }
 
     @Override
-    public boolean attack(Plane plane) {
+    public BattleResult attack(Plane plane) {
         plane.die();
-        return true;
+        return BattleResult.VICTORY;
+    }
+
+    @Override
+    public BattleResult attack(Flag flag) {
+        load(flag);
+        return BattleResult.VICTORY;
     }
 
     public boolean hasFlag(){
