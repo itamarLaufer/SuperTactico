@@ -324,6 +324,8 @@ public class SuperTacticoGame {
                 piece.setLocation(piece.getLocation().turned(boardSize));
                 board[piece.getLocation().getRow()][piece.getLocation().getCol()].setPiece(piece);
             }
+            else
+                piece.setLocation(piece.getLocation().turned(boardSize));
         }
     }
     public Piece getPieceById(int id){
