@@ -11,8 +11,9 @@ class Board(QtWidgets.QGraphicsView):
     UPDATE = '4'
     MOVES = '5'
     GAME = '6'
+    CHAT = '8'
 
-    def __init__(self, tiles: List, pieces: Dict, client, *args, **kwargs):
+    def __init__(self, tiles: List, pieces: Dict, client, chat, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tiles = tiles
         self.changed_tiles = []
@@ -27,6 +28,8 @@ class Board(QtWidgets.QGraphicsView):
         self.player_pieces = piece_container.PieceContainer(client.todo, pieces=pieces)
         self.enemy_pieces = piece_container.PieceContainer(client.todo)
         self.animation = None
+
+        self.chat = chat
         # setup all of the tiles
         for i, row in enumerate(self.tiles):
             for j, color in enumerate(row):
@@ -117,6 +120,8 @@ class Board(QtWidgets.QGraphicsView):
                         for i in self.enemy_pieces:
                             self.scene.addItem(i)
                         self.player_pieces.update(order[1]['newIds'])
+                elif order[0] == self.CHAT:
+                    self.chat(order[1])
                 new = set(new)
                 changed_tiles = set(self.changed_tiles)
                 intersection = changed_tiles & new

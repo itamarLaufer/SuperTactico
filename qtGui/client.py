@@ -41,6 +41,9 @@ class Client:
             if info[0] == '4' or info[0] == '6':
                 piece_info = json.loads(info[1])
                 await self.received.put([info[0], piece_info])
+            if info[0] == '8':
+                chat_info = '_'.join(info[1:])
+                await self.received.put([info[0], chat_info])
 
     def end(self):
         """close everything that's still running"""
