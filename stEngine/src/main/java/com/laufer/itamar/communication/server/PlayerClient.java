@@ -106,6 +106,7 @@ public class PlayerClient implements Runnable {
         JSONObject update = new JSONObject();
         update.put("board", game.getBoardAsJson());
         update.put("pieces", JsonUtils.piecesListToVisibileJsonArray(game.getAllLivingPieces()));
+        update.put("timeForTurn", TIME_FOR_TURN);
         ServerUtils.send(this.getSocket(), "4_" + update.toJSONString());
     }
 
