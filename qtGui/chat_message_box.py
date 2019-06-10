@@ -14,18 +14,21 @@ class ChatMessagesBox(QtWidgets.QListView):
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setModel(self.mymodel)
         self.setItemDelegate(bubble_draw.ListViewDelegate())
+        self.startAutoScroll()
 
     def add_good(self, text):
         text = escape(text)
         item = QtGui.QStandardItem(text)
         item.setData("Outgoing", QtCore.Qt.UserRole + 1)
         self.mymodel.appendRow(item)
+        self.scrollToBottom()
 
     def add_bad(self, text):
         text = escape(text)
         item = QtGui.QStandardItem(str(text))
         item.setData("Incoming", QtCore.Qt.UserRole + 1)
         self.mymodel.appendRow(item)
+        self.scrollToBottom()
 
 
 if __name__ == '__main__':
