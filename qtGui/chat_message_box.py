@@ -18,6 +18,7 @@ class ChatMessagesBox(QtWidgets.QListView):
 
     def add_good(self, text):
         text = escape(text)
+        text = text.strip()
         item = QtGui.QStandardItem(text)
         item.setData("Outgoing", QtCore.Qt.UserRole + 1)
         self.mymodel.appendRow(item)
@@ -25,6 +26,7 @@ class ChatMessagesBox(QtWidgets.QListView):
 
     def add_bad(self, text):
         text = escape(text)
+        text = text.strip()
         item = QtGui.QStandardItem(str(text))
         item.setData("Incoming", QtCore.Qt.UserRole + 1)
         self.mymodel.appendRow(item)
