@@ -1,9 +1,7 @@
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from PySide2.QtCore import *
+from PySide2 import QtWidgets, QtGui, QtCore
 
 
-class ListViewDelegate(QAbstractItemDelegate):
+class ListViewDelegate(QtWidgets.QAbstractItemDelegate):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.d_radius = 5
@@ -18,22 +16,22 @@ class ListViewDelegate(QAbstractItemDelegate):
         self.d_widthfraction = .7
 
     def paint(self, painter, option, index):
-        bodydoc = QTextDocument()
-        textOption = QTextOption(bodydoc.defaultTextOption())
-        textOption.setWrapMode(QTextOption.WrapAtWordBoundaryOrAnywhere)
+        bodydoc = QtGui.QTextDocument()
+        textOption = QtGui.QTextOption(bodydoc.defaultTextOption())
+        textOption.setWrapMode(QtGui.QTextOption.WrapAtWordBoundaryOrAnywhere)
         bodydoc.setDefaultTextOption(textOption)
-        bodydoc.setDefaultFont(QFont("Roboto", 12))
-        bodytext = index.data(Qt.DisplayRole)
+        bodydoc.setDefaultFont(QtGui.QFont("Roboto", 12))
+        bodytext = index.data(QtCore.Qt.DisplayRole)
         bodydoc.setHtml(bodytext)
 
         contentswidth = option.rect.width() * self.d_widthfraction - self.d_horizontalmargin - self.d_pointerwidth - self.d_leftpadding - self.d_rightpadding
         bodydoc.setTextWidth(contentswidth)
         bodyheight = bodydoc.size().height()
 
-        incoming = index.data(Qt.UserRole + 1) == "Incoming"
+        incoming = index.data(QtCore.Qt.UserRole + 1) == "Incoming"
 
         painter.save()
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QtGui.QPainter.Antialiasing)
 
         # painter.drawRect(option.rect)
 
@@ -41,12 +39,12 @@ class ListViewDelegate(QAbstractItemDelegate):
                           option.rect.top() + (self.d_verticalmargin if (index.row() == 0) else 0))
 
         # background color for chat bubble
-        bgcolor = QColor("#66ff66")
+        bgcolor = QtGui.QColor("#66ff66")
         if incoming:
             bgcolor = "#DDDDDD"
 
         # create chat bubble
-        pointie = QPainterPath()
+        pointie = QtGui.QPainterPath()
 
         # left bottom
         pointie.moveTo(0, bodyheight + self.d_toppadding + self.d_bottompadding)
@@ -85,9 +83,9 @@ class ListViewDelegate(QAbstractItemDelegate):
             painter.translate(-pointie.boundingRect().center())
 
         # now paint it!
-        painter.setPen(QPen(bgcolor))
+        painter.setPen(QtGui.QPen(bgcolor))
         painter.drawPath(pointie)
-        painter.fillPath(pointie, QBrush(bgcolor))
+        painter.fillPath(pointie, QtGui.QBrush(bgcolor))
 
         # rotate back or painter is going to paint the text rotated...
         if incoming:
@@ -96,11 +94,11 @@ class ListViewDelegate(QAbstractItemDelegate):
             painter.translate(-pointie.boundingRect().center())
 
         # set text color used to draw message body
-        ctx = QAbstractTextDocumentLayout.PaintContext()
+        ctx = QtGui.QAbstractTextDocumentLayout.PaintContext()
         if incoming:
-            ctx.palette.setColor(QPalette.Text, QColor("black"))
+            ctx.palette.setColor(QtGui.QPalette.Text, QtGui.QColor("black"))
         else:
-            ctx.palette.setColor(QPalette.Text, QColor("white"))
+            ctx.palette.setColor(QtGui.QPalette.Text, QtGui.QColor("white"))
 
         # draw body text
         painter.translate((0 if incoming else self.d_pointerwidth) + self.d_leftpadding, 0)
@@ -109,12 +107,12 @@ class ListViewDelegate(QAbstractItemDelegate):
         painter.restore()
 
     def sizeHint(self, option, index):
-        bodydoc = QTextDocument()
-        textOption = QTextOption(bodydoc.defaultTextOption())
-        textOption.setWrapMode(QTextOption.WrapAtWordBoundaryOrAnywhere)
+        bodydoc = QtGui.QTextDocument()
+        textOption = QtGui.QTextOption(bodydoc.defaultTextOption())
+        textOption.setWrapMode(QtGui.QTextOption.WrapAtWordBoundaryOrAnywhere)
         bodydoc.setDefaultTextOption(textOption)
-        bodydoc.setDefaultFont(QFont("Roboto", 12))
-        bodytext = index.data(Qt.DisplayRole)
+        bodydoc.setDefaultFont(QtGui.QFont("Roboto", 12))
+        bodytext = index.data(QtCore.Qt.DisplayRole)
         bodydoc.setHtml(bodytext)
 
         # the width of the contents are the (a fraction of the window width) minus (margins + padding + width of the bubble's tail)
@@ -123,11 +121,11 @@ class ListViewDelegate(QAbstractItemDelegate):
         # set this available width on the text document
         bodydoc.setTextWidth(contentswidth)
 
-        size = QSize(
+        size = QtCore.QSize(
             bodydoc.idealWidth() + self.d_horizontalmargin + self.d_pointerwidth + self.d_leftpadding + self.d_rightpadding,
             bodydoc.size().height() + self.d_bottompadding + self.d_toppadding + self.d_verticalmargin + 1)  # I dont remember why +1, haha, might not be necessary
 
         if index.row() == 0:  # have extra margin at top of first item
-            size += QSize(0, self.d_verticalmargin)
+            size += QtCore.QSize(0, self.d_verticalmargin)
 
         return size
