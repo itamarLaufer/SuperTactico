@@ -3,6 +3,7 @@ import tile
 from typing import List, Dict
 import time
 import piece_container
+import fight_scene
 
 
 class Board(QtWidgets.QGraphicsView):
@@ -46,6 +47,9 @@ class Board(QtWidgets.QGraphicsView):
         self.timer.setInterval(500)
         self.timer.timeout.connect(self.communicate)
         self.timer.start()
+        self.fight_scene = fight_scene.FightScene()
+        self.fight_scene.timeLine.stateChanged.connect(lambda state: self.setScene(
+            self.scene if state == self.fight_scene.timeLine.State.NotRunning else self.fight_scene))
 
     def wheelEvent(self, event):
         dir = event.delta()
@@ -87,6 +91,18 @@ class Board(QtWidgets.QGraphicsView):
             if piece_x != x or piece_y != y:
                 cur_piece.animate(x, y)
 
+    def fight(self, pieces, result):
+        print(pieces)
+        pid = pieces[0]['id']
+        if pid in self.player_pieces.pieces:
+            self.fight_scene.setGood(pieces[0], result)
+            self.fight_scene.setBad(pieces[1])
+        else:
+            self.fight_scene.setGood(pieces[1], result)
+            self.fight_scene.setBad(pieces[0])
+        self.setScene(self.fight_scene)
+        self.fight_scene.animate()
+
     def communicate(self):
         if not self.client.received.empty():
             order = self.client.received.get_nowait()
@@ -112,6 +128,8 @@ class Board(QtWidgets.QGraphicsView):
                 elif order[0] == self.GAME:
                     changed_pieces = order[1]['pieces']
                     if self.enemy_pieces.pieces:
+                        if 'battleResult' in order[1]:
+                            self.fight(order[1]['pieces'], order[1]['battleResult'])
                         self.piece_move(changed_pieces)
                     else:
                         self.enemy_pieces.add(changed_pieces)
@@ -130,3 +148,21 @@ class Board(QtWidgets.QGraphicsView):
                     i.accepting = False
                     i.setColor(-1)
                     i.color()
+
+    def resizeEvent(self, event):
+        if event.oldSize().width() > 0:
+            old = self.rect_size
+            self.rect_size = int(min(event.size().height() / 20, event.size().width() / 20))
+            for piece in self.player_pieces.pieces.values():
+                pos = piece.pos()
+                piece.setPos(pos.x() / old * self.rect_size, pos.y() / old * self.rect_size)
+                piece.rect_size = self.rect_size
+            for piece in self.enemy_pieces.pieces.values():
+                pos = piece.pos()
+                piece.setPos(pos.x() / old * self.rect_size, pos.y() / old * self.rect_size)
+                piece.rect_size = self.rect_size
+            for i, row in enumerate(self.tiles):
+                for j, cur_tile in enumerate(row):
+                    x = j * self.rect_size
+                    y = i * self.rect_size
+                    self.tiles[i][j].setRect(x, y, self.rect_size, self.rect_size)

@@ -6,6 +6,7 @@ import asyncio
 from asyncqt import QEventLoop, QThreadExecutor
 import chat
 
+
 async def main(loop, player):
     write = loop.create_task(player.send())
     read = loop.create_task(player.receive())
