@@ -18,8 +18,7 @@ class PieceList(QtWidgets.QListView):
         self.index = 0
         self.list = []
 
-    def add_item(self, text):
-        text = text.strip()
+    def add_item(self):
         self.list.append(1)
         item = QtGui.QStandardItem(QtGui.QIcon(QtGui.QPixmap(f'..\\res\pics\pieces\pieceb{self.index}.png')),
                                    str(self.list[self.index]))
@@ -40,8 +39,7 @@ if __name__ == '__main__':
     listview = PieceList()
     # listview.add_bad("This is item one")
     for i in range(19):
-        listview.add_item(
-            "This is item two, it is a very long item, but it's not the item's fault, it is me typing all this text.")
+        listview.add_item()
     # listview.add_bad("This is the third item")
     listview.add_piece(1)
     listview.add_piece(2)
