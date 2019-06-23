@@ -3,7 +3,7 @@ import piece_draw
 
 
 class PieceList(QtWidgets.QListView):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, team, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.mymodel = QtGui.QStandardItemModel()
         self.setResizeMode(QtWidgets.QListView.Adjust)
@@ -17,11 +17,13 @@ class PieceList(QtWidgets.QListView):
         # self.resize(60, 180)
         self.index = 0
         self.list = []
+        self.team = team
 
     def add_item(self):
         self.list.append(1)
-        item = QtGui.QStandardItem(QtGui.QIcon(QtGui.QPixmap(f'..\\res\pics\pieces\pieceb{self.index}.png')),
-                                   str(self.list[self.index]))
+        item = QtGui.QStandardItem(
+            QtGui.QIcon(QtGui.QPixmap(f'..\\res\pics\pieces\piece{self.team + str(self.index)}.png')),
+            str(self.list[self.index]))
         self.index += 1
         item.setData("Outgoing", QtCore.Qt.UserRole + 1)
         self.mymodel.appendRow(item)
