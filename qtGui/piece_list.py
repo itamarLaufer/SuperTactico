@@ -16,17 +16,22 @@ class PieceList(QtWidgets.QListView):
         self.startAutoScroll()
         # self.resize(60, 180)
         self.index = 0
+        self.mapper = {}
         self.team = team
 
-    def add_item(self):
-        item = QtGui.QStandardItem(
-            QtGui.QIcon(QtGui.QPixmap(f'..\\res\pics\pieces\piece{self.team + str(self.index)}.png')),
-            '0')
-        self.index += 1
-        self.mymodel.appendRow(item)
-        # self.scrollToBottom()
+    def add_item(self, path, index):
+        # TODO find a cleaner way to do this. Issue is that False == 0, and i need it to acknowledge the first index: 0
+        exists = self.mapper.get(index, '')
+        if not exists and exists != 0:
+            item = QtGui.QStandardItem(
+                QtGui.QIcon(QtGui.QPixmap(path)), '0')
+            self.mapper[index] = self.index
+            self.index += 1
+            self.mymodel.appendRow(item)
+            # self.scrollToBottom()
 
     def add_piece(self, index):
+        index = self.mapper[index]
         item = self.mymodel.item(index, 0)
         item.setText(str(int(item.text()) + 1))
         self.scrollTo(self.mymodel.index(index, 0))
