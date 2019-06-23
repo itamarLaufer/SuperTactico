@@ -12,7 +12,7 @@ class Board(QtWidgets.QGraphicsView):
     GAME = '6'
     CHAT = '8'
 
-    def __init__(self, tiles: List, pieces: Dict, client, chat, *args, **kwargs):
+    def __init__(self, tiles: List, pieces: Dict, client, chat, team, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tiles = tiles
         self.changed_tiles = []
@@ -24,8 +24,8 @@ class Board(QtWidgets.QGraphicsView):
         self.scaled = 0
         self.scales = []
         self.client = client
-        self.player_pieces = piece_container.PieceContainer(client.todo, pieces=pieces)
-        self.enemy_pieces = piece_container.PieceContainer(client.todo)
+        self.player_pieces = piece_container.PieceContainer(client.todo, team, pieces=pieces)
+        self.enemy_pieces = piece_container.PieceContainer(client.todo, team)
         self.animation = None
 
         self.chat = chat

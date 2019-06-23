@@ -5,6 +5,9 @@ import client
 import asyncio
 from asyncqt import QEventLoop, QThreadExecutor
 import chat
+import team
+
+player_team = team.Team(sys.argv[2])
 
 
 async def main(loop, player):
@@ -22,7 +25,7 @@ asyncio.set_event_loop(loop)
 player = client.Client()
 tiles, player_pieces = loop.run_until_complete(player.connect())
 game_chat = chat.Chat(player.todo)
-game = board.Board(tiles, player_pieces, player, game_chat.receive)
+game = board.Board(tiles, player_pieces, player, game_chat.receive, player_team)
 
 window = QtWidgets.QWidget()
 game_layout = QtWidgets.QVBoxLayout()

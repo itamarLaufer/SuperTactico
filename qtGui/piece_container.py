@@ -4,12 +4,13 @@ from piece import Piece
 class PieceContainer:
     """An object to contain piece objects. Will be more useful later on"""
 
-    def __init__(self, messages, pieces=None):
+    def __init__(self, messages, team, pieces=None):
         self.messages = messages
         self.pieces = {}
+        self.team = team
         if pieces:
             for piece in pieces:
-                current = Piece(piece, 'b', self.messages)
+                current = Piece(piece, self.team.player, True, self.messages)
                 self.pieces[current.id] = current
 
     def __iter__(self):
@@ -20,7 +21,7 @@ class PieceContainer:
 
     def add(self, pieces):
         for piece in pieces:
-            current = Piece(piece, 'r', self.messages)
+            current = Piece(piece, self.team.enemy, False, self.messages)
             self.pieces[current.id] = current
 
     def update(self, new_ids):

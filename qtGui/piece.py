@@ -4,12 +4,13 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Piece(QtWidgets.QGraphicsPixmapItem):
     path = r'..\res\pics\pieces\piece{}.png'
 
-    def __init__(self, piece_info, team, messages, *args, **kwargs):
+    def __init__(self, piece_info, team, is_player, messages, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # setup
         self.rect_size = 30
         self.team = team
-        if team == 'b':
+        self.is_player = is_player
+        if self.is_player:
             self.type_id = piece_info['typeId']
             self.image_path = self.path.format(self.team + str(self.type_id))
         else:
@@ -33,13 +34,13 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
         self.animation.setTimeLine(self.timer)
 
     def mousePressEvent(self, event):
-        if self.team == 'b':
+        if self.is_player:
             self.messages.put_nowait(['3', str(self.id)])
 
     def mouseMoveEvent(self, event):
         """Take care of drag and drop"""
         # put necessary data unto dnd item
-        if self.team == 'b':
+        if self.is_player:
             data = QtCore.QMimeData()
             data.setProperty('piece', self)
             # setup the drag event
@@ -62,7 +63,7 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
     def __str__(self):
         return ' '.join(
             [
-                'Type:', str(self.type_id) if self.team == 'b' else '?',
+                'Type:', str(self.type_id) if self.is_player else '?',
                 'Carrying:', str(self.loads),
                 'Y:', str(self.y),
                 'X:', str(self.x),
