@@ -24,7 +24,7 @@ class PieceList(QtWidgets.QListView):
         exists = self.mapper.get(index, '')
         if not exists and exists != 0:
             item = QtGui.QStandardItem(
-                QtGui.QIcon(QtGui.QPixmap(path)), '0')
+                QtGui.QIcon(QtGui.QPixmap(f'..\\res\pics\pieces\piece{self.team + str(self.index)}.png')), '0')
             self.mapper[index] = self.index
             self.index += 1
             self.mymodel.appendRow(item)
