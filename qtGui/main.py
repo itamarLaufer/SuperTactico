@@ -6,6 +6,7 @@ import asyncio
 from asyncqt import QEventLoop, QThreadExecutor
 import chat
 import team
+import piece_list
 
 player_team = team.Team(sys.argv[2])
 
@@ -22,6 +23,14 @@ app = QtWidgets.QApplication(sys.argv)
 loop = QEventLoop(app)
 asyncio.set_event_loop(loop)
 
+
+grave_layout = QtWidgets.QVBoxLayout()
+player_grave = piece_list.PieceList(player_team.player)
+grave_layout.addWidget(player_grave)
+enemy_grave = piece_list.PieceList(player_team.enemy)
+enemy_grave.hide()
+grave_layout.addWidget(enemy_grave)
+
 player = client.Client()
 tiles, player_pieces = loop.run_until_complete(player.connect())
 game_chat = chat.Chat(player.todo)
@@ -36,6 +45,7 @@ button.clicked.connect(lambda x: player.todo.put_nowait(['1', 'john']))
 game_layout.addWidget(button)
 
 full_layout = QtWidgets.QHBoxLayout()
+full_layout.addLayout(grave_layout)
 full_layout.addLayout(game_layout)
 full_layout.addLayout(game_chat)
 
