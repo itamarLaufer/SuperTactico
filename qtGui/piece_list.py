@@ -19,7 +19,7 @@ class PieceList(QtWidgets.QListView):
         self.mapper = {}
         self.team = team
 
-    def add_item(self, path, index):
+    def add_item(self, index):
         # TODO find a cleaner way to do this. Issue is that False == 0, and i need it to acknowledge the first index: 0
         exists = self.mapper.get(index, '')
         if not exists and exists != 0:
