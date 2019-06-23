@@ -12,7 +12,7 @@ class Board(QtWidgets.QGraphicsView):
     GAME = '6'
     CHAT = '8'
 
-    def __init__(self, tiles: List, pieces: Dict, client, chat, team, *args, **kwargs):
+    def __init__(self, tiles: List, pieces: Dict, client, chat, team, player_grave, enemy_grave, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.tiles = tiles
         self.changed_tiles = []
@@ -24,6 +24,8 @@ class Board(QtWidgets.QGraphicsView):
         self.scaled = 0
         self.scales = []
         self.client = client
+        self.player_grave = player_grave
+        self.enemy_grave = enemy_grave
         self.player_pieces = piece_container.PieceContainer(client.todo, team, pieces=pieces)
         self.enemy_pieces = piece_container.PieceContainer(client.todo, team)
         self.animation = None
@@ -38,6 +40,8 @@ class Board(QtWidgets.QGraphicsView):
                 self.tiles[i][j] = tile.Tile(color, client.todo, rect)
                 self.scene.addItem(self.tiles[i][j])
         for i in self.player_pieces:
+            self.player_grave.add_item(i.type_id)
+            self.enemy_grave.add_item(i.type_id)
             self.scene.addItem(i)
         self.setScene(self.scene)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -133,6 +137,7 @@ class Board(QtWidgets.QGraphicsView):
                         self.piece_move(changed_pieces)
                     else:
                         self.enemy_pieces.add(changed_pieces)
+                        self.enemy_grave.show()
                         for i in self.enemy_pieces:
                             self.scene.addItem(i)
                         self.player_pieces.update(order[1]['newIds'])

@@ -34,7 +34,7 @@ grave_layout.addWidget(enemy_grave)
 player = client.Client()
 tiles, player_pieces = loop.run_until_complete(player.connect())
 game_chat = chat.Chat(player.todo)
-game = board.Board(tiles, player_pieces, player, game_chat.receive, player_team)
+game = board.Board(tiles, player_pieces, player, game_chat.receive, player_team, player_grave, enemy_grave)
 
 window = QtWidgets.QWidget()
 game_layout = QtWidgets.QVBoxLayout()
