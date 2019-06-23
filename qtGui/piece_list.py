@@ -16,16 +16,13 @@ class PieceList(QtWidgets.QListView):
         self.startAutoScroll()
         # self.resize(60, 180)
         self.index = 0
-        self.list = []
         self.team = team
 
     def add_item(self):
-        self.list.append(1)
         item = QtGui.QStandardItem(
             QtGui.QIcon(QtGui.QPixmap(f'..\\res\pics\pieces\piece{self.team + str(self.index)}.png')),
-            str(self.list[self.index]))
+            '0')
         self.index += 1
-        item.setData("Outgoing", QtCore.Qt.UserRole + 1)
         self.mymodel.appendRow(item)
         # self.scrollToBottom()
 
@@ -38,9 +35,9 @@ class PieceList(QtWidgets.QListView):
 if __name__ == '__main__':
     app = QtWidgets.QApplication()
 
-    listview = PieceList()
+    listview = PieceList('b')
     # listview.add_bad("This is item one")
-    for i in range(19):
+    for i in range(20):
         listview.add_item()
     # listview.add_bad("This is the third item")
     listview.add_piece(1)
