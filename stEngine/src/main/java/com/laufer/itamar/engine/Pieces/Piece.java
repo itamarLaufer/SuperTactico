@@ -1,6 +1,7 @@
 package com.laufer.itamar.engine.Pieces;
 
 import com.laufer.itamar.App;
+import com.laufer.itamar.Config;
 import com.laufer.itamar.JsonParsable;
 import com.laufer.itamar.engine.*;
 import com.laufer.itamar.engine.Loads.Loads;
@@ -115,7 +116,7 @@ public abstract class Piece implements JsonParsable
         return basicCanMove(dest) && getPossibleMoveLocations().contains(dest);
     }
      private List<Location> getPossibleMoveLocations(){
-        if(!App.DEBUG)
+        if(!Config.DEBUG)
             return moveType.getPossibleMoveLocations(this);
         int size = game.getBoardSize();
         List<Location> res = new ArrayList<>(size * size);
