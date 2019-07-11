@@ -99,6 +99,16 @@ class Board(QtWidgets.QGraphicsView):
                 grave.add_piece(i['typeId'])
             elif piece_x != x or piece_y != y:
                 cur_piece.animate(x, y)
+            if 'loads' in i.keys():
+                cur_piece.empty_load()
+                for j in i['loads']:
+                    piece_id = j['id']
+                    if cur_piece in self.player_pieces:
+                        loaded = self.player_pieces[piece_id]
+                    elif cur_piece in self.enemy_pieces:
+                        loaded = self.enemy_pieces[piece_id]
+                    self.scene.removeItem(loaded)
+                    cur_piece.add_load(piece_id)
 
     def fight(self, pieces, result):
         pid = pieces[0]['id']

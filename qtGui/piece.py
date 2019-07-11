@@ -60,6 +60,12 @@ class Piece(QtWidgets.QGraphicsPixmapItem):
         self.animation.setPosAt((frames - 1) / frames, QtCore.QPointF(x, y))
         self.timer.start()
 
+    def add_load(self, piece):
+        self.loads.append(piece)
+
+    def empty_load(self):
+        self.loads.clear()
+
     def __str__(self):
         return ' '.join(
             [
