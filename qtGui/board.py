@@ -51,7 +51,7 @@ class Board(QtWidgets.QGraphicsView):
         self.timer.setInterval(500)
         self.timer.timeout.connect(self.communicate)
         self.timer.start()
-        self.fight_scene = fight_scene.FightScene()
+        self.fight_scene = fight_scene.FightScene(team)
         self.fight_scene.timeLine.stateChanged.connect(lambda state: self.setScene(
             self.scene if state == self.fight_scene.timeLine.State.NotRunning else self.fight_scene))
 
@@ -92,18 +92,20 @@ class Board(QtWidgets.QGraphicsView):
             else:
                 cur_piece = self.enemy_pieces[pid]
             piece_x, piece_y = cur_piece.pos().x(), cur_piece.pos().y()
+            if x == y == -self.rect_size:
+                self.scene.removeItem(cur_piece)
             if piece_x != x or piece_y != y:
                 cur_piece.animate(x, y)
 
     def fight(self, pieces, result):
-        print(pieces)
         pid = pieces[0]['id']
         if pid in self.player_pieces.pieces:
-            self.fight_scene.setGood(pieces[0], result)
-            self.fight_scene.setBad(pieces[1])
+            self.fight_scene.set_good(pieces[0], result)
+            self.fight_scene.set_bad(pieces[1])
         else:
-            self.fight_scene.setGood(pieces[1], result)
-            self.fight_scene.setBad(pieces[0])
+            self.fight_scene.set_good(pieces[1], result)
+            self.fight_scene.set_bad(pieces[0])
+        self.fight_scene.clean()
         self.setScene(self.fight_scene)
         self.fight_scene.animate()
 

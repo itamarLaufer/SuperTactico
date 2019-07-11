@@ -2,8 +2,9 @@ from PySide2 import QtWidgets, QtGui, QtCore
 
 
 class FightScene(QtWidgets.QGraphicsScene):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, team, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.team = team
         self.good = None
         self.bad = None
         self.status = None
@@ -11,35 +12,44 @@ class FightScene(QtWidgets.QGraphicsScene):
         self.timeLine = QtCore.QTimeLine(1500, self)
         self.timeLine.setFrameRange(0, 19)
         self.timeLine.frameChanged.connect(self.change)
+        self.size = 200
 
-    def setGood(self, piece, status):
+        self.good_image = QtWidgets.QGraphicsPixmapItem()
+        self.good_image.setPos(self.size, self.size)
+        self.addItem(self.good_image)
+        self.bad_image = QtWidgets.QGraphicsPixmapItem()
+        self.bad_image.setPos(0, 0)
+        self.bad_image.setTransformOriginPoint(self.size / 2, self.size / 2)
+        self.addItem(self.bad_image)
+
+    def set_good(self, piece, status):
         self.good = piece
         self.status = status
 
-    def setBad(self, piece):
+    def set_bad(self, piece):
         self.bad = piece
 
+    def clean(self):
+        self.good_image.setPixmap(
+            QtGui.QPixmap(r'..\res\pics\pieces\piece{}.png'.format(self.team.player + str(self.good['typeId']))).scaled(
+                self.size, self.size))
+        self.bad_image.setRotation(180 if 13 <= self.bad['typeId'] <= 18 else 0)
+        self.bad_image.setPixmap(
+            QtGui.QPixmap(r'..\res\pics\pieces\piece{}.png'.format(self.team.enemy + str(self.bad['typeId']))).scaled(
+                self.size, self.size))
+
     def animate(self):
-        good = QtWidgets.QGraphicsPixmapItem()
-        good.setPixmap(QtGui.QPixmap(r'..\res\pics\pieces\pieceb{}.png'.format(self.good['typeId'])).scaled(200, 200))
-        good.setPos(0, 300)
-        self.addItem(good)
-        bad = QtWidgets.QGraphicsPixmapItem()
-        bad.setRotation(180 if 13 <= self.bad['typeId'] <= 18 else 0)
-        bad.setPixmap(QtGui.QPixmap(r'..\res\pics\pieces\piecer{}.png'.format(self.bad['typeId'])).scaled(200, 200))
-        good.setPos(0, 0)
-        self.addItem(bad)
         self.dead = []
         if self.status == 'VICTORY':
-            self.dead.append(bad)
+            self.dead.append(self.bad_image)
         if self.status == 'TIE':
-            self.dead.append(bad)
-            self.dead.append(good)
+            self.dead.append(self.bad_image)
+            self.dead.append(self.good_image)
         if self.status == 'DEFEAT':
-            self.dead.append(good)
-        self.timeLine.start()
+            self.dead.append(self.good_image)
+        QtCore.QTimer.singleShot(300, self.timeLine.start)
 
     def change(self, a):
-        pic = QtGui.QPixmap(r'..\res\pics\explosion\{}c.png'.format(a)).scaled(200, 200)
+        pic = QtGui.QPixmap(r'..\res\pics\explosion\{}.png'.format(a)).scaled(200, 200)
         for i in self.dead:
             i.setPixmap(pic)
