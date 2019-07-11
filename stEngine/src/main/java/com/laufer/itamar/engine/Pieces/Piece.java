@@ -270,8 +270,11 @@ public abstract class Piece implements JsonParsable
     public JSONObject parseJson() {
         JSONObject res = new JSONObject();
         JSONArray arr = new JSONArray();
+        JSONObject current;
         for(Piece piece: getAllLoads()){
-            arr.add(piece.parseJson());
+            current = piece.parseJson();
+            current.remove("location");
+            arr.add(current);
         }
         res.put("id", id);
         res.put("loads", arr);
@@ -281,6 +284,14 @@ public abstract class Piece implements JsonParsable
     public JSONObject visibleParseJson() {
         JSONObject res = parseJson();
         res.put("typeId", getType());
+        JSONArray arr = new JSONArray();
+        JSONObject current;
+        for(Piece piece: getAllLoads()){
+            current = piece.visibleParseJson();
+            current.remove("location");
+            arr.add(current);
+        }
+        res.put("loads", arr); // visible instead
         return res;
     }
 
