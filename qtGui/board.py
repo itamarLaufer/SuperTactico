@@ -89,12 +89,15 @@ class Board(QtWidgets.QGraphicsView):
             pid = i['id']
             if pid in self.player_pieces.pieces:
                 cur_piece = self.player_pieces[pid]
+                grave = self.player_grave
             else:
                 cur_piece = self.enemy_pieces[pid]
+                grave = self.enemy_grave
             piece_x, piece_y = cur_piece.pos().x(), cur_piece.pos().y()
-            if x == y == -self.rect_size:
+            if x < 0 and y < 0:
                 self.scene.removeItem(cur_piece)
-            if piece_x != x or piece_y != y:
+                grave.add_piece(i['typeId'])
+            elif piece_x != x or piece_y != y:
                 cur_piece.animate(x, y)
 
     def fight(self, pieces, result):
