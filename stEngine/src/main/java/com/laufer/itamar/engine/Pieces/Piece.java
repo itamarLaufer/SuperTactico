@@ -1,5 +1,6 @@
 package com.laufer.itamar.engine.Pieces;
 
+import com.laufer.itamar.App;
 import com.laufer.itamar.JsonParsable;
 import com.laufer.itamar.engine.*;
 import com.laufer.itamar.engine.Loads.Loads;
@@ -111,7 +112,20 @@ public abstract class Piece implements JsonParsable
         return locType.canStandHere(game.getLocTypeInLocation(dest));
     }
     public boolean canMove(Location dest){
-        return basicCanMove(dest) && moveType.getPossibleMoveLocations(this).contains(dest);
+        return basicCanMove(dest) && getPossibleMoveLocations().contains(dest);
+    }
+     private List<Location> getPossibleMoveLocations(){
+        if(!App.DEBUG)
+            return moveType.getPossibleMoveLocations(this);
+        int size = game.getBoardSize();
+        List<Location> res = new ArrayList<>(size * size);
+        for(int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                if(basicCanMove(generateLocation(i, j)))
+                    res.add(generateLocation(i, j));
+            }
+        }
+        return res;
     }
     public List<Order>getPossibleOrders(){
         List<Order>orders = new LinkedList<>();
@@ -122,7 +136,7 @@ public abstract class Piece implements JsonParsable
         return orders;
     }
     private List<MoveOrder> getPossibleMoveOrders(){
-        return moveType.getPossibleMoveLocations(this).stream().map(it-> new MoveOrder(this, it)).collect(Collectors.toList());
+        return getPossibleMoveLocations().stream().map(it-> new MoveOrder(this, it)).collect(Collectors.toList());
     }
     private List<AttackOrder> getPossibleAttackOrders(){
         return location.touchingLocations(game.getBoardSize()).stream().filter(it -> canAttack(game.getPieceFromBoard(it))).map(it -> new AttackOrder(this, it)).collect(Collectors.toList());
